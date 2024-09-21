@@ -1,0 +1,19 @@
+{
+  "name": "url-safe-bitpacking",
+  "module": "src/index.ts",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "bun build ./src/index.ts --outfile=dist/bundle.js && bun run build:declaration",
+    "build:declaration": "tsc --emitDeclarationOnly --outdir dist"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "tsc": "^2.0.4"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts"
+}
