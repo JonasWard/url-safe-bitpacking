@@ -1,16 +1,7 @@
-import * as intTest from './intTest';
-import * as booleanTest from './booleanTest';
-import * as versionTest from './versionTest';
-import * as floatTest from './floatTest';
+import { expect, test } from 'bun:test';
+
 import { DataEntryFactory } from '../factory/factory';
 import { dataArrayStringifier, dataBitsArrayParser } from '../parsers/parsers';
-
-const stringTest = () => {
-  intTest.toStringTest();
-  booleanTest.toStringTest();
-  versionTest.toStringTest();
-  floatTest.toStringTest();
-};
 
 const dataMap = [
   DataEntryFactory.createVersion(3, 4, 'versionA', 0),
@@ -26,17 +17,9 @@ const dataMap = [
   DataEntryFactory.createBoolean(false, 'boolB', 7),
 ];
 
-const valuedStringTest = () => {
+test('simple data array parsing', () => {
   const bitstring = dataArrayStringifier(dataMap);
-
   const unpacked = dataBitsArrayParser(bitstring, dataMap);
 
-  unpacked.forEach((data, index) => {
-    if (dataMap[index].value !== data.value) console.log(data.name, data.value, data.index);
-  });
-};
-
-export const allTests = () => {
-  stringTest();
-  valuedStringTest();
-};
+  unpacked.forEach((data, index) => expect(dataMap[index].value).toBe(data.value));
+});

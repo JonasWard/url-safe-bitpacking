@@ -1,6 +1,8 @@
+import { expect, test } from 'bun:test';
+
 import { DataEntryFactory } from '../factory/factory';
-import { toStringTest as generalStringTest, fromStringTest as generalFromStringTest } from './helperMethods';
-import { PrecisionRangeType } from '../types/floatData';
+import { dataBitsParser, dataBitsStringifier } from '../parsers';
+import { PrecisionRangeType } from '../types';
 
 export const values: [number, number, number, PrecisionRangeType, string][] = [
   [1, 0, 1, 0, '1'], // max
@@ -25,12 +27,11 @@ export const values: [number, number, number, PrecisionRangeType, string][] = [
   [1, 0, 1, 3, '1111101000'], // min
 ];
 
-export const toStringTest = () => {
-  values.forEach(([value, min, max, precision, s]) => {
-    generalStringTest(DataEntryFactory.createFloat(value, min, max, precision), s);
-  });
+values.forEach(([v, min, max, precision, bitString]) =>
+  test(`float ${v}, min: ${min}, max: ${max}, precision: ${precision}`, () =>
+    expect(dataBitsStringifier(DataEntryFactory.createFloat(v, min, max, precision))).toBe(bitString))
+);
 
-  values.forEach(([value, min, max, precision, s]) => {
-    generalFromStringTest(s, DataEntryFactory.createFloat(value, min, max, precision));
-  });
-};
+values.forEach(([v, min, max, precision, bitString]) =>
+  test(`parsing '${bitString}' as float`, () => expect(dataBitsParser(bitString, DataEntryFactory.createFloat(v, min, max, precision)).value).toBe(v))
+);
