@@ -1,12 +1,12 @@
 import { DataType } from '../enums/dataTypes';
 
-export type IntegerBitRangeType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+export const IntegerMaxBits = 12;
 
 // int max and int min can be any in javascript integer representable valid number
-// however, the delta between the two should neve exceed 10 bits or 1024
+// however, the delta between the two should neve exceed 12 bits or 4096
 export interface IntData {
   type: DataType.INT;
   min: number;
   max: number;
-  bits: IntegerBitRangeType;
+  bits: number;
 }
