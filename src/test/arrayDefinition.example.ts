@@ -8,7 +8,7 @@ import {
   NestedContentType,
 } from '../types/arrayDefinitions';
 
-export const validDataEntryArray: NestedContentDataType = ['a name', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]];
+export const nestedContentDataType: NestedContentDataType = ['a name', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]];
 
 export const validOptionalEntryType: OptionalEntryDataType = [true, [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')], []];
 export const anotherValidOptionalEntryType: OptionalEntryDataType = [true, [], [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]];
@@ -21,7 +21,7 @@ export const validEnumEntryType: EnumEntryDataType = [
   [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')],
 ];
 
-export const generalValidEntriesType: NestedContentDataType = [
+export const generalNestedContentDataType: NestedContentDataType = [
   'anotherEntry',
   [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat'), DataEntryFactory.createBoolean(true, 'someBoolean')],
 ];

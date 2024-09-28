@@ -22,23 +22,24 @@ import {
 } from '../types/arrayDefinitions';
 
 export const isSingleLevelContentType = (data: NestedContentType) =>
-  singleLevelContentTypeIsDataEntry(data[0] as SingleLevelContentType) || singleLevelContentTypeIsNestedContentDataType;
+  singleLevelContentTypeIsDataEntry(data[0] as SingleLevelContentType) || singleLevelContentTypeIsNestedContentDataType(data[0] as SingleLevelContentType);
 export const isDoubleLevelContentType = (data: NestedContentType) => !isSingleLevelContentType(data);
 export const singleLevelContentTypeIsDataEntry = (data: SingleLevelContentType) => !Array.isArray(data) && typeof data === 'object';
 export const singleLevelContentTypeIsNestedContentDataType = (data: SingleLevelContentType) => Array.isArray(data) && typeof data[0] === 'string';
 
 export const singleLevelContentTypeIsEnumEntryDataType = (data: NestedContentType) => isDoubleLevelContentType(data) && typeof data[0] === 'number';
-export const singleLevelContentTypeIsOptionalEntryDataType = (data: NestedContentType) => isDoubleLevelContentType(data) && typeof data[1] === 'boolean';
+export const singleLevelContentTypeIsOptionalEntryDataType = (data: NestedContentType) => isDoubleLevelContentType(data) && typeof data[0] === 'boolean';
 
-export const parseValidEntryTypeToDefinitionSubObject = (data: SingleLevelContentType, currentIndex: number): [number, DefinitionSubObject] => {
+export const parseSingleLevelContentTypeToDefinitionSubObject = (data: SingleLevelContentType, currentIndex: number): [number, DefinitionSubObject] => {
   if (singleLevelContentTypeIsDataEntry(data)) return parseDataEntry(data as DataEntry, currentIndex);
-  else if (singleLevelContentTypeIsNestedContentDataType(data)) return parseValidEntriesToDefinitionNestedArray(data as NestedContentDataType, currentIndex);
+  else if (singleLevelContentTypeIsNestedContentDataType(data))
+    return parseNestedContentDataTypeToDefinitionNestedArray(data as NestedContentDataType, currentIndex);
   else {
     throw new Error('this is an invalid output value, wonder why?');
   }
 };
 
-export const parseValidEntriesToDefinitionNestedArray = (
+export const parseNestedContentDataTypeToDefinitionNestedArray = (
   data: NestedContentDataType,
   currentIndex: number
 ): [number, DefinitionNestedArray | DefinitionNestedGenerationObject] => {
@@ -46,13 +47,13 @@ export const parseValidEntriesToDefinitionNestedArray = (
 
   if (isSingleLevelContentType(localData)) {
     let localIndex = currentIndex;
-    const parsedValidEntryTypes: DefinitionSubObject[] = [];
+    const parsedSingleLevelContentTypes: DefinitionSubObject[] = [];
     localData.forEach((v) => {
-      const [resultIndex, resultData] = parseValidEntryTypeToDefinitionSubObject(v as NestedContentDataType, localIndex);
-      parsedValidEntryTypes.push(resultData);
+      const [resultIndex, resultData] = parseSingleLevelContentTypeToDefinitionSubObject(v as NestedContentDataType, localIndex);
+      parsedSingleLevelContentTypes.push(resultData);
       localIndex = resultIndex;
     });
-    return [localIndex, [attributeName, parsedValidEntryTypes]];
+    return [localIndex, [attributeName, parsedSingleLevelContentTypes]];
   } else if (singleLevelContentTypeIsEnumEntryDataType(localData))
     return parseEnumEntryDataTypeToDefinitionNestedGenerationObject(localData as EnumEntryDataType, attributeName, currentIndex);
   else if (singleLevelContentTypeIsOptionalEntryDataType(localData))
@@ -68,14 +69,14 @@ export const parseEnumEntryDataTypeToDefinitionNestedGenerationObject = (
   currentIndex: number
 ): [number, DefinitionNestedGenerationObject] => {
   let localIndex = currentIndex + 1;
-  if (Math.round(data[0]) !== data[0]) `given default value isn't an integer, rounding it`;
-  if (data.length - 2 > Math.round(data[0]))
-    console.log(`given default value was larger than the amount of options available, using the largest value (${data.length - 2}) instead`);
-  if (data[0] < 0) console.log(`given default value was negative, using first index (0) instead`);
+  if (Math.round(data[0]) !== data[0]) `given default (${data[0]}) value isn't an integer, rounding it`;
+  if (data.length - 2 < Math.round(data[0]))
+    console.log(`given default value (${data[0]}) was larger than the amount of options available, using the largest value (${data.length - 2}) instead`);
+  if (data[0] < 0) console.log(`given default value (${data[0]}) was negative, using first index (0) instead`);
   const dataEntry = DataEntryFactory.createEnum(Math.max(Math.min(data.length - 2, Math.round(data[0])), 0), data.length - 2, name, localIndex);
   const generationMethod: DefinitionGenerationObject = (d: DataEntry): DefinitionArrayObject =>
     (data[(d.value as number) + 1] as NonEmptyValidEntryArrayType).map((v) => {
-      const [newIndex, definitionSubObject] = parseValidEntryTypeToDefinitionSubObject(v, localIndex);
+      const [newIndex, definitionSubObject] = parseSingleLevelContentTypeToDefinitionSubObject(v, localIndex);
       localIndex = newIndex;
       return definitionSubObject;
     });
@@ -92,7 +93,7 @@ export const parseOptionalEntryDataTypeToDefinitionNestedGenerationObject = (
   const dataEntry = DataEntryFactory.createBoolean(data[0], name, localIndex);
   const generationMethod: DefinitionGenerationObject = (d: DataEntry): DefinitionArrayObject =>
     (data[Number(!(d.value as boolean)) + 1] as NonEmptyValidEntryArrayType).map((v) => {
-      const [newIndex, definitionSubObject] = parseValidEntryTypeToDefinitionSubObject(v, localIndex);
+      const [newIndex, definitionSubObject] = parseSingleLevelContentTypeToDefinitionSubObject(v, localIndex);
       localIndex = newIndex;
       return definitionSubObject;
     });
@@ -114,7 +115,7 @@ export const parseVersionArrayDefinitionTypeToVersionDefinitionObject = (v: Vers
   localIndex = newIndex;
   // parse the other entries
   v.slice(1).forEach((d) => {
-    const [newIndex, dataEntry] = parseValidEntryTypeToDefinitionSubObject(d, localIndex);
+    const [newIndex, dataEntry] = parseSingleLevelContentTypeToDefinitionSubObject(d, localIndex);
     localIndex = newIndex;
     outputVersionDefinitionArray.push(dataEntry);
   });
