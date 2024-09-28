@@ -2,7 +2,7 @@
   "name": "url-safe-bitpacking",
   "module": "src/index.ts",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "build": "bun build ./src/index.ts --outfile=dist/bundle.js && bun run build:declaration",
     "build:declaration": "tsc --emitDeclarationOnly --outdir dist"

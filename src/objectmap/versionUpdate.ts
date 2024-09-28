@@ -108,5 +108,5 @@ export const updateDataEntry = (data: SemanticlyNestedDataEntry, newDataEntry: D
   // adding the newly entered dataEntry to the start of the array, will always be found first
   const virginDataEntryArray = [correctedDataEntry, ...dataEntryArray];
 
-  return updateDataEntryObject(versionParser.objectGeneratorParameters, virginDataEntryArray);
+  return updateDataEntryObject(versionParser.objectGeneratorParameters as DefinitionArrayObject, virginDataEntryArray);
 };

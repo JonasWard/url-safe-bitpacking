@@ -1,5 +1,5 @@
 import { ObjectGenerationOutputStatus } from '../enums/objectGenerationTypes';
-import { DataEntry } from './dataEntry';
+import { DataEntry, VersionDiscriptionType } from './dataEntry';
 import { SemanticlyNestedDataEntry } from './semanticlyNestedDataEntry';
 import { GlobalVersion } from './versionData';
 
@@ -14,7 +14,9 @@ export type ObjectGeneratorMethod = (s?: string, ...v: (DataEntry | undefined)[]
 export type DefinitionGenerationObject = (v: DataEntry) => DefinitionArrayObject;
 export type DefinitionNestedArray = [string, DefinitionArrayObject];
 export type DefinitionNestedGenerationObject = [string, DataEntry, DefinitionGenerationObject];
-export type DefinitionArrayObject = (DataEntry | DefinitionNestedArray | DefinitionNestedGenerationObject)[];
+export type DefinitionSubObject = DataEntry | DefinitionNestedArray | DefinitionNestedGenerationObject;
+export type DefinitionArrayObject = DefinitionSubObject[];
+export type VersionDefinitionObject = [VersionDiscriptionType, ...DefinitionArrayObject];
 
 export type VersionEnumSemantics = {
   [key: string]: { value: number; label: string }[];
@@ -24,7 +26,7 @@ export type ParserForVersion = {
   version: number;
   versionName: string;
   versionEnumSemantics?: VersionEnumSemantics;
-  objectGeneratorParameters: DefinitionArrayObject;
+  objectGeneratorParameters: VersionDefinitionObject;
 };
 
 export type VersionParsers = {
