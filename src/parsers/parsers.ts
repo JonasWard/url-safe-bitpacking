@@ -6,7 +6,7 @@ import * as enumParser from './enumParser';
 import * as versionParser from './versionParser';
 import * as booleanParser from './booleanParser';
 
-export const valueBitsParser = (bitString: string, mapData: DataRangeDescription) => {
+export const valueBitsParser = (bitString: string, mapData: DataRangeDescription): number | boolean => {
   switch (mapData.type) {
     case DataType.BOOLEAN:
       return booleanParser.rawParser(bitString);
@@ -33,7 +33,7 @@ export const dataBitsParser = (rawString: string, mapData: DataDescription): Dat
   }
 };
 
-export const getBitsCount = (mapData: DataRangeDescription) => {
+export const getBitsCount = (mapData: DataRangeDescription): number => {
   switch (mapData.type) {
     case DataType.BOOLEAN:
       return booleanParser.getBitsCount();

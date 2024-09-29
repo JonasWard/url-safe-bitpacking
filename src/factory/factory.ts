@@ -20,11 +20,11 @@ import { PrecisionRangeType } from '../types/floatData';
 import { VersionRangeType } from '../types/versionData';
 
 export class DataRangeDescriptionFactory {
-  public static createFloat = createFloat;
-  public static createInt = createInt;
-  public static createEnum = createEnum;
-  public static createBoolean = createBoolean;
-  public static createVersion = createVersion;
+  public static createFloat: typeof createFloat = createFloat;
+  public static createInt: typeof createInt = createInt;
+  public static createEnum: typeof createEnum = createEnum;
+  public static createBoolean: typeof createBoolean = createBoolean;
+  public static createVersion: typeof createVersion = createVersion;
 }
 
 export class DataDescriptionFactory {

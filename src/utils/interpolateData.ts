@@ -8,7 +8,7 @@ import { DataEntry } from '../types/dataEntry';
  * @param t - number between 0 and 1
  * @returns updated data entry
  */
-export const interpolateEntryAt = (dataEntry: DataEntry, t: number) => {
+export const interpolateEntryAt: (dataEntry: DataEntry, t: number) => DataEntry = (dataEntry: DataEntry, t: number): DataEntry => {
   const localT = Math.max(Math.min(1, t), 0);
   const cosT = Math.cos(localT * 2 * Math.PI) * 0.5 + 0.5;
 

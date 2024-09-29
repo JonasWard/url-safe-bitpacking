@@ -21,14 +21,15 @@ import {
   NonEmptyValidEntryArrayType,
 } from '../types/arrayDefinitions';
 
-export const isSingleLevelContentType = (data: NestedContentType) =>
+export const isSingleLevelContentType = (data: NestedContentType): boolean =>
   singleLevelContentTypeIsDataEntry(data[0] as SingleLevelContentType) || singleLevelContentTypeIsNestedContentDataType(data[0] as SingleLevelContentType);
-export const isDoubleLevelContentType = (data: NestedContentType) => !isSingleLevelContentType(data);
-export const singleLevelContentTypeIsDataEntry = (data: SingleLevelContentType) => !Array.isArray(data) && typeof data === 'object';
-export const singleLevelContentTypeIsNestedContentDataType = (data: SingleLevelContentType) => Array.isArray(data) && typeof data[0] === 'string';
+export const isDoubleLevelContentType = (data: NestedContentType): boolean => !isSingleLevelContentType(data);
+export const singleLevelContentTypeIsDataEntry = (data: SingleLevelContentType): boolean => !Array.isArray(data) && typeof data === 'object';
+export const singleLevelContentTypeIsNestedContentDataType = (data: SingleLevelContentType): boolean => Array.isArray(data) && typeof data[0] === 'string';
 
-export const singleLevelContentTypeIsEnumEntryDataType = (data: NestedContentType) => isDoubleLevelContentType(data) && typeof data[0] === 'number';
-export const singleLevelContentTypeIsOptionalEntryDataType = (data: NestedContentType) => isDoubleLevelContentType(data) && typeof data[0] === 'boolean';
+export const singleLevelContentTypeIsEnumEntryDataType = (data: NestedContentType): boolean => isDoubleLevelContentType(data) && typeof data[0] === 'number';
+export const singleLevelContentTypeIsOptionalEntryDataType = (data: NestedContentType): boolean =>
+  isDoubleLevelContentType(data) && typeof data[0] === 'boolean';
 
 export const parseSingleLevelContentTypeToDefinitionSubObject = (data: SingleLevelContentType, currentIndex: number): [number, DefinitionSubObject] => {
   if (singleLevelContentTypeIsDataEntry(data)) return parseDataEntry(data as DataEntry, currentIndex);

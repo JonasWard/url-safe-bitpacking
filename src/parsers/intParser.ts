@@ -1,8 +1,8 @@
 import { IntData } from '../types/intData';
 
-export const getBitsCount = (intData: IntData) => intData.bits;
+export const getBitsCount = (intData: IntData): number => intData.bits;
 
-export const rawValueParser = (stateString: string, bitCount: number) => {
+export const rawValueParser = (stateString: string, bitCount: number): number => {
   if (stateString.length < bitCount) throw new Error(`To few bits for this int bit string (${stateString.length} instead of ${bitCount})`);
   if (stateString.length > bitCount) throw new Error(`To many bits for this int bit string (${stateString.length} instead of ${bitCount})`);
 

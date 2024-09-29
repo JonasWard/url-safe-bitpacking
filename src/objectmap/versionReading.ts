@@ -132,7 +132,7 @@ const parsingDefinitionArrayObject = (
 // the main version of an object is always assumed to be the first 8 bits of the object - meaning that there are 256 possible base versions
 const readingVersion = (bitstring: string) => dataBitsArrayParser(bitstring, [DataDescriptionFactory.createVersion(8)])[0] as VersionDescriptionWithValueType;
 
-export const parseUrlMethod = (url: string, parserVersions: ParserForVersion[]) => {
+export const parseUrlMethod = (url: string, parserVersions: ParserForVersion[]): SemanticlyNestedDataEntry => {
   const bitString = parseBase64ToBits(url);
   const version = readingVersion(bitString);
   const versionParser = parserVersions[version.value];
@@ -157,14 +157,22 @@ export const parseDownNestedDataDescription = (nestedDataDescription: Semanticly
  * @param data: SemanticlyNestedDataEntry
  * @returns base64 string
  */
-export const getURLForData = (data: SemanticlyNestedDataEntry) => {
+export const getURLForData = (data: SemanticlyNestedDataEntry): string => {
   const dataEntryArray = parseDownNestedDataDescription(data) as DataEntryArray;
   const bitstring = dataArrayStringifier(dataEntryArray);
   return parseBitsToBase64(bitstring);
 };
 
 // helper method to read out the bit data and see no weird mistakes were made anywhere
-export const getTestStringValues = (data: SemanticlyNestedDataEntry) => {
+export const getTestStringValues = (
+  data: SemanticlyNestedDataEntry
+): {
+  bitsString: string;
+  base64BitString: string;
+  base64SplitString: string;
+  base64String: string;
+  raw: string;
+} => {
   const dataEntryArray = parseDownNestedDataDescription(data) as DataEntryArray;
   const bitstring = dataArrayStringifier(dataEntryArray);
   const url = parseBitsToBase64(bitstring);

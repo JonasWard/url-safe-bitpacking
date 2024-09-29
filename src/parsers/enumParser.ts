@@ -1,7 +1,7 @@
 import { EnumData } from '../types/enumData';
 import { rawValueParser as rawIntParser, rawIntStringifier } from './intParser';
 
-export const getBitsCount = (versionData: EnumData) => versionData.bits;
+export const getBitsCount = (versionData: EnumData): number => versionData.bits;
 
 export const rawParser = (rawString: string, versionData: EnumData): number => rawIntParser(rawString, versionData.bits);
 

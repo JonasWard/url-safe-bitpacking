@@ -1,7 +1,7 @@
 import { FloatData, PrecisionRangeType } from '../types/floatData';
 import { rawValueParser as rawIntParser, rawIntStringifier } from './intParser';
 
-export const getBitsCount = (floatData: FloatData) => floatData.significand;
+export const getBitsCount = (floatData: FloatData): number => floatData.significand;
 
 export const rawValueParser = (stateString: string, significandBits: number, precision: PrecisionRangeType): number => {
   if (stateString.length < significandBits) throw new Error(`To few bits for this float bit string (${stateString.length} instead of ${significandBits})`);

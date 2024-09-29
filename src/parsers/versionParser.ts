@@ -1,7 +1,7 @@
 import { VersionData } from '../types/versionData';
 import { rawValueParser as rawIntParser, rawIntStringifier } from './intParser';
 
-export const getBitsCount = (versionData: VersionData) => versionData.bits;
+export const getBitsCount = (versionData: VersionData): number => versionData.bits;
 
 export const rawParser = (rawString: string, versionData: VersionData): number => rawIntParser(rawString, versionData.bits);
 
