@@ -73,13 +73,23 @@ export const parseEnumEntryDataTypeToDefinitionNestedGenerationObject = (
   if (data.length - 2 < Math.round(data[0]))
     console.log(`given default value (${data[0]}) was larger than the amount of options available, using the largest value (${data.length - 2}) instead`);
   if (data[0] < 0) console.log(`given default value (${data[0]}) was negative, using first index (0) instead`);
-  const dataEntry = DataEntryFactory.createEnum(Math.max(Math.min(data.length - 2, Math.round(data[0])), 0), data.length - 2, name, localIndex);
-  const generationMethod: DefinitionGenerationObject = (d: DataEntry): DefinitionArrayObject =>
-    (data[(d.value as number) + 1] as NonEmptyValidEntryArrayType).map((v) => {
+  const dataEntry = DataEntryFactory.createEnum(
+    Math.max(Math.min(data.length - 2, Math.round(data[0])), 0),
+    data.length - 2,
+    `${name}${NAME_DELIMETER}ENUM_TYPE`,
+    localIndex
+  );
+  const generationMethod: DefinitionGenerationObject = (d: DataEntry): DefinitionArrayObject => {
+    const dataEntry = { ...d, index: localIndex } as DataEntry;
+    localIndex += 1;
+    const definitionArray: DefinitionArrayObject = (data[(d.value as number) + 1] as NonEmptyValidEntryArrayType).map((v) => {
       const [newIndex, definitionSubObject] = parseSingleLevelContentTypeToDefinitionSubObject(v, localIndex);
       localIndex = newIndex;
       return definitionSubObject;
     });
+
+    return [dataEntry, ...definitionArray];
+  };
 
   return [localIndex, [name, dataEntry, generationMethod]];
 };
@@ -90,13 +100,18 @@ export const parseOptionalEntryDataTypeToDefinitionNestedGenerationObject = (
   currentIndex: number
 ): [number, DefinitionNestedGenerationObject] => {
   let localIndex = currentIndex + 1;
-  const dataEntry = DataEntryFactory.createBoolean(data[0], name, localIndex);
-  const generationMethod: DefinitionGenerationObject = (d: DataEntry): DefinitionArrayObject =>
-    (data[Number(!(d.value as boolean)) + 1] as NonEmptyValidEntryArrayType).map((v) => {
+  const dataEntry = DataEntryFactory.createBoolean(data[0], `${name}${NAME_DELIMETER}BOOLEAN_TYPE`, localIndex);
+  const generationMethod: DefinitionGenerationObject = (d: DataEntry): DefinitionArrayObject => {
+    const dataEntry = { ...d, index: localIndex } as DataEntry;
+    localIndex += 1;
+    const definitionArray = (data[Number(!(d.value as boolean)) + 1] as NonEmptyValidEntryArrayType).map((v) => {
       const [newIndex, definitionSubObject] = parseSingleLevelContentTypeToDefinitionSubObject(v, localIndex);
       localIndex = newIndex;
       return definitionSubObject;
     });
+
+    return [dataEntry, ...definitionArray];
+  };
 
   return [localIndex, [name, dataEntry, generationMethod]];
 };
