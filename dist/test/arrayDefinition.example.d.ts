@@ -1,0 +1,12 @@
+import { NestedContentDataType, OptionalEntryDataType, EnumEntryDataType, VersionArrayDefinitionType, NestedContentType } from '../types/arrayDefinitions';
+export declare const nestedContentDataType: NestedContentDataType;
+export declare const validOptionalEntryType: OptionalEntryDataType;
+export declare const anotherValidOptionalEntryType: OptionalEntryDataType;
+export declare const validEnumEntryType: EnumEntryDataType;
+export declare const generalNestedContentDataType: NestedContentDataType;
+export declare const exampleVersion: VersionArrayDefinitionType;
+export declare const lucernaeTuricumArcExamples: EnumEntryDataType;
+export declare const footprintDefinition: EnumEntryDataType;
+export declare const heightParsingDefinition: NestedContentType;
+export declare const shapePreProcessingDefinition: EnumEntryDataType;
+export declare const lucernaeTurici: VersionArrayDefinitionType;

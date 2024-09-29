@@ -1,0 +1,14 @@
+import { DataEntry, DefinitionNestedArray, DefinitionNestedGenerationObject, DefinitionSubObject, VersionDefinitionObject } from '../types';
+import { EnumEntryDataType, OptionalEntryDataType, NestedContentType, NestedContentDataType, SingleLevelContentType, VersionArrayDefinitionType } from '../types/arrayDefinitions';
+export declare const isSingleLevelContentType: (data: NestedContentType) => boolean;
+export declare const isDoubleLevelContentType: (data: NestedContentType) => boolean;
+export declare const singleLevelContentTypeIsDataEntry: (data: SingleLevelContentType) => boolean;
+export declare const singleLevelContentTypeIsNestedContentDataType: (data: SingleLevelContentType) => boolean;
+export declare const singleLevelContentTypeIsEnumEntryDataType: (data: NestedContentType) => boolean;
+export declare const singleLevelContentTypeIsOptionalEntryDataType: (data: NestedContentType) => boolean;
+export declare const parseSingleLevelContentTypeToDefinitionSubObject: (data: SingleLevelContentType, currentIndex: number) => [number, DefinitionSubObject];
+export declare const parseNestedContentDataTypeToDefinitionNestedArray: (data: NestedContentDataType, currentIndex: number) => [number, DefinitionNestedArray | DefinitionNestedGenerationObject];
+export declare const parseEnumEntryDataTypeToDefinitionNestedGenerationObject: (data: EnumEntryDataType, name: string, currentIndex: number) => [number, DefinitionNestedGenerationObject];
+export declare const parseOptionalEntryDataTypeToDefinitionNestedGenerationObject: (data: OptionalEntryDataType, name: string, currentIndex: number) => [number, DefinitionNestedGenerationObject];
+export declare const parseDataEntry: (d: DataEntry, currentIndex: number) => [number, DataEntry];
+export declare const parseVersionArrayDefinitionTypeToVersionDefinitionObject: (v: VersionArrayDefinitionType) => VersionDefinitionObject;

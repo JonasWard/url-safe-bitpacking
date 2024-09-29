@@ -8,7 +8,7 @@
     "dist/*.d.ts"
   ],
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Jonas Ward",
   "description": "Library for creating web safe base64 objects with custom bith widths and dynamic values.",
   "scripts": {
