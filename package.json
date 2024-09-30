@@ -4,11 +4,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist/*.js",
-    "dist/*.d.ts"
+    "dist/*"
   ],
   "type": "module",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Jonas Ward",
   "description": "Library for creating web safe base64 objects with custom bith widths and dynamic values.",
   "scripts": {
