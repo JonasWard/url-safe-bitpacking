@@ -129,12 +129,11 @@ const parsingDefinitionArrayObject = (
   ];
 };
 
-// the main version of an object is always assumed to be the first 8 bits of the object - meaning that there are 256 possible base versions
-const readingVersion = (bitstring: string) => dataBitsArrayParser(bitstring, [DataDescriptionFactory.createVersion(8)])[0] as VersionDescriptionWithValueType;
-
 export const parseUrlMethod = (url: string, parserVersions: ParserForVersion[]): SemanticlyNestedDataEntry => {
   const bitString = parseBase64ToBits(url);
-  const version = readingVersion(bitString);
+  const version = dataBitsArrayParser(bitString, [
+    DataDescriptionFactory.createVersion(parserVersions[0].versionBitCount),
+  ])[0] as VersionDescriptionWithValueType;
   const versionParser = parserVersions[version.value];
 
   if (!versionParser) throw new Error(`No parser for version ${version.value}`);

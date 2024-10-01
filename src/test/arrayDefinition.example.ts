@@ -1,4 +1,7 @@
 import { DataEntryFactory } from '../factory';
+import { nestedDataEntryArrayToObject } from '../objectmap';
+import { parseVersionArrayDefinitionTypeToVersionDefinitionObject } from '../objectmap/versionArrayDefinitionToObjectDefintion';
+import { DefinitionArrayObject, ParserForVersion, VersionDefinitionObject } from '../types';
 import {
   NestedContentDataType,
   OptionalEntryDataType,
@@ -169,4 +172,13 @@ export const lucernaeTurici: VersionArrayDefinitionType = [
   ['footprint', footprintDefinition],
   ['heights', heightParsingDefinition],
   ['shapePreProcessing', shapePreProcessingDefinition],
+];
+
+export const lucernaeTuriciVersions: ParserForVersion[] = [
+  {
+    version: 0,
+    versionBitCount: 4,
+    versionName: '0',
+    objectGeneratorParameters: parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as VersionDefinitionObject,
+  },
 ];

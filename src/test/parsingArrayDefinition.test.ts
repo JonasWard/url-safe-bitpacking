@@ -8,6 +8,7 @@ import {
   lucernaeTurici,
   generalNestedContentDataType,
   anotherValidOptionalEntryType,
+  lucernaeTuriciVersions,
 } from './arrayDefinition.example';
 
 import {
@@ -21,7 +22,7 @@ import {
   singleLevelContentTypeIsDataEntry,
   singleLevelContentTypeIsNestedContentDataType,
 } from '../objectmap/versionArrayDefinitionToObjectDefintion';
-import { nestedDataEntryArrayToObject } from '../objectmap';
+import { getURLForData, nestedDataEntryArrayToObject, parseUrlMethod } from '../objectmap';
 import { DefinitionArrayObject } from '../types';
 import { SingleLevelContentType } from '../types/arrayDefinitions';
 
@@ -97,7 +98,7 @@ test('parse to array and then parse back', () =>
 test('parse to object - lucernae turici', () =>
   expect(
     (() => {
-      console.log(JSON.stringify(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici), null, 2));
+      JSON.stringify(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici), null, 2);
       return true;
     })()
   ).toBe(true));
@@ -105,13 +106,26 @@ test('parse to object - lucernae turici', () =>
 test('parse lucernae turici', () =>
   expect(
     (() => {
-      console.log(
-        JSON.stringify(
-          nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as DefinitionArrayObject, 0),
-          null,
-          2
-        )
+      JSON.stringify(
+        nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as DefinitionArrayObject, 0),
+        null,
+        2
       );
+      return true;
+    })()
+  ).toBe(true));
+
+const v0BaseStateString = 'CD2GGMmQAMYQBQoyGSjIAgAQ';
+
+test('parse lucernae turici to base64', () =>
+  expect(
+    getURLForData(nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as DefinitionArrayObject, 0))
+  ).toBe(v0BaseStateString));
+
+test('parse lucernae turici from base64', () =>
+  expect(
+    (() => {
+      console.log(parseUrlMethod(v0BaseStateString, lucernaeTuriciVersions));
       return true;
     })()
   ).toBe(true));
