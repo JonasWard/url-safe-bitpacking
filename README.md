@@ -1,6 +1,6 @@
 # url-safe-bitpacking
 
-Package for creating definitions of parametric models that can be stored as compactly as possible in a URL by storing it in a web-safe base-64 string.
+Package for creating definitions of parametric models that can be stored as compactly as possible in a URL by storing it in a web-safe base-64 string. This pacakge is till very much WIP. Feel free to suggest by making an issue or pull-request [GitHub](https://github.com/JonasWard/url-safe-bitpacking).
 
 ## concept
 
@@ -62,7 +62,7 @@ Single-level nested objects are arrays in which the entries it contains describe
 
 For the Double Nested arrays there are currently two variations: either an Optional type, which only accepts two values of which is an empty array and will be toggle on/off in relation to a certain boolean data entry.
 
-Install
+# Install
 
 ```bash
 npm install url-safe-bitpacking
