@@ -1,7 +1,7 @@
 import { ObjectGenerationOutputStatus } from '../enums/objectGenerationTypes';
 import { DataEntry, VersionDiscriptionType } from './dataEntry';
 import { SemanticlyNestedDataEntry } from './semanticlyNestedDataEntry';
-import { GlobalVersion } from './versionData';
+import { GlobalVersion, VersionRangeType } from './versionData';
 /**
  * A method that generates a nested object based on a set of values
  * @param s - url bit string (optional)
@@ -23,6 +23,7 @@ export type VersionEnumSemantics = {
 };
 export type ParserForVersion = {
     version: number;
+    versionBitCount: VersionRangeType;
     versionName: string;
     versionEnumSemantics?: VersionEnumSemantics;
     objectGeneratorParameters: VersionDefinitionObject;

@@ -1,3 +1,4 @@
+import { ParserForVersion } from '../types';
 import { NestedContentDataType, OptionalEntryDataType, EnumEntryDataType, VersionArrayDefinitionType, NestedContentType } from '../types/arrayDefinitions';
 export declare const nestedContentDataType: NestedContentDataType;
 export declare const validOptionalEntryType: OptionalEntryDataType;
@@ -10,3 +11,4 @@ export declare const footprintDefinition: EnumEntryDataType;
 export declare const heightParsingDefinition: NestedContentType;
 export declare const shapePreProcessingDefinition: EnumEntryDataType;
 export declare const lucernaeTurici: VersionArrayDefinitionType;
+export declare const lucernaeTuriciVersions: ParserForVersion[];
