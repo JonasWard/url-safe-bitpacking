@@ -36,7 +36,7 @@ const generationObjectUpdating = (
   dataEntryArray: DataEntryArray
 ): [string, SemanticlyNestedDataEntry] => {
   const [keyString, keyDataEntry, methodGenerator] = definitionArrayObject;
-  const foundKeyDataEntry = dataEntryArray.find((d) => d.name === keyDataEntry.name);
+  const foundKeyDataEntry = dataEntryArray.find((d) => d.name === keyDataEntry.name && d.index === keyDataEntry.index);
   const newKeyData = foundKeyDataEntry ? updateValue(keyDataEntry, foundKeyDataEntry) : keyDataEntry;
   return [keyString, updateDataEntryObject(methodGenerator(newKeyData), dataEntryArray)];
 };

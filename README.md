@@ -2,6 +2,15 @@
 
 Package for creating definitions of parametric models that can be stored as compactly as possible in a URL by storing it in a web-safe base-64 string. This pacakge is till very much WIP. Feel free to suggest by making an issue or pull-request [GitHub](https://github.com/JonasWard/url-safe-bitpacking).
 
+### goal for version 0.2
+
+| what | code | tests | docs |
+| data types | [x] | [x] | [x] |
+| nested object model | [x] | [ ] | [ ] |
+| updating model entries | [x] | [ ] | [ ] |
+| re-using data from old model on change in definition | [ ] | [ ] | [ ] |
+| flattening and reading of the objects | [x] | [ ] | [ ] |
+
 ## concept
 
 The goal of this library is to offer a flexible, minimal and, variable object definition that can be stored in the browser URL. The main imagined use-case is parametric models that have nested and variable sub-object definitions.
