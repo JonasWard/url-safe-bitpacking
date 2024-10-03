@@ -50,7 +50,7 @@ DataEntryFactory.createInt(5, 3, 20, 'circleDivisions');
 
 ### float
 
-Floating points work very much like the integer type, with the main difference that one can also define a precision to define at what order of magnitude (from -3 to +3) the variable should be considered. The significand can be up to 20 bits, which eg. at precision -3 would allow a range of .001 to 1048.576. Floating points are assumed to be always positive.
+Floating points work very much like the integer type, with the main difference that one can also define a precision to define at what order of magnitude (from -3 to +3) the variable should be considered. The significand can be up to 20 bits, which eg. at precision -3 would allow a range of .001 to 1048.576.
 
 ```typescript
 DataEntryFactory.createFloat(20, 10, 200, -1, 'shapePreProcessingWarptotal');
