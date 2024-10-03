@@ -4,12 +4,13 @@ Package for creating definitions of parametric models that can be stored as comp
 
 ### goal for version 0.2
 
-| what | code | tests | docs |
-| data types | [x] | [x] | [x] |
-| nested object model | [x] | [ ] | [ ] |
-| updating model entries | [x] | [ ] | [ ] |
-| re-using data from old model on change in definition | [ ] | [ ] | [ ] |
-| flattening and reading of the objects | [x] | [ ] | [ ] |
+| what                                                 | code | tests | docs |
+| ---------------------------------------------------- | ---- | ----- | ---- |
+| data types                                           | [x]  | [x]   | [x]  |
+| nested object model                                  | [x]  | [ ]   | [ ]  |
+| updating model entries                               | [x]  | [ ]   | [ ]  |
+| re-using data from old model on change in definition | [ ]  | [ ]   | [ ]  |
+| flattening and reading of the objects                | [x]  | [ ]   | [ ]  |
 
 ## concept
 
