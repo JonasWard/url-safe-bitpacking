@@ -1,6 +1,6 @@
-import { FloatDescriptionWithValueType } from '../types/dataEntry';
+import { FloatDataEntry } from '../types/dataEntry';
 
-export const updateValue = (original: FloatDescriptionWithValueType, update: FloatDescriptionWithValueType): FloatDescriptionWithValueType => {
+export const updateValue = (original: FloatDataEntry, update: FloatDataEntry): FloatDataEntry => {
   const value = Math.max(Math.min(update.value, original.max), original.min);
 
   return {

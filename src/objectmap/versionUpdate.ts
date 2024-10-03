@@ -1,5 +1,5 @@
 import { dataEntryCorrecting } from '../parsers/parsers';
-import { DataEntry, DataEntryArray, VersionDescriptionWithValueType } from '../types/dataEntry';
+import { DataEntry, DataEntryArray, VersionDataEntry } from '../types/dataEntry';
 import { SemanticlyNestedDataEntry } from '../types/semanticlyNestedDataEntry';
 import { DefinitionArrayObject, DefinitionNestedArray, DefinitionNestedGenerationObject, ParserForVersion } from '../types/versionParser';
 import { updateValue } from '../update/updateValues';
@@ -97,7 +97,7 @@ export const getDefaultObject = (versionObjects: ParserForVersion[], versioninde
  * @returns a newly created object in case of a key data description, otherwise the same object with just the new Data Entry value updated
  */
 export const updateDataEntry = (data: SemanticlyNestedDataEntry, newDataEntry: DataEntry, versionObjects: ParserForVersion[]): SemanticlyNestedDataEntry => {
-  const version = data.version as VersionDescriptionWithValueType;
+  const version = data.version as VersionDataEntry;
   const versionParser = versionObjects[version.value];
   if (!versionParser) throw new Error(`No parser for version ${version.value}`);
 

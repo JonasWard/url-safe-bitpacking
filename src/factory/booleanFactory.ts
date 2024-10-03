@@ -1,4 +1,4 @@
 import { DataType } from '../enums/dataTypes';
-import { BooleanData } from '../types/booleanData';
+import { BooleanDataEntry } from '../types';
 
-export const create = (): BooleanData => ({ type: DataType.BOOLEAN });
+export const create = (value: boolean, name: string = '', index: number = 0): BooleanDataEntry => ({ value, type: DataType.BOOLEAN, name, index });

@@ -1,15 +1,7 @@
 import { DataEntryFactory } from '../factory';
-import { nestedDataEntryArrayToObject } from '../objectmap';
 import { parseVersionArrayDefinitionTypeToVersionDefinitionObject } from '../objectmap/versionArrayDefinitionToObjectDefintion';
-import { DefinitionArrayObject, ParserForVersion, VersionDefinitionObject } from '../types';
-import {
-  NestedContentDataType,
-  OptionalEntryDataType,
-  EnumEntryDataType,
-  VersionArrayDefinitionType,
-  SingleLevelContentType,
-  NestedContentType,
-} from '../types/arrayDefinitions';
+import { ParsersForVersionObject, VersionDefinitionObject } from '../types';
+import { NestedContentDataType, OptionalEntryDataType, EnumEntryDataType, VersionArrayDefinitionType, NestedContentType } from '../types/arrayDefinitions';
 
 export const nestedContentDataType: NestedContentDataType = ['a name', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]];
 
@@ -174,11 +166,13 @@ export const lucernaeTurici: VersionArrayDefinitionType = [
   ['shapePreProcessing', shapePreProcessingDefinition],
 ];
 
-export const lucernaeTuriciVersions: ParserForVersion[] = [
-  {
-    version: 0,
-    versionBitCount: 4,
-    versionName: '0',
-    objectGeneratorParameters: parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as VersionDefinitionObject,
-  },
-];
+export const lucernaeTuriciVersions: ParsersForVersionObject = {
+  versionBitCount: 4,
+  versionParsers: [
+    {
+      version: 0,
+      versionName: '0',
+      objectGeneratorParameters: parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as VersionDefinitionObject,
+    },
+  ],
+};

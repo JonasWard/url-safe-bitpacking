@@ -1,5 +1,6 @@
 import { DataType } from '../enums/dataTypes';
 
-export interface BooleanData {
+export type BooleanData = {
   type: DataType.BOOLEAN;
-}
+  value: boolean;
+};

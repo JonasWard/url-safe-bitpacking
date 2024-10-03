@@ -7,7 +7,7 @@ import {
   DefinitionNestedGenerationObject,
   DefinitionSubObject,
   VersionDefinitionObject,
-  VersionDescriptionWithValueType,
+  VersionDataEntry,
 } from '../types';
 import {
   EnumEntryDataType,
@@ -127,7 +127,7 @@ export const parseVersionArrayDefinitionTypeToVersionDefinitionObject = (v: Vers
   let localIndex = 0;
   // parse the version
   const [newIndex, version] = parseDataEntry(v[0] as DataEntry, localIndex);
-  const outputVersionDefinitionArray: VersionDefinitionObject = [version as VersionDescriptionWithValueType];
+  const outputVersionDefinitionArray: VersionDefinitionObject = [version as VersionDataEntry];
   localIndex = newIndex;
   // parse the other entries
   v.slice(1).forEach((d) => {

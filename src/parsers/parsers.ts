@@ -1,12 +1,12 @@
 import { DataType } from '../enums/dataTypes';
-import { DataDescription, DataEntry, DataEntryArray, DataRangeDescription } from '../types/dataEntry';
+import { DataEntryArray, DataEntry } from '../types/dataEntry';
 import * as floatParser from './floatParser';
 import * as intParser from './intParser';
 import * as enumParser from './enumParser';
 import * as versionParser from './versionParser';
 import * as booleanParser from './booleanParser';
 
-export const valueBitsParser = (bitString: string, mapData: DataRangeDescription): number | boolean => {
+export const valueBitsParser = (bitString: string, mapData: DataEntry): number | boolean => {
   switch (mapData.type) {
     case DataType.BOOLEAN:
       return booleanParser.rawParser(bitString);
@@ -21,7 +21,7 @@ export const valueBitsParser = (bitString: string, mapData: DataRangeDescription
   }
 };
 
-export const dataBitsParser = (rawString: string, mapData: DataDescription): DataEntry => {
+export const dataBitsParser = (rawString: string, mapData: DataEntry): DataEntry => {
   switch (mapData.type) {
     case DataType.BOOLEAN:
       return { ...mapData, value: valueBitsParser(rawString, mapData) as boolean };
@@ -33,7 +33,7 @@ export const dataBitsParser = (rawString: string, mapData: DataDescription): Dat
   }
 };
 
-export const getBitsCount = (mapData: DataRangeDescription): number => {
+export const getBitsCount = (mapData: DataEntry): number => {
   switch (mapData.type) {
     case DataType.BOOLEAN:
       return booleanParser.getBitsCount();
@@ -54,7 +54,7 @@ export const getBitsCount = (mapData: DataRangeDescription): number => {
  * @param mapDataArray Data descriptions to map the bits to data entries
  * @returns array of data entries
  */
-export const dataBitsArrayParser = (bitString: string, mapDataArray: DataDescription[]): DataEntryArray => {
+export const dataBitsArrayParser = (bitString: string, mapDataArray: DataEntry[]): DataEntryArray => {
   const bitCounts = mapDataArray.map((mapData) => getBitsCount(mapData));
   const bitStartEndMap: [number, number][] = [];
   bitCounts.forEach((bitCount, index) => {

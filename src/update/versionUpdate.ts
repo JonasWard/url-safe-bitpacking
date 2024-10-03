@@ -1,6 +1,6 @@
-import { VersionDescriptionWithValueType } from '../types/dataEntry';
+import { VersionDataEntry } from '../types/dataEntry';
 
-export const updateValue = (original: VersionDescriptionWithValueType, update: VersionDescriptionWithValueType): VersionDescriptionWithValueType => {
+export const updateValue = (original: VersionDataEntry, update: VersionDataEntry): VersionDataEntry => {
   const value = Math.min(original.bits ** 2 - 1, update.value);
 
   return {

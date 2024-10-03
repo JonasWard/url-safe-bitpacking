@@ -1,5 +1,5 @@
 export { ObjectGenerationOutputStatus, DataType } from './enums';
-export { DataRangeDescriptionFactory, DataDescriptionFactory, DataEntryFactory } from './factory';
+export { DataEntryFactory } from './factory';
 export { getDefaultObject, updateDataEntry } from './objectmap';
 export {
   valueBitsParser,
@@ -28,24 +28,10 @@ export {
   IntData,
   VersionRangeType,
   VersionData,
-  GlobalVersion,
   BooleanData,
-  DataRangeDescription,
-  BooleanDiscriptionType,
-  IntDiscriptionType,
-  EnumDiscriptionType,
-  FloatDiscriptionType,
-  VersionDiscriptionType,
-  DataDescription,
-  BooleanDescriptionWithValueType,
-  IntDescriptionWithValueType,
-  EnumDescriptionWithValueType,
-  FloatDescriptionWithValueType,
-  VersionDescriptionWithValueType,
   DataEntry,
   DataEntryArray,
   SemanticlyNestedDataEntry,
-  SemanticlyNestedDataDescription,
   ObjectGeneratorMethod,
   DefinitionGenerationObject,
   DefinitionNestedArray,
@@ -55,7 +41,7 @@ export {
   VersionDefinitionObject,
   VersionEnumSemantics,
   ParserForVersion,
-  VersionParsers,
+  ParsersForVersionObject,
 } from './types';
 export {} from './update';
 export { interpolateEntryAt, getRelativeValue } from './utils';

@@ -1,5 +1,5 @@
 import { ObjectGenerationOutputStatus } from '../enums/objectGenerationTypes';
-import { DataDescriptionFactory } from '../factory/factory';
+import { DataEntryFactory } from '../factory/factory';
 import {
   dataArrayStringifier,
   dataBitsArrayParser,
@@ -9,9 +9,9 @@ import {
   parseBase64ToBits,
   parseBitsToBase64,
 } from '../parsers/parsers';
-import { DataDescription, DataEntry, DataEntryArray, VersionDescriptionWithValueType } from '../types/dataEntry';
-import { SemanticlyNestedDataDescription, SemanticlyNestedDataEntry } from '../types/semanticlyNestedDataEntry';
-import { DefinitionArrayObject, ParserForVersion } from '../types/versionParser';
+import { DataEntry, DataEntryArray, VersionDataEntry } from '../types/dataEntry';
+import { SemanticlyNestedDataEntry } from '../types/semanticlyNestedDataEntry';
+import { DefinitionArrayObject, ParserForVersion, ParsersForVersionObject } from '../types/versionParser';
 
 const parameterOffset = 100;
 
@@ -129,23 +129,21 @@ const parsingDefinitionArrayObject = (
   ];
 };
 
-export const parseUrlMethod = (url: string, parserVersions: ParserForVersion[]): SemanticlyNestedDataEntry => {
+export const parseUrlMethod = (url: string, parserVersions: ParsersForVersionObject): SemanticlyNestedDataEntry => {
   const bitString = parseBase64ToBits(url);
-  const version = dataBitsArrayParser(bitString, [
-    DataDescriptionFactory.createVersion(parserVersions[0].versionBitCount),
-  ])[0] as VersionDescriptionWithValueType;
-  const versionParser = parserVersions[version.value];
+  const version = dataBitsArrayParser(bitString, [DataEntryFactory.createVersion(0, parserVersions.versionBitCount)])[0] as VersionDataEntry;
+  const versionParser = parserVersions.versionParsers[version.value];
 
   if (!versionParser) throw new Error(`No parser for version ${version.value}`);
   return parsingDefinitionArrayObject(bitString, versionParser.objectGeneratorParameters as DefinitionArrayObject, 0)[0];
 };
 
 // flattening an nested data discription object, can be used for all semantically nested data types (though a bit type hacky)
-export const parseDownNestedDataDescription = (nestedDataDescription: SemanticlyNestedDataDescription): DataDescription[] => {
-  const dataDescriptions: DataDescription[] = [];
+export const parseDownNestedDataDescription = (nestedDataDescription: SemanticlyNestedDataEntry): DataEntry[] => {
+  const dataDescriptions: DataEntry[] = [];
   Object.values(nestedDataDescription).forEach((value) => {
-    if (value.hasOwnProperty('type')) dataDescriptions.push(value as DataDescription);
-    else dataDescriptions.push(...parseDownNestedDataDescription(value as SemanticlyNestedDataDescription));
+    if (value.hasOwnProperty('type')) dataDescriptions.push(value as DataEntry);
+    else dataDescriptions.push(...parseDownNestedDataDescription(value as SemanticlyNestedDataEntry));
   });
 
   return dataDescriptions.sort();

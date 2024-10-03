@@ -1,6 +1,6 @@
-import { EnumDescriptionWithValueType } from '../types/dataEntry';
+import { EnumDataEntry } from '../types/dataEntry';
 
-export const updateValue = (original: EnumDescriptionWithValueType, update: EnumDescriptionWithValueType): EnumDescriptionWithValueType => {
+export const updateValue = (original: EnumDataEntry, update: EnumDataEntry): EnumDataEntry => {
   const value = Math.min(original.max, update.value);
 
   return {
