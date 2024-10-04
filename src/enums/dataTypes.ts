@@ -6,7 +6,7 @@ export enum DataType {
   FLOAT,
 }
 
-export const getDataTypeName = (type: DataType) => {
+export const getDataTypeName = (type: DataType): string => {
   switch (type) {
     case DataType.VERSION:
       return 'VERSION';

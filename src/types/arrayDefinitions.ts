@@ -1,4 +1,4 @@
-import { DataEntry, VersionDescriptionWithValueType } from './dataEntry';
+import { DataEntry, VersionDataEntry } from './dataEntry';
 
 // basic content type
 export type SingleLevelContentType = DataEntry | NestedContentDataType;
@@ -11,7 +11,7 @@ export type NonEmptyValidEntryArrayType = [SingleLevelContentType, ...SingleLeve
 export type OptionalEntryDataType = [boolean, NonEmptyValidEntryArrayType, []] | [boolean, [], NonEmptyValidEntryArrayType]; // first entry is the default value
 export type EnumEntryDataType = [number, NonEmptyValidEntryArrayType, NonEmptyValidEntryArrayType, ...SingleLevelContentType[][]]; // first number is the default index
 
-export type VersionArrayDefinitionType = [VersionDescriptionWithValueType, ...SingleLevelContentType[]];
+export type VersionArrayDefinitionType = [VersionDataEntry, ...SingleLevelContentType[]];
 
 export const INDEX_DELIMETER = '$';
 export const NAME_DELIMETER = '_';
