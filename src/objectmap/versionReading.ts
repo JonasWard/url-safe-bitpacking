@@ -11,9 +11,10 @@ import {
 } from '../parsers/parsers';
 import { DataEntry, DataEntryArray, VersionDataEntry } from '../types/dataEntry';
 import { SemanticlyNestedDataEntry } from '../types/semanticlyNestedDataEntry';
-import { DefinitionArrayObject, ParserForVersion, ParsersForVersionObject } from '../types/versionParser';
+import { DefinitionArrayObject, ParsersForVersionObject } from '../types/versionParser';
 
-const parameterOffset = 100;
+// dirty index fix
+let currentIndex = -1;
 
 /**
  * Method for finding the names of the variable data entries in the DefinitionArrayObject
@@ -35,19 +36,21 @@ export const getVariableStrings = (definitionArrayObject: DefinitionArrayObject)
 /**
  * Method that translates a DefinitionArrayObject into a SemanticlyNestedDataEntry
  * @param definitionArrayObject [DataEntry | [string, DefinitionArrayObject]]
- * @param startIndex
  * @returns
  */
-export const nestedDataEntryArrayToObject = (definitionArrayObject: DefinitionArrayObject, startIndex: number): SemanticlyNestedDataEntry => {
-  const baseIndex = startIndex * parameterOffset;
+export const nestedDataEntryArrayToObject = (definitionArrayObject: DefinitionArrayObject): SemanticlyNestedDataEntry => {
+  currentIndex = -1;
+  return internalNestedDataEntryArrayToObject(definitionArrayObject);
+};
 
+const internalNestedDataEntryArrayToObject = (definitionArrayObject: DefinitionArrayObject): SemanticlyNestedDataEntry => {
   return Object.fromEntries(
-    definitionArrayObject.map((value, i) => {
+    definitionArrayObject.map((value) => {
       if (Array.isArray(value)) {
-        if (value.length === 2) return [value[0], nestedDataEntryArrayToObject(value[1], baseIndex + i)];
-        else return [value[0], nestedDataEntryArrayToObject(value[2](value[1]), baseIndex + i)];
+        if (value.length === 2) return [value[0], internalNestedDataEntryArrayToObject(value[1])];
+        else return [value[0], internalNestedDataEntryArrayToObject(value[2](value[1]))];
       }
-      return [value.name, { ...value, index: baseIndex + i }];
+      return [value.name, { ...value, index: ++currentIndex }];
     })
   );
 };
@@ -61,29 +64,27 @@ export const nestedDataEntryArrayToObject = (definitionArrayObject: DefinitionAr
  */
 const definitionArrayObjectParser = (
   bitString: string,
-  v: [string, DefinitionArrayObject],
-  orderIndex: number
+  v: [string, DefinitionArrayObject]
 ): [[string, SemanticlyNestedDataEntry], ObjectGenerationOutputStatus, number] => {
   const [key, values] = v;
-  const [nestedSemanticObject, objectGenerationStatus, localEndIndex] = parsingDefinitionArrayObject(bitString, values, orderIndex);
+  const [nestedSemanticObject, objectGenerationStatus, localEndIndex] = parsingDefinitionArrayObject(bitString, values);
   return [[key, nestedSemanticObject], objectGenerationStatus, localEndIndex];
 };
 
 const methodParser = (
   bitString: string,
-  v: [string, DataEntry, (v: DataEntry) => DefinitionArrayObject],
-  orderIndex: number
+  v: [string, DataEntry, (v: DataEntry) => DefinitionArrayObject]
 ): [[string, SemanticlyNestedDataEntry], ObjectGenerationOutputStatus, number] => {
   const [key, keyDataDescription, methodGenerator] = v;
-  const [keyDataEntry, status, bitWidth] = dataEntryParser(bitString, keyDataDescription, orderIndex);
-  const [result, localStatus, localEndIndex] = definitionArrayObjectParser(bitString, [key, methodGenerator(keyDataEntry)], orderIndex);
+  const [keyDataEntry, status] = dataEntryParser(bitString, keyDataDescription);
+  const [result, localStatus, localEndIndex] = definitionArrayObjectParser(bitString, [key, methodGenerator(keyDataEntry)]);
   return [result, localStatus !== ObjectGenerationOutputStatus.PARSED ? localStatus : status, localEndIndex];
 };
 
-const dataEntryParser = (bitString: string, v: DataEntry, baseOrderIndex: number): [DataEntry, ObjectGenerationOutputStatus, number] => {
+const dataEntryParser = (bitString: string, v: DataEntry): [DataEntry, ObjectGenerationOutputStatus, number] => {
   const bitWidth = getBitsCount(v);
-  const value = dataBitsParser(bitString.slice(0, bitWidth), v);
-  return [{ ...value, index: baseOrderIndex }, ObjectGenerationOutputStatus.PARSED, bitWidth];
+  const value = { ...dataBitsParser(bitString.slice(0, bitWidth), v), index: ++currentIndex };
+  return [value, ObjectGenerationOutputStatus.PARSED, bitWidth];
 };
 
 /**
@@ -94,10 +95,8 @@ const dataEntryParser = (bitString: string, v: DataEntry, baseOrderIndex: number
  */
 const parsingDefinitionArrayObject = (
   bitString: string,
-  definitionArrayObject: DefinitionArrayObject,
-  orderIndex: number
+  definitionArrayObject: DefinitionArrayObject
 ): [SemanticlyNestedDataEntry, ObjectGenerationOutputStatus, number] => {
-  const baseOrderIndex = orderIndex * parameterOffset;
   let startIndex = 0;
   let objectGenerationStatus = ObjectGenerationOutputStatus.PARSED;
 
@@ -106,18 +105,18 @@ const parsingDefinitionArrayObject = (
       definitionArrayObject.map((value, i) => {
         if (Array.isArray(value)) {
           if (value.length === 2) {
-            const [[key, nestedSemanticObject], status, localEndIndex] = definitionArrayObjectParser(bitString.slice(startIndex), value, baseOrderIndex + i);
+            const [[key, nestedSemanticObject], status, localEndIndex] = definitionArrayObjectParser(bitString.slice(startIndex), value);
             startIndex += localEndIndex;
             objectGenerationStatus !== ObjectGenerationOutputStatus.PARSED ? objectGenerationStatus : status;
             return [key, nestedSemanticObject];
           } else {
-            const [[key, nestedSemanticObject], status, localEndIndex] = methodParser(bitString.slice(startIndex), value, baseOrderIndex + i);
+            const [[key, nestedSemanticObject], status, localEndIndex] = methodParser(bitString.slice(startIndex), value);
             startIndex += localEndIndex;
             objectGenerationStatus !== ObjectGenerationOutputStatus.PARSED ? objectGenerationStatus : status;
             return [key, nestedSemanticObject];
           }
         } else {
-          const [dataEntry, status, localEndIndex] = dataEntryParser(bitString.slice(startIndex), value, baseOrderIndex + i);
+          const [dataEntry, status, localEndIndex] = dataEntryParser(bitString.slice(startIndex), value);
           startIndex += localEndIndex;
           objectGenerationStatus !== ObjectGenerationOutputStatus.PARSED ? objectGenerationStatus : status;
           return [dataEntry.name, dataEntry];
@@ -132,10 +131,10 @@ const parsingDefinitionArrayObject = (
 export const parseUrlMethod = (url: string, parserVersions: ParsersForVersionObject): SemanticlyNestedDataEntry => {
   const bitString = parseBase64ToBits(url);
   const version = dataBitsArrayParser(bitString, [DataEntryFactory.createVersion(0, parserVersions.versionBitCount)])[0] as VersionDataEntry;
-  const versionParser = parserVersions.versionParsers[version.value];
+  const versionParser = parserVersions.parsers[version.value];
 
   if (!versionParser) throw new Error(`No parser for version ${version.value}`);
-  return parsingDefinitionArrayObject(bitString, versionParser.objectGeneratorParameters as DefinitionArrayObject, 0)[0];
+  return parsingDefinitionArrayObject(bitString, versionParser.objectGeneratorParameters as DefinitionArrayObject)[0];
 };
 
 // flattening an nested data discription object, can be used for all semantically nested data types (though a bit type hacky)

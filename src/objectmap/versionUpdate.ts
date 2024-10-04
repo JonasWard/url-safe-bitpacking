@@ -1,9 +1,29 @@
 import { dataEntryCorrecting } from '../parsers/parsers';
 import { DataEntry, DataEntryArray, VersionDataEntry } from '../types/dataEntry';
 import { SemanticlyNestedDataEntry } from '../types/semanticlyNestedDataEntry';
-import { DefinitionArrayObject, DefinitionNestedArray, DefinitionNestedGenerationObject, ParserForVersion } from '../types/versionParser';
+import {
+  DefinitionArrayObject,
+  DefinitionNestedArray,
+  DefinitionNestedGenerationObject,
+  ParserForVersion,
+  ParsersForVersionObject,
+} from '../types/versionParser';
 import { updateValue } from '../update/updateValues';
 import { nestedDataEntryArrayToObject, parseDownNestedDataDescription } from './versionReading';
+
+// don't alter or change this variable anywher, it used when creating objects to keep track of the current index of a nested object
+// it's a bit hacky, but it gets the job done...
+let currentObjectIndex = 0;
+
+/**
+ * Helper method for finding an existing data entry in case there was a previous object
+ * @param dataEntry - new DataEntry
+ * @param dataEntryArray - existing DataEntryArray
+ */
+const findExistingDataEntry = (dataEntry: DataEntry, dataEntryArray: DataEntryArray): DataEntry | undefined => {
+  const dataEntryName = dataEntry.internalName ?? dataEntry.name;
+  return dataEntryArray.find((d) => (d.internalName ?? d.name) === dataEntryName);
+};
 
 /**
  * Method that handles a single dataEntry object in an DefinitionArrayObject
@@ -11,9 +31,9 @@ import { nestedDataEntryArrayToObject, parseDownNestedDataDescription } from './
  * @param dataEntryArray - DataEntryArray
  */
 const dataEntryUpdating = (dataEntry: DataEntry, dataEntryArray: DataEntryArray): [string, DataEntry] => {
-  const existingDataEntry = dataEntryArray.find((d) => d.name === dataEntry.name);
-  if (!existingDataEntry) return [dataEntry.name, dataEntry];
-  return [dataEntry.name, updateValue(dataEntry, existingDataEntry)];
+  const existingDataEntry = findExistingDataEntry(dataEntry, dataEntryArray);
+  if (!existingDataEntry) return [dataEntry.name, { ...dataEntry, index: currentObjectIndex++ }];
+  return [dataEntry.name, { ...updateValue(dataEntry, existingDataEntry), index: currentObjectIndex++ }];
 };
 
 /**
@@ -36,7 +56,7 @@ const generationObjectUpdating = (
   dataEntryArray: DataEntryArray
 ): [string, SemanticlyNestedDataEntry] => {
   const [keyString, keyDataEntry, methodGenerator] = definitionArrayObject;
-  const foundKeyDataEntry = dataEntryArray.find((d) => d.name === keyDataEntry.name && d.index === keyDataEntry.index);
+  const foundKeyDataEntry = findExistingDataEntry(keyDataEntry, dataEntryArray);
   const newKeyData = foundKeyDataEntry ? updateValue(keyDataEntry, foundKeyDataEntry) : keyDataEntry;
   return [keyString, updateDataEntryObject(methodGenerator(newKeyData), dataEntryArray)];
 };
@@ -82,23 +102,30 @@ const updateValuesInDataEntryObject = (data: SemanticlyNestedDataEntry, newDataE
   return data;
 };
 
-export const getDefaultObject = (versionObjects: ParserForVersion[], versionindex: number) => {
-  const versionParser = versionObjects[versionindex];
-  if (!versionParser) throw new Error(`No parser for version ${versionindex} index`);
-
-  return nestedDataEntryArrayToObject(versionParser.objectGeneratorParameters as DefinitionArrayObject, 0) as SemanticlyNestedDataEntry;
+/**
+ * Get the default object for a given version
+ * @param versionParser - The parsers for all versions
+ * @param versionindex - The index of the version for which to get the default object
+ * @returns - The default object for the given version
+ * @throws - Error if no parser for the given version index
+ */
+export const getDefaultObject = (versionParser: ParsersForVersionObject, versionindex: number) => {
+  if (!versionParser.parsers[versionindex]) throw new Error(`No parser for version ${versionindex} index`);
+  return nestedDataEntryArrayToObject(versionParser.parsers[versionindex].objectGeneratorParameters) as SemanticlyNestedDataEntry;
 };
 
 /**
  * Method that handles the updating of a single value in a SemanticlyNestedDataEntry object
  * @param data SemanticlyNestedDataEntry
  * @param newDataEntry updated DataEntry
- * @param versionObjects version object
+ * @param parsersForVersion version object
  * @returns a newly created object in case of a key data description, otherwise the same object with just the new Data Entry value updated
  */
-export const updateDataEntry = (data: SemanticlyNestedDataEntry, newDataEntry: DataEntry, versionObjects: ParserForVersion[]): SemanticlyNestedDataEntry => {
+export const updateDataEntry = (data: SemanticlyNestedDataEntry, newDataEntry: DataEntry, parsersForVersion: ParserForVersion[]): SemanticlyNestedDataEntry => {
+  currentObjectIndex = 0; // version for some reason is not correctly indexed, but that is acceptable
+
   const version = data.version as VersionDataEntry;
-  const versionParser = versionObjects[version.value];
+  const versionParser = parsersForVersion[version.value];
   if (!versionParser) throw new Error(`No parser for version ${version.value}`);
 
   const correctedDataEntry = dataEntryCorrecting(newDataEntry);
