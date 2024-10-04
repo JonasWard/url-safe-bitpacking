@@ -31,10 +31,10 @@ export const singleLevelContentTypeIsEnumEntryDataType = (data: NestedContentTyp
 export const singleLevelContentTypeIsOptionalEntryDataType = (data: NestedContentType): boolean =>
   isDoubleLevelContentType(data) && typeof data[0] === 'boolean';
 
-export const parseSingleLevelContentTypeToDefinitionSubObject = (data: SingleLevelContentType, currentIndex: number): [number, DefinitionSubObject] => {
-  if (singleLevelContentTypeIsDataEntry(data)) return parseDataEntry(data as DataEntry, currentIndex);
+export const parseSingleLevelContentTypeToDefinitionSubObject = (data: SingleLevelContentType, internalPrecedingName?: string): DefinitionSubObject => {
+  if (singleLevelContentTypeIsDataEntry(data)) return parseDataEntry(data as DataEntry, internalPrecedingName);
   else if (singleLevelContentTypeIsNestedContentDataType(data))
-    return parseNestedContentDataTypeToDefinitionNestedArray(data as NestedContentDataType, currentIndex);
+    return parseNestedContentDataTypeToDefinitionNestedArray(data as NestedContentDataType, internalPrecedingName);
   else {
     throw new Error('this is an invalid output value, wonder why?');
   }
@@ -42,23 +42,16 @@ export const parseSingleLevelContentTypeToDefinitionSubObject = (data: SingleLev
 
 export const parseNestedContentDataTypeToDefinitionNestedArray = (
   data: NestedContentDataType,
-  currentIndex: number
-): [number, DefinitionNestedArray | DefinitionNestedGenerationObject] => {
+  internalPrecedingName?: string
+): DefinitionNestedArray | DefinitionNestedGenerationObject => {
   const [attributeName, localData] = data;
 
-  if (isSingleLevelContentType(localData)) {
-    let localIndex = currentIndex;
-    const parsedSingleLevelContentTypes: DefinitionSubObject[] = [];
-    localData.forEach((v) => {
-      const [resultIndex, resultData] = parseSingleLevelContentTypeToDefinitionSubObject(v as NestedContentDataType, localIndex);
-      parsedSingleLevelContentTypes.push(resultData);
-      localIndex = resultIndex;
-    });
-    return [localIndex, [attributeName, parsedSingleLevelContentTypes]];
-  } else if (singleLevelContentTypeIsEnumEntryDataType(localData))
-    return parseEnumEntryDataTypeToDefinitionNestedGenerationObject(localData as EnumEntryDataType, attributeName, currentIndex);
+  if (isSingleLevelContentType(localData))
+    return [attributeName, localData.map((v) => parseSingleLevelContentTypeToDefinitionSubObject(v as NestedContentDataType, internalPrecedingName))];
+  else if (singleLevelContentTypeIsEnumEntryDataType(localData))
+    return parseEnumEntryDataTypeToDefinitionNestedGenerationObject(localData as EnumEntryDataType, attributeName, internalPrecedingName);
   else if (singleLevelContentTypeIsOptionalEntryDataType(localData))
-    return parseOptionalEntryDataTypeToDefinitionNestedGenerationObject(localData as OptionalEntryDataType, attributeName, currentIndex);
+    return parseOptionalEntryDataTypeToDefinitionNestedGenerationObject(localData as OptionalEntryDataType, attributeName, internalPrecedingName);
   else {
     throw new Error('this is an invalid output value, wonder why?');
   }
@@ -67,74 +60,44 @@ export const parseNestedContentDataTypeToDefinitionNestedArray = (
 export const parseEnumEntryDataTypeToDefinitionNestedGenerationObject = (
   data: EnumEntryDataType,
   name: string,
-  currentIndex: number
-): [number, DefinitionNestedGenerationObject] => {
-  let localIndex = currentIndex + 1;
+  internalPrecedingName?: string
+): DefinitionNestedGenerationObject => {
   if (Math.round(data[0]) !== data[0]) `given default (${data[0]}) value isn't an integer, rounding it`;
   if (data.length - 2 < Math.round(data[0]))
     console.log(`given default value (${data[0]}) was larger than the amount of options available, using the largest value (${data.length - 2}) instead`);
   if (data[0] < 0) console.log(`given default value (${data[0]}) was negative, using first index (0) instead`);
-  const dataEntry = DataEntryFactory.createEnum(
-    Math.max(Math.min(data.length - 2, Math.round(data[0])), 0),
-    data.length - 2,
-    `${name}${NAME_DELIMETER}ENUM_TYPE`,
-    localIndex
+  const dataEntry = parseDataEntry(
+    DataEntryFactory.createEnum(Math.max(Math.min(data.length - 2, Math.round(data[0])), 0), data.length - 2, name),
+    internalPrecedingName
   );
-  const generationMethod: DefinitionGenerationObject = (d: DataEntry): DefinitionArrayObject => {
-    const dataEntry = { ...d, index: localIndex } as DataEntry;
-    localIndex += 1;
-    const definitionArray: DefinitionArrayObject = (data[(d.value as number) + 1] as NonEmptyValidEntryArrayType).map((v) => {
-      const [newIndex, definitionSubObject] = parseSingleLevelContentTypeToDefinitionSubObject(v, localIndex);
-      localIndex = newIndex;
-      return definitionSubObject;
-    });
+  const generationMethod: DefinitionGenerationObject = (d: DataEntry): DefinitionArrayObject => [
+    d,
+    ...(data[(d.value as number) + 1] as NonEmptyValidEntryArrayType).map((v) => parseSingleLevelContentTypeToDefinitionSubObject(v, dataEntry.internalName)),
+  ];
 
-    return [dataEntry, ...definitionArray];
-  };
-
-  return [localIndex, [name, dataEntry, generationMethod]];
+  return [name, dataEntry, generationMethod];
 };
 
 export const parseOptionalEntryDataTypeToDefinitionNestedGenerationObject = (
   data: OptionalEntryDataType,
   name: string,
-  currentIndex: number
-): [number, DefinitionNestedGenerationObject] => {
-  let localIndex = currentIndex + 1;
-  const dataEntry = DataEntryFactory.createBoolean(data[0], `${name}${NAME_DELIMETER}BOOLEAN_TYPE`, localIndex);
-  const generationMethod: DefinitionGenerationObject = (d: DataEntry): DefinitionArrayObject => {
-    const dataEntry = { ...d, index: localIndex } as DataEntry;
-    localIndex += 1;
-    const definitionArray = (data[Number(!(d.value as boolean)) + 1] as NonEmptyValidEntryArrayType).map((v) => {
-      const [newIndex, definitionSubObject] = parseSingleLevelContentTypeToDefinitionSubObject(v, localIndex);
-      localIndex = newIndex;
-      return definitionSubObject;
-    });
+  internalPrecedingName?: string
+): DefinitionNestedGenerationObject => {
+  const dataEntry = parseDataEntry(DataEntryFactory.createBoolean(data[0], name), internalPrecedingName);
+  const generationMethod: DefinitionGenerationObject = (d: DataEntry): DefinitionArrayObject => [
+    d,
+    ...(data[Number(!(d.value as boolean)) + 1] as NonEmptyValidEntryArrayType).map((v) =>
+      parseSingleLevelContentTypeToDefinitionSubObject(v, dataEntry.internalName)
+    ),
+  ];
 
-    return [dataEntry, ...definitionArray];
-  };
-
-  return [localIndex, [name, dataEntry, generationMethod]];
+  return [name, dataEntry, generationMethod];
 };
 
-export const parseDataEntry = (d: DataEntry, currentIndex: number): [number, DataEntry] => {
-  const localIndex = currentIndex + 1;
+export const parseDataEntry = (d: DataEntry, internalPrecedingName?: string): DataEntry =>
+  internalPrecedingName ? { ...d, internalName: `${internalPrecedingName}${NAME_DELIMETER}${d.name}` } : d;
 
-  return [localIndex, { ...d, index: localIndex }];
-};
-
-export const parseVersionArrayDefinitionTypeToVersionDefinitionObject = (v: VersionArrayDefinitionType): VersionDefinitionObject => {
-  let localIndex = 0;
-  // parse the version
-  const [newIndex, version] = parseDataEntry(v[0] as DataEntry, localIndex);
-  const outputVersionDefinitionArray: VersionDefinitionObject = [version as VersionDataEntry];
-  localIndex = newIndex;
-  // parse the other entries
-  v.slice(1).forEach((d) => {
-    const [newIndex, dataEntry] = parseSingleLevelContentTypeToDefinitionSubObject(d, localIndex);
-    localIndex = newIndex;
-    outputVersionDefinitionArray.push(dataEntry);
-  });
-
-  return outputVersionDefinitionArray;
-};
+export const parseVersionArrayDefinitionTypeToVersionDefinitionObject = (v: VersionArrayDefinitionType): VersionDefinitionObject => [
+  parseDataEntry(v[0]) as VersionDataEntry,
+  ...v.slice(1).map((d) => parseSingleLevelContentTypeToDefinitionSubObject(d, '_')),
+];
