@@ -13,8 +13,9 @@ import { DataEntry, DataEntryArray, VersionDataEntry } from '../types/dataEntry'
 import { SemanticlyNestedDataEntry } from '../types/semanticlyNestedDataEntry';
 import { DefinitionArrayObject, ParsersForVersionObject } from '../types/versionParser';
 
-// dirty index fix
-let currentIndex = -1;
+// don't alter or change this variable anywher, it used when creating objects to keep track of the current index of a nested object
+// it's a bit hacky, but it gets the job done...
+let currentObjectIndex = -1;
 
 /**
  * Method for finding the names of the variable data entries in the DefinitionArrayObject
@@ -39,7 +40,7 @@ export const getVariableStrings = (definitionArrayObject: DefinitionArrayObject)
  * @returns
  */
 export const nestedDataEntryArrayToObject = (definitionArrayObject: DefinitionArrayObject): SemanticlyNestedDataEntry => {
-  currentIndex = -1;
+  currentObjectIndex = -1;
   return internalNestedDataEntryArrayToObject(definitionArrayObject);
 };
 
@@ -50,7 +51,7 @@ const internalNestedDataEntryArrayToObject = (definitionArrayObject: DefinitionA
         if (value.length === 2) return [value[0], internalNestedDataEntryArrayToObject(value[1])];
         else return [value[0], internalNestedDataEntryArrayToObject(value[2](value[1]))];
       }
-      return [value.name, { ...value, index: ++currentIndex }];
+      return [value.name, { ...value, index: ++currentObjectIndex }];
     })
   );
 };
@@ -76,14 +77,14 @@ const methodParser = (
   v: [string, DataEntry, (v: DataEntry) => DefinitionArrayObject]
 ): [[string, SemanticlyNestedDataEntry], ObjectGenerationOutputStatus, number] => {
   const [key, keyDataDescription, methodGenerator] = v;
-  const [keyDataEntry, status] = dataEntryParser(bitString, keyDataDescription);
+  const [keyDataEntry, status] = dataEntryParser(bitString, keyDataDescription, false); // not increasing index twice
   const [result, localStatus, localEndIndex] = definitionArrayObjectParser(bitString, [key, methodGenerator(keyDataEntry)]);
   return [result, localStatus !== ObjectGenerationOutputStatus.PARSED ? localStatus : status, localEndIndex];
 };
 
-const dataEntryParser = (bitString: string, v: DataEntry): [DataEntry, ObjectGenerationOutputStatus, number] => {
+const dataEntryParser = (bitString: string, v: DataEntry, iterate: boolean = true): [DataEntry, ObjectGenerationOutputStatus, number] => {
   const bitWidth = getBitsCount(v);
-  const value = { ...dataBitsParser(bitString.slice(0, bitWidth), v), index: ++currentIndex };
+  const value = iterate ? { ...dataBitsParser(bitString.slice(0, bitWidth), v), index: ++currentObjectIndex } : dataBitsParser(bitString.slice(0, bitWidth), v);
   return [value, ObjectGenerationOutputStatus.PARSED, bitWidth];
 };
 
@@ -102,7 +103,7 @@ const parsingDefinitionArrayObject = (
 
   return [
     Object.fromEntries(
-      definitionArrayObject.map((value, i) => {
+      definitionArrayObject.map((value) => {
         if (Array.isArray(value)) {
           if (value.length === 2) {
             const [[key, nestedSemanticObject], status, localEndIndex] = definitionArrayObjectParser(bitString.slice(startIndex), value);
@@ -128,7 +129,15 @@ const parsingDefinitionArrayObject = (
   ];
 };
 
+/**
+ * Method to parse a url into a SemanticlyNestedDataEntry.
+ * @param url - the url to parse
+ * @param parserVersions - the object containing the version parsers
+ * @returns the parsed SemanticlyNestedDataEntry
+ */
 export const parseUrlMethod = (url: string, parserVersions: ParsersForVersionObject): SemanticlyNestedDataEntry => {
+  currentObjectIndex = -1;
+
   const bitString = parseBase64ToBits(url);
   const version = dataBitsArrayParser(bitString, [DataEntryFactory.createVersion(0, parserVersions.versionBitCount)])[0] as VersionDataEntry;
   const versionParser = parserVersions.parsers[version.value];
