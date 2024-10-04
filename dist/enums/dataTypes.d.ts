@@ -5,3 +5,4 @@ export declare enum DataType {
     INT = 3,
     FLOAT = 4
 }
+export declare const getDataTypeName: (type: DataType) => string;

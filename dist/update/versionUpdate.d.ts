@@ -1,2 +1,2 @@
-import { VersionDescriptionWithValueType } from '../types/dataEntry';
-export declare const updateValue: (original: VersionDescriptionWithValueType, update: VersionDescriptionWithValueType) => VersionDescriptionWithValueType;
+import { VersionDataEntry } from '../types/dataEntry';
+export declare const updateValue: (original: VersionDataEntry, update: VersionDataEntry) => VersionDataEntry;

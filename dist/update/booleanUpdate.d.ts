@@ -1,2 +1,2 @@
-import { BooleanDescriptionWithValueType } from '../types/dataEntry';
-export declare const updateValue: (original: BooleanDescriptionWithValueType, update: BooleanDescriptionWithValueType) => BooleanDescriptionWithValueType;
+import { BooleanDataEntry } from '../types/dataEntry';
+export declare const updateValue: (original: BooleanDataEntry, update: BooleanDataEntry) => BooleanDataEntry;

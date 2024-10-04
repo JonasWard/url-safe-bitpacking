@@ -27,18 +27,21 @@ var getBitsForIntegerNumber = (number, maxBits) => {
 };
 
 // src/factory/floatFactory.ts
-var create = (min, max, precision) => {
+var create = (value, min = 0, max = 1, precision = 2, name = "", index = -1) => {
   const precisionMultiplier = 10 ** precision;
   const roundedMin = Math.floor(min * precisionMultiplier);
   const roundedMax = Math.ceil(max * precisionMultiplier);
   const delta = roundedMax - roundedMin;
   const significand = Math.max(1, getBitsForIntegerNumber(delta, SignificandMaxBits));
   return {
+    value,
     type: DataType.FLOAT,
     min: roundedMin / precisionMultiplier,
     max: roundedMax / precisionMultiplier,
     precision,
-    significand
+    significand,
+    name,
+    index
   };
 };
 
@@ -46,7 +49,7 @@ var create = (min, max, precision) => {
 var IntegerMaxBits = 12;
 
 // src/factory/intFactory.ts
-var create2 = (min, max) => {
+var create2 = (value, min = 0, max = 10, name = "", index = -1) => {
   if (!Number.isInteger(min) || !Number.isInteger(max))
     throw new Error("min and max must be integers");
   if (max - min < 1)
@@ -54,23 +57,26 @@ var create2 = (min, max) => {
   if (Math.abs(max - min) > 2 ** IntegerMaxBits - 1)
     throw new Error("max - min must be less than 1024");
   const bits = getBitsForIntegerNumber(max - min + 1, IntegerMaxBits);
-  return { type: DataType.INT, min, max, bits };
+  return { value, type: DataType.INT, min, max, bits, name, index };
 };
 
 // src/factory/booleanFactory.ts
-var create3 = () => ({ type: DataType.BOOLEAN });
+var create3 = (value, name = "", index = -1) => ({ value, type: DataType.BOOLEAN, name, index });
 
 // src/factory/versionFactory.ts
-var create4 = (bits) => ({
+var create4 = (value, bits = 8, name = "", index = -1) => ({
+  value,
   type: DataType.VERSION,
-  bits
+  bits,
+  name,
+  index
 });
 
 // src/types/enumData.ts
 var EnumMaxBits = 8;
 
 // src/factory/enumFactory.ts
-var create5 = (max) => {
+var create5 = (value, max = 10, name = "", index = -1) => {
   if (!Number.isInteger(max))
     throw new Error("min and max must be integers");
   if (max < 1)
@@ -78,78 +84,17 @@ var create5 = (max) => {
   if (max > 2 ** EnumMaxBits - 1)
     throw new Error("max - min must be less than 256");
   const bits = getBitsForIntegerNumber(max + 1, EnumMaxBits);
-  return { type: DataType.ENUM, max, bits };
+  return { value, type: DataType.ENUM, max, bits, name, index };
 };
 
 // src/factory/factory.ts
-class DataRangeDescriptionFactory {
-  static createFloat = create;
-  static createInt = create2;
-  static createEnum = create5;
-  static createBoolean = create3;
-  static createVersion = create4;
-}
-
-class DataDescriptionFactory {
-  static createFloat = (min = 0, max = 1, precision = 2, name = "", index = 0) => ({
-    ...create(min, max, precision),
-    name,
-    index
-  });
-  static createInt = (min = 0, max = 10, name = "", index = 0) => ({
-    ...create2(min, max),
-    name,
-    index
-  });
-  static createEnum = (max = 10, name = "", index = 0) => ({
-    ...create5(max),
-    name,
-    index
-  });
-  static createBoolean = (name = "", index = 0) => ({
-    ...create3(),
-    name,
-    index
-  });
-  static createVersion = (bits = 8, name = "", index = 0) => ({
-    ...create4(bits),
-    name,
-    index
-  });
-}
-
-class DataEntryFactory {
-  static createFloat = (value, min = 0, max = 1, precision = 2, name = "", index = 0) => ({
-    ...create(min, max, precision),
-    value,
-    name,
-    index
-  });
-  static createInt = (value, min = 0, max = 10, name = "", index = 0) => ({
-    ...create2(min, max),
-    value,
-    name,
-    index
-  });
-  static createEnum = (value, max = 10, name = "", index = 0) => ({
-    ...create5(max),
-    value,
-    name,
-    index
-  });
-  static createBoolean = (value, name = "", index = 0) => ({
-    ...create3(),
-    value,
-    name,
-    index
-  });
-  static createVersion = (value, bits = 8, name = "", index = 0) => ({
-    ...create4(bits),
-    value,
-    name,
-    index
-  });
-}
+var DataEntryFactory = {
+  createFloat: create,
+  createInt: create2,
+  createEnum: create5,
+  createBoolean: create3,
+  createVersion: create4
+};
 // src/parsers/intParser.ts
 var getBitsCount = (intData2) => intData2.bits;
 var rawValueParser = (stateString, bitCount) => {
@@ -309,17 +254,20 @@ var dataArrayStringifier = (dataEntryArray) => {
 };
 
 // src/objectmap/versionReading.ts
-var parameterOffset = 100;
-var nestedDataEntryArrayToObject = (definitionArrayObject, startIndex) => {
-  const baseIndex = startIndex * parameterOffset;
-  return Object.fromEntries(definitionArrayObject.map((value, i) => {
+var currentObjectIndex = -1;
+var nestedDataEntryArrayToObject = (definitionArrayObject) => {
+  currentObjectIndex = -1;
+  return internalNestedDataEntryArrayToObject(definitionArrayObject);
+};
+var internalNestedDataEntryArrayToObject = (definitionArrayObject) => {
+  return Object.fromEntries(definitionArrayObject.map((value) => {
     if (Array.isArray(value)) {
       if (value.length === 2)
-        return [value[0], nestedDataEntryArrayToObject(value[1], baseIndex + i)];
+        return [value[0], internalNestedDataEntryArrayToObject(value[1])];
       else
-        return [value[0], nestedDataEntryArrayToObject(value[2](value[1]), baseIndex + i)];
+        return [value[0], internalNestedDataEntryArrayToObject(value[2](value[1]))];
     }
-    return [value.name, { ...value, index: baseIndex + i }];
+    return [value.name, { ...value, index: ++currentObjectIndex }];
   }));
 };
 var parseDownNestedDataDescription = (nestedDataDescription) => {
@@ -385,19 +333,24 @@ var updateValue6 = (original, update) => {
       return updateValue2(original, update);
     case DataType.ENUM:
       return updateValue3(original, update);
-    case DataType.VERSION:
-      return updateValue4(original, update);
     case DataType.BOOLEAN:
       return updateValue5(original, update);
+    case DataType.VERSION:
+      return updateValue4(original, update);
   }
 };
 
 // src/objectmap/versionUpdate.ts
+var currentObjectIndex2 = 0;
+var findExistingDataEntry = (dataEntry, dataEntryArray) => {
+  const dataEntryName = dataEntry.internalName ?? dataEntry.name;
+  return dataEntryArray.find((d) => (d.internalName ?? d.name) === dataEntryName);
+};
 var dataEntryUpdating = (dataEntry, dataEntryArray) => {
-  const existingDataEntry = dataEntryArray.find((d) => d.name === dataEntry.name);
+  const existingDataEntry = findExistingDataEntry(dataEntry, dataEntryArray);
   if (!existingDataEntry)
-    return [dataEntry.name, dataEntry];
-  return [dataEntry.name, updateValue6(dataEntry, existingDataEntry)];
+    return [dataEntry.name, { ...dataEntry, index: currentObjectIndex2++ }];
+  return [dataEntry.name, { ...updateValue6(dataEntry, existingDataEntry), index: currentObjectIndex2++ }];
 };
 var nestedDataEntryArrayUpdating = (definitionNestedArrray, dataEntryArray) => {
   const [keyString, nestedDefinitionArray] = definitionNestedArrray;
@@ -405,7 +358,7 @@ var nestedDataEntryArrayUpdating = (definitionNestedArrray, dataEntryArray) => {
 };
 var generationObjectUpdating = (definitionArrayObject, dataEntryArray) => {
   const [keyString, keyDataEntry, methodGenerator] = definitionArrayObject;
-  const foundKeyDataEntry = dataEntryArray.find((d) => d.name === keyDataEntry.name);
+  const foundKeyDataEntry = findExistingDataEntry(keyDataEntry, dataEntryArray);
   const newKeyData = foundKeyDataEntry ? updateValue6(keyDataEntry, foundKeyDataEntry) : keyDataEntry;
   return [keyString, updateDataEntryObject(methodGenerator(newKeyData), dataEntryArray)];
 };
@@ -427,15 +380,15 @@ var updateDataEntryObject = (definitionArrayObject, dataArray) => {
   });
   return newNestedObject;
 };
-var getDefaultObject = (versionObjects, versionindex) => {
-  const versionParser = versionObjects[versionindex];
-  if (!versionParser)
+var getDefaultObject = (versionParser, versionindex) => {
+  if (!versionParser.parsers[versionindex])
     throw new Error(`No parser for version ${versionindex} index`);
-  return nestedDataEntryArrayToObject(versionParser.objectGeneratorParameters, 0);
+  return nestedDataEntryArrayToObject(versionParser.parsers[versionindex].objectGeneratorParameters);
 };
-var updateDataEntry = (data, newDataEntry, versionObjects) => {
+var updateDataEntry = (data, newDataEntry, parsersForVersion) => {
+  currentObjectIndex2 = 0;
   const version = data.version;
-  const versionParser = versionObjects[version.value];
+  const versionParser = parsersForVersion[version.value];
   if (!versionParser)
     throw new Error(`No parser for version ${version.value}`);
   const correctedDataEntry = dataEntryCorrecting(newDataEntry);
@@ -493,7 +446,5 @@ export {
   ObjectGenerationOutputStatus,
   IntegerMaxBits,
   DataType,
-  DataRangeDescriptionFactory,
-  DataEntryFactory,
-  DataDescriptionFactory
+  DataEntryFactory
 };

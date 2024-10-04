@@ -1,6 +1,6 @@
-import { DataDescription } from '../types/dataEntry';
-import { SemanticlyNestedDataDescription, SemanticlyNestedDataEntry } from '../types/semanticlyNestedDataEntry';
-import { DefinitionArrayObject, ParserForVersion } from '../types/versionParser';
+import { DataEntry } from '../types/dataEntry';
+import { SemanticlyNestedDataEntry } from '../types/semanticlyNestedDataEntry';
+import { DefinitionArrayObject, ParsersForVersionObject } from '../types/versionParser';
 /**
  * Method for finding the names of the variable data entries in the DefinitionArrayObject
  * @param definitionArrayObject - DefinitionArrayObject
@@ -10,12 +10,17 @@ export declare const getVariableStrings: (definitionArrayObject: DefinitionArray
 /**
  * Method that translates a DefinitionArrayObject into a SemanticlyNestedDataEntry
  * @param definitionArrayObject [DataEntry | [string, DefinitionArrayObject]]
- * @param startIndex
  * @returns
  */
-export declare const nestedDataEntryArrayToObject: (definitionArrayObject: DefinitionArrayObject, startIndex: number) => SemanticlyNestedDataEntry;
-export declare const parseUrlMethod: (url: string, parserVersions: ParserForVersion[]) => SemanticlyNestedDataEntry;
-export declare const parseDownNestedDataDescription: (nestedDataDescription: SemanticlyNestedDataDescription) => DataDescription[];
+export declare const nestedDataEntryArrayToObject: (definitionArrayObject: DefinitionArrayObject) => SemanticlyNestedDataEntry;
+/**
+ * Method to parse a url into a SemanticlyNestedDataEntry.
+ * @param url - the url to parse
+ * @param parserVersions - the object containing the version parsers
+ * @returns the parsed SemanticlyNestedDataEntry
+ */
+export declare const parseUrlMethod: (url: string, parserVersions: ParsersForVersionObject) => SemanticlyNestedDataEntry;
+export declare const parseDownNestedDataDescription: (nestedDataDescription: SemanticlyNestedDataEntry) => DataEntry[];
 /**
  * Method to get an URL descriptor from a SemanticlyNestedDataEntry
  * @param data: SemanticlyNestedDataEntry

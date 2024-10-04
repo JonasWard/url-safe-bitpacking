@@ -1,2 +1,2 @@
-import { IntData } from '../types/intData';
-export declare const create: (min: number, max: number) => IntData;
+import { IntDataEntry } from '../types';
+export declare const create: (value: number, min?: number, max?: number, name?: string, index?: number) => IntDataEntry;

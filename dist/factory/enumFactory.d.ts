@@ -1,2 +1,2 @@
-import { EnumData } from '../types/enumData';
-export declare const create: (max: number) => EnumData;
+import { EnumDataEntry } from '../types';
+export declare const create: (value: number, max?: number, name?: string, index?: number) => EnumDataEntry;

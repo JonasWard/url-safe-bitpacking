@@ -1,2 +1,2 @@
-import { IntDescriptionWithValueType } from '../types/dataEntry';
-export declare const updateValue: (original: IntDescriptionWithValueType, update: IntDescriptionWithValueType) => IntDescriptionWithValueType;
+import { IntDataEntry } from '../types/dataEntry';
+export declare const updateValue: (original: IntDataEntry, update: IntDataEntry) => IntDataEntry;
