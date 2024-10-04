@@ -52,7 +52,7 @@ test('dataValidation', () => {
 test('simple valid entries', () =>
   expect(
     (() => {
-      JSON.stringify(parseNestedContentDataTypeToDefinitionNestedArray(nestedContentDataType, 0), null, 2);
+      JSON.stringify(parseNestedContentDataTypeToDefinitionNestedArray(nestedContentDataType), null, 2);
       return true;
     })()
   ).toBe(true));
@@ -60,7 +60,7 @@ test('simple valid entries', () =>
 test('simple optional entry type', () =>
   expect(
     (() => {
-      JSON.stringify(parseOptionalEntryDataTypeToDefinitionNestedGenerationObject(validOptionalEntryType, 'something', 0), null, 2);
+      JSON.stringify(parseOptionalEntryDataTypeToDefinitionNestedGenerationObject(validOptionalEntryType, 'something'), null, 2);
       return true;
     })()
   ).toBe(true));
@@ -68,7 +68,7 @@ test('simple optional entry type', () =>
 test('simple enum entry type', () =>
   expect(
     (() => {
-      JSON.stringify(parseEnumEntryDataTypeToDefinitionNestedGenerationObject(validEnumEntryType, 'something', 0), null, 2);
+      JSON.stringify(parseEnumEntryDataTypeToDefinitionNestedGenerationObject(validEnumEntryType, 'something'), null, 2);
       return true;
     })()
   ).toBe(true));
@@ -85,11 +85,7 @@ test('parse to array and then parse back', () =>
   expect(
     (() => {
       // console.log(
-      JSON.stringify(
-        nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(exampleVersion) as DefinitionArrayObject, 0),
-        null,
-        2
-      );
+      JSON.stringify(nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(exampleVersion) as DefinitionArrayObject), null, 2);
       // );
       return true;
     })()
@@ -106,11 +102,7 @@ test('parse to object - lucernae turici', () =>
 test('parse lucernae turici', () =>
   expect(
     (() => {
-      JSON.stringify(
-        nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as DefinitionArrayObject, 0),
-        null,
-        2
-      );
+      JSON.stringify(nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as DefinitionArrayObject), null, 2);
       return true;
     })()
   ).toBe(true));
@@ -118,9 +110,9 @@ test('parse lucernae turici', () =>
 const v0BaseStateString = 'CD2GGMmQAMYQBQoyGSjIAgAQ';
 
 test('parse lucernae turici to base64', () =>
-  expect(
-    getURLForData(nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as DefinitionArrayObject, 0))
-  ).toBe(v0BaseStateString));
+  expect(getURLForData(nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as DefinitionArrayObject))).toBe(
+    v0BaseStateString
+  ));
 
 test('parse lucernae turici from base64', () =>
   expect(

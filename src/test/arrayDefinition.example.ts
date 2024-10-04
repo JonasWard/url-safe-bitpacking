@@ -168,10 +168,8 @@ export const lucernaeTurici: VersionArrayDefinitionType = [
 
 export const lucernaeTuriciVersions: ParsersForVersionObject = {
   versionBitCount: 4,
-  versionParsers: [
+  parsers: [
     {
-      version: 0,
-      versionName: '0',
       objectGeneratorParameters: parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as VersionDefinitionObject,
     },
   ],
