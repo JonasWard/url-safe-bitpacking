@@ -23,13 +23,11 @@ export type VersionEnumSemantics = {
 };
 
 export type ParserForVersion = {
-  version: number;
-  versionName: string;
   versionEnumSemantics?: VersionEnumSemantics;
   objectGeneratorParameters: VersionDefinitionObject;
 };
 
 export type ParsersForVersionObject = {
   versionBitCount: VersionRangeType;
-  versionParsers: ParserForVersion[];
+  parsers: ParserForVersion[];
 };
