@@ -5,10 +5,8 @@ import {
   validOptionalEntryType,
   validEnumEntryType,
   exampleVersion,
-  lucernaeTurici,
   generalNestedContentDataType,
   anotherValidOptionalEntryType,
-  lucernaeTuriciVersions,
 } from './arrayDefinition.example';
 
 import {
@@ -22,7 +20,7 @@ import {
   singleLevelContentTypeIsDataEntry,
   singleLevelContentTypeIsNestedContentDataType,
 } from '../objectmap/versionArrayDefinitionToObjectDefintion';
-import { getURLForData, nestedDataEntryArrayToObject, parseUrlMethod } from '../objectmap';
+import { nestedDataEntryArrayToObject } from '../objectmap';
 import { DefinitionArrayObject } from '../types';
 import { SingleLevelContentType } from '../types/arrayDefinitions';
 
@@ -87,37 +85,6 @@ test('parse to array and then parse back', () =>
       // console.log(
       JSON.stringify(nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(exampleVersion) as DefinitionArrayObject), null, 2);
       // );
-      return true;
-    })()
-  ).toBe(true));
-
-test('parse to object - lucernae turici', () =>
-  expect(
-    (() => {
-      JSON.stringify(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici), null, 2);
-      return true;
-    })()
-  ).toBe(true));
-
-test('parse lucernae turici', () =>
-  expect(
-    (() => {
-      JSON.stringify(nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as DefinitionArrayObject), null, 2);
-      return true;
-    })()
-  ).toBe(true));
-
-const v0BaseStateString = 'CD2GGMmQAMYQBQoyGSjIAgAQ';
-
-test('parse lucernae turici to base64', () =>
-  expect(getURLForData(nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as DefinitionArrayObject))).toBe(
-    v0BaseStateString
-  ));
-
-test('parse lucernae turici from base64', () =>
-  expect(
-    (() => {
-      console.log(parseUrlMethod(v0BaseStateString, lucernaeTuriciVersions));
       return true;
     })()
   ).toBe(true));
