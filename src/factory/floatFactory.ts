@@ -9,7 +9,7 @@ export const create = (
   max: number = 1,
   precision: PrecisionRangeType = 2,
   name: string = '',
-  index: number = 0
+  index: number = -1
 ): FloatDataEntry => {
   const precisionMultiplier = 10 ** precision;
 
