@@ -3,3 +3,5 @@ export const getBitsForIntegerNumber = (number: number, maxBits: number): number
   if (bitCount > maxBits) throw new Error(`Cannot get ${maxBits} bits for a number with ${bitCount} bits`);
   return bitCount;
 };
+
+export const getMaxIntegerValueForGivenBitWidth = (bitCount: number): number => 2 ** bitCount - 1;
