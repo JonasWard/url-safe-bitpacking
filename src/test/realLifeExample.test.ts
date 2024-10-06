@@ -1,5 +1,7 @@
 import { expect, test } from 'bun:test';
-import { nestedDataEntryArrayToObject, getURLForData, parseUrlMethod, parseDownNestedDataDescription, updateDataEntry } from '../objectmap';
+import { nestedDataEntryArrayToObject, getURLForData, parseDownNestedDataDescription, getSemanticallyNestedValues } from '../objectmap';
+import { parseUrlMethod } from '../objectmap/versionReading';
+import { updateDataEntry } from '../objectmap/versionUpdate';
 import { parseVersionArrayDefinitionTypeToVersionDefinitionObject } from '../objectmap/versionArrayDefinitionToObjectDefintion';
 import { DefinitionArrayObject } from '../types';
 import { lucernaeTurici, lucernaeTuriciVersions } from './arrayDefinition.example';
