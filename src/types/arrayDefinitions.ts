@@ -13,5 +13,4 @@ export type EnumEntryDataType = [number, NonEmptyValidEntryArrayType, NonEmptyVa
 
 export type VersionArrayDefinitionType = [VersionDataEntry, ...SingleLevelContentType[]];
 
-export const INDEX_DELIMETER = '$';
 export const NAME_DELIMETER = '_';

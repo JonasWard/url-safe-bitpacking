@@ -11,7 +11,6 @@ import {
 } from '../types';
 import {
   EnumEntryDataType,
-  INDEX_DELIMETER,
   NAME_DELIMETER,
   OptionalEntryDataType,
   NestedContentType,
