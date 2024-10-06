@@ -96,7 +96,10 @@ export const parseOptionalEntryDataTypeToDefinitionNestedGenerationObject = (
 export const parseDataEntry = (d: DataEntry, internalPrecedingName?: string): DataEntry =>
   internalPrecedingName ? { ...d, internalName: `${internalPrecedingName}${NAME_DELIMETER}${d.name}` } : d;
 
-export const parseVersionArrayDefinitionTypeToVersionDefinitionObject = (v: VersionArrayDefinitionType): VersionDefinitionObject => [
-  parseDataEntry(v[0]) as VersionDataEntry,
+export const parseVersionArrayDefinitionTypeToVersionDefinitionObject = (
+  v: VersionArrayDefinitionType,
+  optionalIndexOverwrite?: number
+): VersionDefinitionObject => [
+  optionalIndexOverwrite ? { ...(parseDataEntry(v[0]) as VersionDataEntry), value: optionalIndexOverwrite } : (parseDataEntry(v[0]) as VersionDataEntry),
   ...v.slice(1).map((d) => parseSingleLevelContentTypeToDefinitionSubObject(d, '_')),
 ];
