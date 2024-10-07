@@ -1140,3 +1140,45 @@ test('lucernae turici - update height type - object', () => {
     },
   ]);
 });
+
+test('lucernae turici - semantically nested values object', () => {
+  const semanticallyNestedValues = getSemanticallyNestedValues(parseUrlMethod(v0BaseStateString, lucernaeTuriciVersions), lucernaeTuriciVersions);
+
+  expect(semanticallyNestedValues).toEqual({
+    version: 0,
+    extrusion: {
+      extrusion: 4,
+      radiusTop: 0.35,
+      insetTop: 0.25,
+      insetBottom: 0.25,
+      insetSides: 0.25,
+      pointedness: 1,
+      divisionPointedness: 1,
+      divisionCount: 1,
+      divisionResolution: 1,
+    },
+    footprint: {
+      footprint: 3,
+      size: 20,
+      xCount: 3,
+      yCount: 0,
+      shellThickness: 0,
+      bufferInside: 2,
+      bufferOutside: 2,
+    },
+    heights: {
+      totalHeight: 150,
+      storyCount: 7,
+      heightProcessingMethod: {
+        heightProcessingMethod: 1,
+        maxAmplitude: 1,
+        minAmplitude: 1,
+        period: 1,
+        phaseShift: 0,
+      },
+    },
+    shapePreProcessing: {
+      shapePreProcessing: 2,
+    },
+  });
+});
