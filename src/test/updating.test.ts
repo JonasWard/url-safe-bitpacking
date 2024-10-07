@@ -2,8 +2,8 @@ import { expect, test } from 'bun:test';
 import { DataEntryFactory } from '../factory';
 import { ParserForVersion, VersionArrayDefinitionType } from '../types';
 import { parseVersionArrayDefinitionTypeToVersionDefinitionObject } from '../objectmap/versionArrayDefinitionToObjectDefintion';
-import { nestedDataEntryArrayToObject, parseDownNestedDataDescription } from '../objectmap';
 import { updateDataEntry } from '../objectmap/versionUpdate';
+import { nestedDataEntryArrayToObject, parseDownNestedDataDescription } from '../objectmap/versionReading';
 
 // base object definitions
 const versionObject: VersionArrayDefinitionType = [

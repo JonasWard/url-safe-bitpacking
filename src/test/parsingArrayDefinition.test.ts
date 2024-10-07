@@ -20,9 +20,9 @@ import {
   singleLevelContentTypeIsDataEntry,
   singleLevelContentTypeIsNestedContentDataType,
 } from '../objectmap/versionArrayDefinitionToObjectDefintion';
-import { nestedDataEntryArrayToObject } from '../objectmap';
 import { DefinitionArrayObject } from '../types';
 import { SingleLevelContentType } from '../types/arrayDefinitions';
+import { nestedDataEntryArrayToObject } from '../objectmap/versionReading';
 
 test('dataValidation', () => {
   expect(isSingleLevelContentType(generalNestedContentDataType[1])).toBe(true);
