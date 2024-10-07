@@ -87,7 +87,8 @@ export const updateDataEntryObject = (definitionArrayObject: DefinitionArrayObje
 };
 
 /**
- * Method to update the values in a SemanticlyNestedDataEntry object in place
+ * Internal method to update the values in a SemanticlyNestedDataEntry object in place
+ * Should only be used after having created a new SemanticlyNestedDataEntry object
  * @param data SemanticlyNestedDataEntry, gets mutated in place
  * @param newDataEntry DataEntry to update
  * @returns same data object
