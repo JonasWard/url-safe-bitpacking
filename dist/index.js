@@ -25,6 +25,7 @@ var getBitsForIntegerNumber = (number, maxBits) => {
     throw new Error(`Cannot get ${maxBits} bits for a number with ${bitCount} bits`);
   return bitCount;
 };
+var getMaxIntegerValueForGivenBitWidth = (bitCount) => 2 ** bitCount - 1;
 
 // src/factory/floatFactory.ts
 var create = (value, min = 0, max = 1, precision = 2, name = "", index = -1) => {
@@ -95,6 +96,65 @@ var DataEntryFactory = {
   createBoolean: create3,
   createVersion: create4
 };
+// src/types/arrayDefinitions.ts
+var NAME_DELIMETER = "_";
+
+// src/objectmap/versionArrayDefinitionToObjectDefintion.ts
+var isSingleLevelContentType = (data) => singleLevelContentTypeIsDataEntry(data[0]) || singleLevelContentTypeIsNestedContentDataType(data[0]);
+var isDoubleLevelContentType = (data) => !isSingleLevelContentType(data);
+var singleLevelContentTypeIsDataEntry = (data) => !Array.isArray(data) && typeof data === "object";
+var singleLevelContentTypeIsNestedContentDataType = (data) => Array.isArray(data) && typeof data[0] === "string";
+var singleLevelContentTypeIsEnumEntryDataType = (data) => isDoubleLevelContentType(data) && typeof data[0] === "number";
+var singleLevelContentTypeIsOptionalEntryDataType = (data) => isDoubleLevelContentType(data) && typeof data[0] === "boolean";
+var parseSingleLevelContentTypeToDefinitionSubObject = (data, internalPrecedingName) => {
+  if (singleLevelContentTypeIsDataEntry(data))
+    return parseDataEntry(data, internalPrecedingName);
+  else if (singleLevelContentTypeIsNestedContentDataType(data))
+    return parseNestedContentDataTypeToDefinitionNestedArray(data, internalPrecedingName);
+  else {
+    throw new Error("this is an invalid output value, wonder why?");
+  }
+};
+var parseNestedContentDataTypeToDefinitionNestedArray = (data, internalPrecedingName) => {
+  const [attributeName, localData] = data;
+  if (isSingleLevelContentType(localData))
+    return [attributeName, localData.map((v) => parseSingleLevelContentTypeToDefinitionSubObject(v, internalPrecedingName))];
+  else if (singleLevelContentTypeIsEnumEntryDataType(localData))
+    return parseEnumEntryDataTypeToDefinitionNestedGenerationObject(localData, attributeName, internalPrecedingName);
+  else if (singleLevelContentTypeIsOptionalEntryDataType(localData))
+    return parseOptionalEntryDataTypeToDefinitionNestedGenerationObject(localData, attributeName, internalPrecedingName);
+  else {
+    throw new Error("this is an invalid output value, wonder why?");
+  }
+};
+var parseEnumEntryDataTypeToDefinitionNestedGenerationObject = (data, name, internalPrecedingName) => {
+  if (Math.round(data[0]) !== data[0])
+    `given default (${data[0]}) value isn't an integer, rounding it`;
+  if (data.length - 2 < Math.round(data[0]))
+    console.log(`given default value (${data[0]}) was larger than the amount of options available, using the largest value (${data.length - 2}) instead`);
+  if (data[0] < 0)
+    console.log(`given default value (${data[0]}) was negative, using first index (0) instead`);
+  const dataEntry = parseDataEntry(DataEntryFactory.createEnum(Math.max(Math.min(data.length - 2, Math.round(data[0])), 0), data.length - 2, name), internalPrecedingName);
+  const generationMethod = (d) => [
+    d,
+    ...data[d.value + 1].map((v) => parseSingleLevelContentTypeToDefinitionSubObject(v, dataEntry.internalName))
+  ];
+  return [name, dataEntry, generationMethod];
+};
+var parseOptionalEntryDataTypeToDefinitionNestedGenerationObject = (data, name, internalPrecedingName) => {
+  const dataEntry = parseDataEntry(DataEntryFactory.createBoolean(data[0], name), internalPrecedingName);
+  const generationMethod = (d) => [
+    d,
+    ...data[Number(!d.value) + 1].map((v) => parseSingleLevelContentTypeToDefinitionSubObject(v, dataEntry.internalName))
+  ];
+  return [name, dataEntry, generationMethod];
+};
+var parseDataEntry = (d, internalPrecedingName) => internalPrecedingName ? { ...d, internalName: `${internalPrecedingName}${NAME_DELIMETER}${d.name}` } : d;
+var parseVersionArrayDefinitionTypeToVersionDefinitionObject = (v, optionalIndexOverwrite) => [
+  optionalIndexOverwrite ? { ...parseDataEntry(v[0]), value: optionalIndexOverwrite } : parseDataEntry(v[0]),
+  ...v.slice(1).map((d) => parseSingleLevelContentTypeToDefinitionSubObject(d, "_"))
+];
+
 // src/parsers/intParser.ts
 var getBitsCount = (intData2) => intData2.bits;
 var rawValueParser = (stateString, bitCount) => {
@@ -255,20 +315,58 @@ var dataArrayStringifier = (dataEntryArray) => {
 
 // src/objectmap/versionReading.ts
 var currentObjectIndex = -1;
-var nestedDataEntryArrayToObject = (definitionArrayObject) => {
-  currentObjectIndex = -1;
-  return internalNestedDataEntryArrayToObject(definitionArrayObject);
+var definitionArrayObjectParser = (bitString, v) => {
+  const [key, values] = v;
+  const [nestedSemanticObject, objectGenerationStatus, localEndIndex] = parsingDefinitionArrayObject(bitString, values);
+  return [[key, nestedSemanticObject], objectGenerationStatus, localEndIndex];
 };
-var internalNestedDataEntryArrayToObject = (definitionArrayObject) => {
-  return Object.fromEntries(definitionArrayObject.map((value) => {
-    if (Array.isArray(value)) {
-      if (value.length === 2)
-        return [value[0], internalNestedDataEntryArrayToObject(value[1])];
-      else
-        return [value[0], internalNestedDataEntryArrayToObject(value[2](value[1]))];
-    }
-    return [value.name, { ...value, index: ++currentObjectIndex }];
-  }));
+var methodParser = (bitString, v) => {
+  const [key, keyDataDescription, methodGenerator] = v;
+  const [keyDataEntry, status] = dataEntryParser(bitString, keyDataDescription, false);
+  const [result, localStatus, localEndIndex] = definitionArrayObjectParser(bitString, [key, methodGenerator(keyDataEntry)]);
+  return [result, localStatus !== ObjectGenerationOutputStatus.PARSED ? localStatus : status, localEndIndex];
+};
+var dataEntryParser = (bitString, v, iterate = true) => {
+  const bitWidth = getBitsCount6(v);
+  const value = iterate ? { ...dataBitsParser(bitString.slice(0, bitWidth), v), index: ++currentObjectIndex } : dataBitsParser(bitString.slice(0, bitWidth), v);
+  return [value, ObjectGenerationOutputStatus.PARSED, bitWidth];
+};
+var parsingDefinitionArrayObject = (bitString, definitionArrayObject) => {
+  let startIndex = 0;
+  let objectGenerationStatus = ObjectGenerationOutputStatus.PARSED;
+  return [
+    Object.fromEntries(definitionArrayObject.map((value) => {
+      if (Array.isArray(value)) {
+        if (value.length === 2) {
+          const [[key, nestedSemanticObject], status, localEndIndex] = definitionArrayObjectParser(bitString.slice(startIndex), value);
+          startIndex += localEndIndex;
+          ObjectGenerationOutputStatus.PARSED;
+          return [key, nestedSemanticObject];
+        } else {
+          const [[key, nestedSemanticObject], status, localEndIndex] = methodParser(bitString.slice(startIndex), value);
+          startIndex += localEndIndex;
+          ObjectGenerationOutputStatus.PARSED;
+          return [key, nestedSemanticObject];
+        }
+      } else {
+        const [dataEntry, status, localEndIndex] = dataEntryParser(bitString.slice(startIndex), value);
+        startIndex += localEndIndex;
+        ObjectGenerationOutputStatus.PARSED;
+        return [dataEntry.name, dataEntry];
+      }
+    })),
+    objectGenerationStatus,
+    startIndex
+  ];
+};
+var parseUrlMethod = (url, parserVersions) => {
+  currentObjectIndex = -1;
+  const bitString = parseBase64ToBits(url);
+  const version = dataBitsArrayParser(bitString, [DataEntryFactory.createVersion(0, parserVersions.versionBitCount)])[0];
+  const versionParser = parserVersions.parsers[version.value];
+  if (!versionParser)
+    throw new Error(`No parser for version ${version.value}`);
+  return parsingDefinitionArrayObject(bitString, versionParser.objectGeneratorParameters)[0];
 };
 var parseDownNestedDataDescription = (nestedDataDescription) => {
   const dataDescriptions = [];
@@ -280,6 +378,12 @@ var parseDownNestedDataDescription = (nestedDataDescription) => {
   });
   return dataDescriptions.sort();
 };
+var getURLForData = (data) => {
+  const dataEntryArray = parseDownNestedDataDescription(data);
+  const bitstring = dataArrayStringifier(dataEntryArray);
+  return parseBitsToBase64(bitstring);
+};
+
 // src/update/floatUpdate.ts
 var updateValue = (original, update) => {
   const value = Math.max(Math.min(update.value, original.max), original.min);
@@ -380,11 +484,6 @@ var updateDataEntryObject = (definitionArrayObject, dataArray) => {
   });
   return newNestedObject;
 };
-var getDefaultObject = (versionParser, versionindex) => {
-  if (!versionParser.parsers[versionindex])
-    throw new Error(`No parser for version ${versionindex} index`);
-  return nestedDataEntryArrayToObject(versionParser.parsers[versionindex].objectGeneratorParameters);
-};
 var updateDataEntry = (data, newDataEntry, parsersForVersion) => {
   currentObjectIndex2 = 0;
   const version = data.version;
@@ -395,6 +494,42 @@ var updateDataEntry = (data, newDataEntry, parsersForVersion) => {
   const dataEntryArray = parseDownNestedDataDescription(data);
   const virginDataEntryArray = [correctedDataEntry, ...dataEntryArray];
   return updateDataEntryObject(versionParser.objectGeneratorParameters, virginDataEntryArray);
+};
+
+// src/objectmap/versionUserMethods.ts
+var createParserObject = (versionArray, versionBitCount, enumSemanticsMapping, attributeSemanticsMapping) => {
+  const maxAllowedParsers = getMaxIntegerValueForGivenBitWidth(versionBitCount);
+  if (versionArray.length > maxAllowedParsers)
+    throw new Error(`Cannot have more than ${maxAllowedParsers} versions`);
+  return {
+    versionBitCount,
+    parsers: versionArray.map((version, index) => ({
+      attributeSemanticsMapping: attributeSemanticsMapping ? Array.isArray(attributeSemanticsMapping) ? attributeSemanticsMapping[index] : attributeSemanticsMapping : undefined,
+      enumSemanticsMapping: enumSemanticsMapping ? Array.isArray(enumSemanticsMapping) ? enumSemanticsMapping[index] : enumSemanticsMapping : undefined,
+      objectGeneratorParameters: parseVersionArrayDefinitionTypeToVersionDefinitionObject(version, index)
+    }))
+  };
+};
+var parseUrl = (urlSafeBase64, parserVersions) => parseUrlMethod(urlSafeBase64, parserVersions);
+var updateDataEntry2 = (updatedEntry, currentObject, parserVersions) => updateDataEntry(currentObject, updatedEntry, parserVersions.parsers);
+var getURLSafeBase64ForData = (data) => getURLForData(data);
+var internalParseDataEntry = (data, enumSemanticsMapping) => {
+  if (data.type === DataType.ENUM && enumSemanticsMapping) {
+    const mapping = enumSemanticsMapping[data.name]?.find((entry) => entry.value === data.value);
+    if (mapping)
+      return mapping.label;
+  }
+  return data.value;
+};
+var internalStrictSemanticallyNestedValues = (data, enumSemanticsMapping, attributeSemanticsMapping) => Object.fromEntries(Object.entries(data).map(([key, value]) => [
+  attributeSemanticsMapping ? attributeSemanticsMapping[key] ?? key : key,
+  value.type !== undefined ? internalParseDataEntry(value, enumSemanticsMapping) : internalStrictSemanticallyNestedValues(value, enumSemanticsMapping, attributeSemanticsMapping)
+]));
+var getSemanticallyNestedValues = (data, parserVersions) => {
+  const versionNumber = data.version.value;
+  const enumSemanticsMapping = parserVersions.parsers[versionNumber]?.enumSemanticsMapping;
+  const attributeSemanticsMapping = parserVersions.parsers[versionNumber]?.attributeSemanticsMapping;
+  return internalStrictSemanticallyNestedValues(data, enumSemanticsMapping, attributeSemanticsMapping);
 };
 // src/utils/interpolateData.ts
 var interpolateEntryAt = (dataEntry2, t) => {
@@ -429,19 +564,13 @@ var getRelativeValue = (dataEntry2) => {
   }
 };
 export {
-  valueBitsParser,
-  updateDataEntry,
-  parseBitsToBase64,
-  parseBase64ToBits,
+  updateDataEntry2 as updateDataEntry,
+  parseUrl,
   interpolateEntryAt,
+  getURLSafeBase64ForData,
+  getSemanticallyNestedValues,
   getRelativeValue,
-  getDefaultObject,
-  getBitsCount6 as getBitsCount,
-  dataEntryCorrecting,
-  dataBitsStringifier,
-  dataBitsParser,
-  dataBitsArrayParser,
-  dataArrayStringifier,
+  createParserObject,
   SignificandMaxBits,
   ObjectGenerationOutputStatus,
   IntegerMaxBits,

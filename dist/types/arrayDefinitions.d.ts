@@ -7,5 +7,4 @@ export type NonEmptyValidEntryArrayType = [SingleLevelContentType, ...SingleLeve
 export type OptionalEntryDataType = [boolean, NonEmptyValidEntryArrayType, []] | [boolean, [], NonEmptyValidEntryArrayType];
 export type EnumEntryDataType = [number, NonEmptyValidEntryArrayType, NonEmptyValidEntryArrayType, ...SingleLevelContentType[][]];
 export type VersionArrayDefinitionType = [VersionDataEntry, ...SingleLevelContentType[]];
-export declare const INDEX_DELIMETER = "$";
 export declare const NAME_DELIMETER = "_";

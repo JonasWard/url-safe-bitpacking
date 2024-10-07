@@ -11,4 +11,4 @@ export declare const parseNestedContentDataTypeToDefinitionNestedArray: (data: N
 export declare const parseEnumEntryDataTypeToDefinitionNestedGenerationObject: (data: EnumEntryDataType, name: string, internalPrecedingName?: string) => DefinitionNestedGenerationObject;
 export declare const parseOptionalEntryDataTypeToDefinitionNestedGenerationObject: (data: OptionalEntryDataType, name: string, internalPrecedingName?: string) => DefinitionNestedGenerationObject;
 export declare const parseDataEntry: (d: DataEntry, internalPrecedingName?: string) => DataEntry;
-export declare const parseVersionArrayDefinitionTypeToVersionDefinitionObject: (v: VersionArrayDefinitionType) => VersionDefinitionObject;
+export declare const parseVersionArrayDefinitionTypeToVersionDefinitionObject: (v: VersionArrayDefinitionType, optionalIndexOverwrite?: number) => VersionDefinitionObject;

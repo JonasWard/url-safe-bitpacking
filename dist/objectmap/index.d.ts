@@ -1,2 +1,1 @@
-export * from './versionReading';
-export * from './versionUpdate';
+export * from './versionUserMethods';

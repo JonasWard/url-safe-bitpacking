@@ -22,7 +22,8 @@ export type VersionEnumSemantics = {
     }[];
 };
 export type ParserForVersion = {
-    versionEnumSemantics?: VersionEnumSemantics;
+    enumSemanticsMapping?: VersionEnumSemantics;
+    attributeSemanticsMapping?: Record<string, string>;
     objectGeneratorParameters: VersionDefinitionObject;
 };
 export type ParsersForVersionObject = {
