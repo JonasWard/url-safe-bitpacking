@@ -1,17 +1,7 @@
 export { ObjectGenerationOutputStatus, DataType } from './enums';
 export { DataEntryFactory } from './factory';
-export { getDefaultObject, updateDataEntry } from './objectmap';
-export {
-  valueBitsParser,
-  dataBitsParser,
-  getBitsCount,
-  dataBitsArrayParser,
-  dataBitsStringifier,
-  dataEntryCorrecting,
-  parseBitsToBase64,
-  parseBase64ToBits,
-  dataArrayStringifier,
-} from './parsers';
+export { createParserObject, parseUrl, updateDataEntry, getURLSafeBase64ForData, getSemanticallyNestedValues } from './objectmap';
+export {} from './parsers';
 export {
   SingleLevelContentType,
   NestedContentDataType,
