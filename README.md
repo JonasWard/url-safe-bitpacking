@@ -9,7 +9,7 @@ Package for creating definitions of parametric models that can be stored as comp
 | data types                                           | &check;  | &check;  | &check;  |
 | nested object model                                  | &check;  | &check;  | &frac14; |
 | updating model entries                               | &check;  | &check;  |          |
-| re-using data from old model on change in definition | &frac34; | &frac14; |          |
+| re-using data from old model on change in definition | &frac12; | &frac14; |          |
 | flattening and reading of the objects                | &check;  | &check;  | &iquest; |
 
 ## concept
