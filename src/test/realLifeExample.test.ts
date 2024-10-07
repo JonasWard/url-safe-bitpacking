@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { getSemanticallyNestedValues } from '@/objectmap/createParserObject';
+import { getSemanticallyNestedValues } from '@/objectmap/versionUserMethods';
 import { getURLForData, nestedDataEntryArrayToObject, parseDownNestedDataDescription, parseUrlMethod } from '../objectmap/versionReading';
 import { updateDataEntry } from '../objectmap/versionUpdate';
 import { parseVersionArrayDefinitionTypeToVersionDefinitionObject } from '../objectmap/versionArrayDefinitionToObjectDefintion';
