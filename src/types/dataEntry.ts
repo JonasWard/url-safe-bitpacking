@@ -22,4 +22,8 @@ export type VersionDataEntry = Prettify<VersionData & DataDescription>;
 
 export type DataEntry = BooleanDataEntry | IntDataEntry | EnumDataEntry | FloatDataEntry | VersionDataEntry;
 
+export type ProtectedAttributeNames = Prettify<
+  keyof BooleanDataEntry | keyof IntDataEntry | keyof EnumDataEntry | keyof FloatDataEntry | keyof VersionDataEntry
+>;
+
 export type DataEntryArray = DataEntry[];
