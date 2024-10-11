@@ -8,12 +8,14 @@ import {
   SemanticlyNestedDataEntry,
   DataEntry,
   SemanticlyNestedValues,
+  DataEntryArray,
 } from '../types';
 import { parseVersionArrayDefinitionTypeToVersionDefinitionObject } from './versionArrayDefinitionToObjectDefintion';
-import { parseUrlMethod, getURLForData } from './versionReading';
+import { parseUrlMethod, getURLForData, nestedDataEntryArrayToObject, parseDownNestedDataDescription } from './versionReading';
 import { updateDataEntry as updateDataEntryObject } from './versionUpdate';
 
 // her the methods are defined that the user reasonably is expected to use
+
 /**
  * Method to create version definition objects
  * @param {VersionArrayDefinitionType[]} versionArray  - version definition array
