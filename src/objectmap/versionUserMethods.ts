@@ -128,3 +128,9 @@ export const getDefaultObject = (parserForVersions: ParsersForVersionObject, ver
   return nestedDataEntryArrayToObject(parserForVersions.parsers[versionindex].objectGeneratorParameters) as SemanticlyNestedDataEntry;
 };
 
+/**
+ * Method to get the get a (sorted by index) flat array of a SemanticallyNestedDataEntry
+ * @param {SemanticlyNestedDataEntry} data - the semanticly nested data entry to flatten
+ * @returns DataEntryArray
+ */
+export const getFlatArray = (data: SemanticlyNestedDataEntry): DataEntryArray => parseDownNestedDataDescription(data);
