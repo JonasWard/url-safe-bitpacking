@@ -24,7 +24,6 @@ import { updateDataEntry as updateDataEntryObject } from './versionUpdate';
  * @param {undefined | Record<string, string> | Record<string, string>[]} attributeSemanticsMapping - optional semantics mapping, if nothing given no semantics will be mapped
  * @returns ParsersForVersionObject
  */
-
 export const createParserObject = (
   versionArray: VersionArrayDefinitionType[],
   versionBitCount: VersionRangeType,
@@ -48,21 +47,23 @@ export const createParserObject = (
     })),
   };
 };
+
 /** the data object needs to be accesible in 3 versions.
  *
  * 1. As a semanticly nested object (primary data structure, also used for UI)
  * 2. As an array of entries (derived from semanticly nested object, to translate and from to bitstream)
  * 3. As an object with all the data entry information stripped (derived from semanticly nested object, read only)
  */
+
 /**
  * Construct SemanticlyNestedDataEntry
  * @param urlSafeBase64 - the url to parse
  * @param parserVersions - the object containing the version parsers
  * @returns the parsed SemanticlyNestedDataEntry
  */
-
 export const parseUrl = (urlSafeBase64: string, parserVersions: ParsersForVersionObject): SemanticlyNestedDataEntry =>
   parseUrlMethod(urlSafeBase64, parserVersions);
+
 /**
  * Update a data entry in a SemanticlyNestedDataEntry
  * @param {DataEntry} updatedEntry - the updated data entry
@@ -70,19 +71,19 @@ export const parseUrl = (urlSafeBase64: string, parserVersions: ParsersForVersio
  * @param {ParsersForVersionObject} parserVersions - the object containing the version parsers
  * @returns {SemanticlyNestedDataEntry} - the updated SemanticlyNestedDataEntry
  */
-
 export const updateDataEntry = (
   updatedEntry: DataEntry,
   currentObject: SemanticlyNestedDataEntry,
   parserVersions: ParsersForVersionObject
 ): SemanticlyNestedDataEntry => updateDataEntryObject(currentObject, updatedEntry, parserVersions.parsers);
+
 /**
  * Method to get the URLSafeBase64 representation of a SemanticlyNestedDataEntry
  * @param {SemanticlyNestedDataEntry} data - the data object
  * @returns {string} - the urlSafeBase64 representation
  */
-
 export const getURLSafeBase64ForData = (data: SemanticlyNestedDataEntry): string => getURLForData(data);
+
 const internalParseDataEntry = (data: DataEntry, enumSemanticsMapping?: VersionEnumSemantics): string | number | boolean => {
   if (data.type === DataType.ENUM && enumSemanticsMapping) {
     const mapping = enumSemanticsMapping[data.name]?.find((entry) => entry.value === data.value);
@@ -90,6 +91,7 @@ const internalParseDataEntry = (data: DataEntry, enumSemanticsMapping?: VersionE
   }
   return data.value;
 };
+
 const internalStrictSemanticallyNestedValues = (
   data: SemanticlyNestedDataEntry,
   enumSemanticsMapping?: VersionEnumSemantics,
@@ -103,12 +105,12 @@ const internalStrictSemanticallyNestedValues = (
         : internalStrictSemanticallyNestedValues(value as SemanticlyNestedDataEntry, enumSemanticsMapping, attributeSemanticsMapping),
     ])
   );
+
 /**
  * Method for getting the basic object for a given semanticly nested data entry
  * @param {SemanticlyNestedDataEntry} data - the data object
  * @returns {SemanticlyNestedDataEntry} - the basic object
  */
-
 export const getSemanticallyNestedValues = (data: SemanticlyNestedDataEntry, parserVersions: ParsersForVersionObject): SemanticlyNestedValues => {
   // get the version object
   const versionNumber = (data.version as DataEntry).value as number;
