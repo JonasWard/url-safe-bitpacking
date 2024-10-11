@@ -315,6 +315,21 @@ var dataArrayStringifier = (dataEntryArray) => {
 
 // src/objectmap/versionReading.ts
 var currentObjectIndex = -1;
+var nestedDataEntryArrayToObject = (definitionArrayObject) => {
+  currentObjectIndex = -1;
+  return internalNestedDataEntryArrayToObject(definitionArrayObject);
+};
+var internalNestedDataEntryArrayToObject = (definitionArrayObject) => {
+  return Object.fromEntries(definitionArrayObject.map((value) => {
+    if (Array.isArray(value)) {
+      if (value.length === 2)
+        return [value[0], internalNestedDataEntryArrayToObject(value[1])];
+      else
+        return [value[0], internalNestedDataEntryArrayToObject(value[2](value[1]))];
+    }
+    return [value.name, { ...value, index: ++currentObjectIndex }];
+  }));
+};
 var definitionArrayObjectParser = (bitString, v) => {
   const [key, values] = v;
   const [nestedSemanticObject, objectGenerationStatus, localEndIndex] = parsingDefinitionArrayObject(bitString, values);
@@ -531,6 +546,12 @@ var getSemanticallyNestedValues = (data, parserVersions) => {
   const attributeSemanticsMapping = parserVersions.parsers[versionNumber]?.attributeSemanticsMapping;
   return internalStrictSemanticallyNestedValues(data, enumSemanticsMapping, attributeSemanticsMapping);
 };
+var getDefaultObject = (parserForVersions, versionindex) => {
+  if (!parserForVersions.parsers[versionindex])
+    throw new Error(`No parser for version ${versionindex} index`);
+  return nestedDataEntryArrayToObject(parserForVersions.parsers[versionindex].objectGeneratorParameters);
+};
+var getFlatArray = (data) => parseDownNestedDataDescription(data);
 // src/utils/interpolateData.ts
 var interpolateEntryAt = (dataEntry2, t) => {
   const localT = Math.max(Math.min(1, t), 0);
@@ -570,6 +591,8 @@ export {
   getURLSafeBase64ForData,
   getSemanticallyNestedValues,
   getRelativeValue,
+  getFlatArray,
+  getDefaultObject,
   createParserObject,
   SignificandMaxBits,
   ObjectGenerationOutputStatus,

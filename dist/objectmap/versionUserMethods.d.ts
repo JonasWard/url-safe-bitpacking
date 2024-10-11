@@ -1,4 +1,4 @@
-import { VersionArrayDefinitionType, VersionRangeType, VersionEnumSemantics, ParsersForVersionObject, SemanticlyNestedDataEntry, DataEntry, SemanticlyNestedValues } from '../types';
+import { VersionArrayDefinitionType, VersionRangeType, VersionEnumSemantics, ParsersForVersionObject, SemanticlyNestedDataEntry, DataEntry, SemanticlyNestedValues, DataEntryArray } from '../types';
 /**
  * Method to create version definition objects
  * @param {VersionArrayDefinitionType[]} versionArray  - version definition array
@@ -41,3 +41,16 @@ export declare const getURLSafeBase64ForData: (data: SemanticlyNestedDataEntry) 
  * @returns {SemanticlyNestedDataEntry} - the basic object
  */
 export declare const getSemanticallyNestedValues: (data: SemanticlyNestedDataEntry, parserVersions: ParsersForVersionObject) => SemanticlyNestedValues;
+/**
+ * Method to get the default object for a given version
+ * @param {ParsersForVersionObject} parserForVersions - the object containing the version parsers
+ * @param {number} versionindex - number of the version you want to generate the default object for
+ * @returns SemanticlyNestedDataEntry
+ */
+export declare const getDefaultObject: (parserForVersions: ParsersForVersionObject, versionindex: number) => SemanticlyNestedDataEntry;
+/**
+ * Method to get the get a (sorted by index) flat array of a SemanticallyNestedDataEntry
+ * @param {SemanticlyNestedDataEntry} data - the semanticly nested data entry to flatten
+ * @returns DataEntryArray
+ */
+export declare const getFlatArray: (data: SemanticlyNestedDataEntry) => DataEntryArray;
