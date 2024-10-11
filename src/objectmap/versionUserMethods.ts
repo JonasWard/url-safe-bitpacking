@@ -116,3 +116,15 @@ export const getSemanticallyNestedValues = (data: SemanticlyNestedDataEntry, par
   // will actually be a version object so it data can never be just a data entry
   return internalStrictSemanticallyNestedValues(data, enumSemanticsMapping, attributeSemanticsMapping);
 };
+
+/**
+ * Method to get the default object for a given version
+ * @param {ParsersForVersionObject} parserForVersions - the object containing the version parsers
+ * @param {number} versionindex - number of the version you want to generate the default object for
+ * @returns SemanticlyNestedDataEntry
+ */
+export const getDefaultObject = (parserForVersions: ParsersForVersionObject, versionindex: number): SemanticlyNestedDataEntry => {
+  if (!parserForVersions.parsers[versionindex]) throw new Error(`No parser for version ${versionindex} index`);
+  return nestedDataEntryArrayToObject(parserForVersions.parsers[versionindex].objectGeneratorParameters) as SemanticlyNestedDataEntry;
+};
+
