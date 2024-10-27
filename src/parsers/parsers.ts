@@ -48,6 +48,11 @@ export const getBitsCount = (mapData: DataEntry): number => {
   }
 };
 
+export const dataEntryBitstringParser = (bitstring: string, dataEntry: DataEntry): [DataEntry, string] => [
+  dataBitsParser(bitstring.slice(0, getBitsCount(dataEntry)), dataEntry),
+  bitstring.slice(getBitsCount(dataEntry)),
+];
+
 /**
  * Method to convert a bitstring into an array of data entries
  * @param bitString bitstring to parse into bits and then data entries
