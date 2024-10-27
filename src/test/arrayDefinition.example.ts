@@ -1,20 +1,60 @@
 import { DataEntryFactory } from '../factory';
 import { parseVersionArrayDefinitionTypeToVersionDefinitionObject } from '../objectmap/versionArrayDefinitionToObjectDefintion';
-import { ParsersForVersionObject, VersionDefinitionObject } from '../types';
-import { NestedContentDataType, OptionalEntryDataType, EnumEntryDataType, VersionArrayDefinitionType, NestedContentType } from '../types/arrayDefinitions';
+import {
+  ParsersForVersionObject,
+  VersionDefinitionObject,
+  NestedContentDataType,
+  OptionalEntryDataType,
+  EnumEntryDataType,
+  VersionArrayDefinitionType,
+  NestedContentType,
+  ArrayEntryDataType,
+  SingleLevelContentType,
+} from '../types';
 
-export const nestedContentDataType: NestedContentDataType = ['a name', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]];
+export const ncdt_0: NestedContentDataType = ['a name', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]];
+export const ncdt_1: NestedContentDataType = ['anotherName', [DataEntryFactory.createBoolean(true, 'aBoolean')]];
+export const ncdt_2: NestedContentDataType = ['anotherName', [DataEntryFactory.createEnum(0, 4, 'anEnum')]];
 
-export const validOptionalEntryType: OptionalEntryDataType = [true, [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')], []];
-export const anotherValidOptionalEntryType: OptionalEntryDataType = [true, [], [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]];
-// const invalidValidOptionalEntryType: OptionalEntryDataType = [[], [], [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]];
+export const oedt_0: OptionalEntryDataType = [true, [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')], []];
+export const oedt_1: OptionalEntryDataType = [true, [], [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]];
+export const oedt_2: OptionalEntryDataType = [false, [], [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]];
 
-export const validEnumEntryType: EnumEntryDataType = [
+export const eedt_0: EnumEntryDataType = [
   1,
-  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')],
-  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')],
-  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')],
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_0_0')],
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_0_1')],
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_0_2')],
 ];
+export const eedt_1: EnumEntryDataType = [
+  2,
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_1_0')],
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_1_1')],
+];
+export const eedt_2: EnumEntryDataType = [
+  2,
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_2_0')],
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_2_1')],
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_2_2')],
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_2_3')],
+];
+
+export const aedt_0: ArrayEntryDataType = [[0, 3], [DataEntryFactory.createFloat(0, 0, 1, 2, 'aedt_0_someFloat0')]];
+export const aedt_1: ArrayEntryDataType = [
+  [1, 2],
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat0'), DataEntryFactory.createFloat(0, 0, 1, 2, 'aedt_1_someFloat1')],
+];
+export const aedt_2: ArrayEntryDataType = [
+  [2, 4],
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat0'), DataEntryFactory.createFloat(0, 0, 1, 2, 'aedt_2_someFloat1')],
+];
+
+export const slct_0: SingleLevelContentType = DataEntryFactory.createBoolean(true, 'slct_0_boolean');
+export const slct_1: SingleLevelContentType = ncdt_0;
+export const slct_2: SingleLevelContentType = ncdt_1;
+export const slct_3: SingleLevelContentType = ['slct_3', oedt_0];
+export const slct_4: SingleLevelContentType = ['slct_4', eedt_0];
+export const slct_5: SingleLevelContentType = ['slct_5', aedt_0];
 
 export const generalNestedContentDataType: NestedContentDataType = [
   'anotherEntry',
@@ -25,15 +65,15 @@ export const exampleVersion: VersionArrayDefinitionType = [
   DataEntryFactory.createVersion(0, 8, 'version'),
   ['someEntry', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]],
   ['anotherEntry', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat'), DataEntryFactory.createBoolean(true, 'someBoolean')]],
-  ['enumDataType', validEnumEntryType],
-  ['optionalDataTypes', validOptionalEntryType],
+  ['enumDataType', eedt_0],
+  ['optionalDataTypes', oedt_0],
   [
     'nestedeDataTypes',
     [
       2,
       [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')],
       [['nested data entry', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]]],
-      [['nestedOptionalExample', validEnumEntryType]],
+      [['nestedOptionalExample', eedt_0]],
     ],
   ],
 ];
@@ -170,7 +210,20 @@ export const lucernaeTuriciVersions: ParsersForVersionObject = {
   versionBitCount: 4,
   parsers: [
     {
-      objectGeneratorParameters: parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as VersionDefinitionObject,
+      definition: parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as VersionDefinitionObject,
+    },
+  ],
+};
+
+export const arrayDataTypeTest: ArrayEntryDataType = [[1, 3], [DataEntryFactory.createBoolean(true, 'someBoolean')]];
+
+export const versionArrayDataTypeTest: VersionArrayDefinitionType = [DataEntryFactory.createVersion(0, 4, 'version'), ['arrayDataTypeTest', arrayDataTypeTest]];
+
+export const arrayVersionObjectDataType: ParsersForVersionObject = {
+  versionBitCount: 4,
+  parsers: [
+    {
+      definition: parseVersionArrayDefinitionTypeToVersionDefinitionObject(versionArrayDataTypeTest) as VersionDefinitionObject,
     },
   ],
 };

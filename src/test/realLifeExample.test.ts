@@ -4,7 +4,7 @@ import { getURLForData, nestedDataEntryArrayToObject, parseDownNestedDataDescrip
 import { updateDataEntry } from '../objectmap/versionUpdate';
 import { parseVersionArrayDefinitionTypeToVersionDefinitionObject } from '../objectmap/versionArrayDefinitionToObjectDefintion';
 import { DefinitionArrayObject } from '../types';
-import { lucernaeTurici, lucernaeTuriciVersions } from './arrayDefinition.example';
+import { arrayVersionObjectDataType, lucernaeTurici, lucernaeTuriciVersions, versionArrayDataTypeTest } from './arrayDefinition.example';
 
 test('lucernae turici - parse to object VersionDefinitionObject', () =>
   expect(JSON.parse(JSON.stringify(parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici), null, 2))).toEqual([
@@ -1181,4 +1181,60 @@ test('lucernae turici - semantically nested values object', () => {
       shapePreProcessing: 2,
     },
   });
+});
+
+const arrayDataString = 'Ag';
+
+test('versionArrayDataTypeTest - to base64', () =>
+  expect(
+    getURLForData(nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(versionArrayDataTypeTest) as DefinitionArrayObject))
+  ).toBe(arrayDataString));
+
+test('versionArrayDataTypeTest - to semantic nested value object', () =>
+  expect(nestedDataEntryArrayToObject(parseVersionArrayDefinitionTypeToVersionDefinitionObject(versionArrayDataTypeTest) as DefinitionArrayObject)).toEqual({
+    version: {
+      value: 0,
+      type: 0,
+      bits: 4,
+      name: 'version',
+      index: 0,
+    },
+    arrayDataTypeTest: {
+      arrayDataTypeTest: {
+        value: 1,
+        type: 3,
+        min: 1,
+        max: 3,
+        bits: 2,
+        name: 'arrayDataTypeTest',
+        index: 1,
+        internalName: '__arrayDataTypeTest',
+      },
+      someBoolean: {
+        value: true,
+        type: 1,
+        name: 'someBoolean',
+        index: 2,
+        internalName: '__arrayDataTypeTest_0_someBoolean',
+      },
+    },
+  }));
+
+test('versionArrayDataTypeTest - to semantic nested value object', () => {
+  const updatedObject = updateDataEntry(
+    parseUrlMethod(arrayDataString, arrayVersionObjectDataType),
+    {
+      value: 3,
+      type: 3,
+      min: 1,
+      max: 3,
+      bits: 2,
+      name: 'arrayDataTypeTest',
+      index: 1,
+      internalName: '__arrayDataTypeTest',
+    },
+    arrayVersionObjectDataType.parsers
+  );
+
+  expect(updatedObject).toEqual({});
 });
