@@ -11,10 +11,13 @@ import { VersionRangeType } from './versionData';
  */
 export type ObjectGeneratorMethod = (s?: string, ...v: (DataEntry | undefined)[]) => [SemanticlyNestedDataEntry, ObjectGenerationOutputStatus, number];
 
-export type DefinitionGenerationObject = (v: DataEntry) => DefinitionArrayObject;
+export type DefinitionDerivativeMethod = (v: DataEntry) => {
+  s: DataEntry;
+  v: DefinitionArrayObject;
+};
 export type DefinitionNestedArray = [string, DefinitionArrayObject];
-export type DefinitionNestedGenerationObject = [string, DataEntry, DefinitionGenerationObject];
-export type DefinitionSubObject = DataEntry | DefinitionNestedArray | DefinitionNestedGenerationObject;
+export type DefinitionDerivativeObject = [string, DataEntry, DefinitionDerivativeMethod];
+export type DefinitionSubObject = DataEntry | DefinitionNestedArray | DefinitionDerivativeObject;
 export type DefinitionArrayObject = DefinitionSubObject[];
 export type VersionDefinitionObject = [VersionDataEntry, ...DefinitionArrayObject];
 

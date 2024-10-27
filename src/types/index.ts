@@ -7,3 +7,4 @@ export * from './semanticlyNestedDataEntry';
 export * from './versionData';
 export * from './versionParser';
 export * from './arrayDefinitions';
+export * from './stateValueModel';

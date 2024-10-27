@@ -1,9 +1,9 @@
 import { DataEntry } from './dataEntry';
 
 export type SemanticlyNestedDataEntry = {
-  [key: string]: SemanticlyNestedDataEntry | DataEntry;
+  [key: string]: SemanticlyNestedDataEntry | DataEntry | SemanticlyNestedDataEntry[];
 };
 
 export type SemanticlyNestedValues = {
-  [key: string]: SemanticlyNestedValues | boolean | number | string;
+  [key: string]: SemanticlyNestedValues | number | string | boolean | SemanticlyNestedValues[];
 };
