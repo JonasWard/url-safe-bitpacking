@@ -143,7 +143,7 @@ export const parseUrlMethod = (url: string, parserVersions: ParsersForVersionObj
   const versionParser = parserVersions.parsers[version.value];
 
   if (!versionParser) throw new Error(`No parser for version ${version.value}`);
-  return parsingDefinitionArrayObject(bitString, versionParser.objectGeneratorParameters as DefinitionArrayObject)[0];
+  return parsingDefinitionArrayObject(bitString, versionParser.definition as DefinitionArrayObject)[0];
 };
 
 // flattening an nested data discription object, can be used for all semantically nested data types (though a bit type hacky)

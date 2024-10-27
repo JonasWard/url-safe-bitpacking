@@ -4,7 +4,8 @@ import { SemanticlyNestedDataEntry } from '../types/semanticlyNestedDataEntry';
 import {
   DefinitionArrayObject,
   DefinitionNestedArray,
-  DefinitionNestedGenerationObject,
+  DefinitionDerivativeObject,
+  DefinitionSubObject,
   ParserForVersion,
   ParsersForVersionObject,
 } from '../types/versionParser';
@@ -51,14 +52,36 @@ const nestedDataEntryArrayUpdating = (definitionNestedArrray: DefinitionNestedAr
  * @param definitionArrayObject - DefinitionNestedGenerationObject
  * @param dataEntryArray - DataEntryArray
  */
-const generationObjectUpdating = (
-  definitionArrayObject: DefinitionNestedGenerationObject,
-  dataEntryArray: DataEntryArray
-): [string, SemanticlyNestedDataEntry] => {
+const generationObjectUpdating = (definitionArrayObject: DefinitionDerivativeObject, dataEntryArray: DataEntryArray): [string, SemanticlyNestedDataEntry] => {
   const [keyString, keyDataEntry, methodGenerator] = definitionArrayObject;
   const foundKeyDataEntry = findExistingDataEntry(keyDataEntry, dataEntryArray);
   const newKeyData = foundKeyDataEntry ? updateValue(keyDataEntry, foundKeyDataEntry) : keyDataEntry;
   return [keyString, updateDataEntryObject(methodGenerator(newKeyData), dataEntryArray)];
+};
+
+/**
+ * Internal helper method
+ */
+const handleSubObject = (
+  value: DefinitionSubObject,
+  newNestedObject: SemanticlyNestedDataEntry,
+  dataArray: DataEntryArray
+): [string, DataEntry | SemanticlyNestedDataEntry | SemanticlyNestedDataEntry[]] => {
+  if (Array.isArray(value)) {
+    if (value.length === 2) {
+      const [localKeyString, nestedDataEntry] = nestedDataEntryArrayUpdating(value as DefinitionNestedArray, dataArray);
+      newNestedObject[localKeyString] = nestedDataEntry;
+      return [localKeyString, nestedDataEntry];
+    } else {
+      const [localKeyString, nestedDataEntry] = generationObjectUpdating(value as DefinitionDerivativeObject, dataArray);
+      newNestedObject[localKeyString] = nestedDataEntry;
+      return [localKeyString, nestedDataEntry];
+    }
+  } else {
+    const [localKeyString, dataEntry] = dataEntryUpdating(value, dataArray);
+    newNestedObject[localKeyString] = dataEntry;
+    return [localKeyString, dataEntry];
+  }
 };
 
 /**
@@ -69,20 +92,7 @@ const generationObjectUpdating = (
  */
 export const updateDataEntryObject = (definitionArrayObject: DefinitionArrayObject, dataArray: DataEntryArray): SemanticlyNestedDataEntry => {
   const newNestedObject: SemanticlyNestedDataEntry = {};
-  definitionArrayObject.forEach((value) => {
-    if (Array.isArray(value)) {
-      if (value.length === 2) {
-        const [keyString, nestedDataEntry] = nestedDataEntryArrayUpdating(value, dataArray);
-        newNestedObject[keyString] = nestedDataEntry;
-      } else {
-        const [keyString, nestedDataEntry] = generationObjectUpdating(value, dataArray);
-        newNestedObject[keyString] = nestedDataEntry;
-      }
-    } else {
-      const [key, dataEntry] = dataEntryUpdating(value, dataArray);
-      newNestedObject[key] = dataEntry;
-    }
-  });
+  definitionArrayObject.forEach((value) => handleSubObject(value, newNestedObject, dataArray));
   return newNestedObject;
 };
 
@@ -95,7 +105,9 @@ export const updateDataEntryObject = (definitionArrayObject: DefinitionArrayObje
  */
 const updateValuesInDataEntryObject = (data: SemanticlyNestedDataEntry, newDataEntry: DataEntry) => {
   Object.values(data).forEach((value) => {
-    if (value.hasOwnProperty('type')) {
+    if (Array.isArray(value)) {
+      value.forEach((subValue) => updateValuesInDataEntryObject(subValue, newDataEntry));
+    } else if (value.hasOwnProperty('type')) {
       if (value.name === newDataEntry.name) value.value = newDataEntry.value;
     } else updateValuesInDataEntryObject(value as SemanticlyNestedDataEntry, newDataEntry);
   });
@@ -112,7 +124,7 @@ const updateValuesInDataEntryObject = (data: SemanticlyNestedDataEntry, newDataE
  */
 export const getDefaultObject = (versionParser: ParsersForVersionObject, versionindex: number) => {
   if (!versionParser.parsers[versionindex]) throw new Error(`No parser for version ${versionindex} index`);
-  return nestedDataEntryArrayToObject(versionParser.parsers[versionindex].objectGeneratorParameters) as SemanticlyNestedDataEntry;
+  return nestedDataEntryArrayToObject(versionParser.parsers[versionindex].definition) as SemanticlyNestedDataEntry;
 };
 
 /**
@@ -136,5 +148,5 @@ export const updateDataEntry = (data: SemanticlyNestedDataEntry, newDataEntry: D
   // adding the newly entered dataEntry to the start of the array, will always be found first
   const virginDataEntryArray = [correctedDataEntry, ...dataEntryArray];
 
-  return updateDataEntryObject(versionParser.objectGeneratorParameters as DefinitionArrayObject, virginDataEntryArray);
+  return updateDataEntryObject(versionParser.definition as DefinitionArrayObject, virginDataEntryArray);
 };

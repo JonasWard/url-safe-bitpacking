@@ -43,7 +43,7 @@ export const createParserObject = (
           : attributeSemanticsMapping
         : undefined,
       enumSemanticsMapping: enumSemanticsMapping ? (Array.isArray(enumSemanticsMapping) ? enumSemanticsMapping[index] : enumSemanticsMapping) : undefined,
-      objectGeneratorParameters: parseVersionArrayDefinitionTypeToVersionDefinitionObject(version, index),
+      definition: parseVersionArrayDefinitionTypeToVersionDefinitionObject(version, index),
     })),
   };
 };
@@ -100,7 +100,9 @@ const internalStrictSemanticallyNestedValues = (
   Object.fromEntries(
     Object.entries(data).map(([key, value]) => [
       attributeSemanticsMapping ? attributeSemanticsMapping[key] ?? key : key,
-      value.type !== undefined
+      Array.isArray(value)
+        ? value.map((subValue) => internalStrictSemanticallyNestedValues(subValue, enumSemanticsMapping, attributeSemanticsMapping))
+        : value.type !== undefined
         ? internalParseDataEntry(value as DataEntry, enumSemanticsMapping)
         : internalStrictSemanticallyNestedValues(value as SemanticlyNestedDataEntry, enumSemanticsMapping, attributeSemanticsMapping),
     ])
@@ -129,7 +131,7 @@ export const getSemanticallyNestedValues = (data: SemanticlyNestedDataEntry, par
  */
 export const getDefaultObject = (parserForVersions: ParsersForVersionObject, versionindex: number): SemanticlyNestedDataEntry => {
   if (!parserForVersions.parsers[versionindex]) throw new Error(`No parser for version ${versionindex} index`);
-  return nestedDataEntryArrayToObject(parserForVersions.parsers[versionindex].objectGeneratorParameters) as SemanticlyNestedDataEntry;
+  return nestedDataEntryArrayToObject(parserForVersions.parsers[versionindex].definition) as SemanticlyNestedDataEntry;
 };
 
 /**
