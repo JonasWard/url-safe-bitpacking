@@ -1,15 +1,5 @@
-export { ObjectGenerationOutputStatus, DataType } from './enums';
+export { DataType } from './enums';
 export { DataEntryFactory } from './factory';
-export {
-  createParserObject,
-  parseUrl,
-  updateDataEntry,
-  getURLSafeBase64ForData,
-  getSemanticallyNestedValues,
-  getDefaultObject,
-  getFlatArray,
-} from './objectmap';
-export {} from './parsers';
 export {
   SingleLevelContentType,
   NestedContentDataType,
@@ -18,7 +8,6 @@ export {
   NonEmptyValidEntryArrayType,
   OptionalEntryDataType,
   EnumEntryDataType,
-  VersionArrayDefinitionType,
   PrecisionRangeType,
   SignificandMaxBits,
   FloatData,
@@ -29,17 +18,7 @@ export {
   BooleanData,
   DataEntry,
   DataEntryArray,
-  SemanticlyNestedDataEntry,
-  ObjectGeneratorMethod,
-  DefinitionGenerationObject,
-  DefinitionNestedArray,
-  DefinitionNestedGenerationObject,
-  DefinitionSubObject,
-  DefinitionArrayObject,
-  VersionDefinitionObject,
-  VersionEnumSemantics,
-  ParserForVersion,
-  ParsersForVersionObject,
 } from './types';
-export {} from './update';
+export { createParserObject, getStateValue, getBase64String } from './objectmap';
+export { parseBase64ToBits } from './parsers';
 export { interpolateEntryAt, getRelativeValue } from './utils';
