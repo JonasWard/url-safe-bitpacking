@@ -1,5 +1,5 @@
 import { dataArrayStringifier, parseBitsToBase64 } from '../parsers';
-import { DataEntry, DataEntryArray } from '../types';
+import { DataEntry, DataEntryArray, NestedContentType, SingleLevelContentType } from '../types';
 import { DerivativeStateDataType, DerivativeStateValueType, StateDataType, StateValueType } from '../types/stateValueModel';
 
 const flattenDerivativeStateDataType = (stateValue: DerivativeStateDataType): DataEntryArray => [
@@ -37,3 +37,19 @@ export const getStateValue = (stateValue: StateDataType): StateValueType =>
 export const getDataEntryArray = (stateValue: StateDataType): DataEntryArray => internalGetDataEntryArray(stateValue).sort((a, b) => a.index - b.index);
 
 export const getBase64String = (stateValue: StateDataType): string => parseBitsToBase64(dataArrayStringifier(getDataEntryArray(stateValue)));
+
+// helper code for parsing the definitions into the correct type
+export const isSingleLevelContentType = (data: NestedContentType): boolean =>
+  singleLevelContentTypeIsDataEntry(data[0] as SingleLevelContentType) ||
+  (singleLevelContentTypeIsNestedContentDataType(data[0] as SingleLevelContentType) && !doubleLevelContentTypeIsArrayDefinitionType(data));
+export const isDoubleLevelContentType = (data: NestedContentType): boolean => !isSingleLevelContentType(data);
+export const singleLevelContentTypeIsDataEntry = (data: SingleLevelContentType): boolean => !Array.isArray(data) && typeof data === 'object';
+export const singleLevelContentTypeIsNestedContentDataType = (data: SingleLevelContentType): boolean => Array.isArray(data) && typeof data[0] === 'string';
+
+export const doubleLevelContentTypeIsEnumEntryDataType = (data: NestedContentType): boolean => isDoubleLevelContentType(data) && typeof data[0] === 'number';
+export const doubleLevelContentTypeIsOptionalEntryDataType = (data: NestedContentType): boolean =>
+  isDoubleLevelContentType(data) && typeof data[0] === 'boolean';
+export const doubleLevelContentTypeIsArrayDefinitionType = (data: NestedContentType): boolean =>
+  Array.isArray(data[0]) && data[0].length === 2 && typeof data[0][0] === 'number' && typeof data[0][1] === 'number';
+
+export const isDataEntry = (v: any): boolean => typeof v === 'object' && !Array.isArray(v) && v?.type !== undefined && v?.value !== undefined;

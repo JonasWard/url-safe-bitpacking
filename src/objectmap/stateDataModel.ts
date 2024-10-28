@@ -1,12 +1,11 @@
 import { DataEntryFactory } from '../factory';
-import { dataEntryBitstringParser, parseBase64ToBits } from '../parsers';
+import { dataEntryBitstringParser } from '../parsers';
 import {
   DataEntry,
   DataEntryArray,
   PREFIX_SEPERATOR_DELIMETER,
   NestedContentType,
   SingleLevelContentType,
-  VersionArrayDefinitionType,
   DoubleLevelContentType,
   ArrayEntryDataType,
   EnumEntryDataType,
@@ -22,23 +21,16 @@ import {
   IntDataEntry,
 } from '../types';
 import { updateValue } from '../update';
-import { getDataEntryArray } from './stateValueHelperMethods';
+import {
+  doubleLevelContentTypeIsArrayDefinitionType,
+  doubleLevelContentTypeIsEnumEntryDataType,
+  doubleLevelContentTypeIsOptionalEntryDataType,
+  isDoubleLevelContentType,
+  singleLevelContentTypeIsDataEntry,
+  singleLevelContentTypeIsNestedContentDataType,
+} from './stateValueHelperMethods';
 
 let currentDataEntryIndex = 0;
-
-// helper code for helping the type system understand what it is going through
-export const isSingleLevelContentType = (data: NestedContentType): boolean =>
-  singleLevelContentTypeIsDataEntry(data[0] as SingleLevelContentType) ||
-  (singleLevelContentTypeIsNestedContentDataType(data[0] as SingleLevelContentType) && !doubleLevelContentTypeIsArrayDefinitionType(data));
-export const isDoubleLevelContentType = (data: NestedContentType): boolean => !isSingleLevelContentType(data);
-export const singleLevelContentTypeIsDataEntry = (data: SingleLevelContentType): boolean => !Array.isArray(data) && typeof data === 'object';
-export const singleLevelContentTypeIsNestedContentDataType = (data: SingleLevelContentType): boolean => Array.isArray(data) && typeof data[0] === 'string';
-
-export const doubleLevelContentTypeIsEnumEntryDataType = (data: NestedContentType): boolean => isDoubleLevelContentType(data) && typeof data[0] === 'number';
-export const doubleLevelContentTypeIsOptionalEntryDataType = (data: NestedContentType): boolean =>
-  isDoubleLevelContentType(data) && typeof data[0] === 'boolean';
-export const doubleLevelContentTypeIsArrayDefinitionType = (data: NestedContentType): boolean =>
-  Array.isArray(data[0]) && data[0].length === 2 && typeof data[0][0] === 'number' && typeof data[0][1] === 'number';
 
 /**
  * Helper method for finding an existing data entry in case there was a previous object
@@ -172,7 +164,7 @@ export const getStateDataFromDoubleLevelContentType = (
   throw new Error('this is an invalid output value, wonder why?');
 };
 
-const getStateDateFromSingleLevelContentTypeArray =
+export const getStateDateFromSingleLevelContentTypeArray =
   (slcta: SingleLevelContentType[], prefix: string, attributeName: string) =>
   (additionalData?: DataEntryArray | string): [DataEntryArray | string | undefined, [string, StateDataType]] => {
     const outputDataObject: StateDataType = {};
@@ -205,10 +197,4 @@ export const getGenerationMethodForSingleLevelContentTypeArray = (slct: SingleLe
   return (additionalData?: DataEntryArray | string): StateDataType => getStateDateFromSingleLevelContentTypeArray(slct, '', '')(additionalData)[1][1];
 };
 
-export const getGenerationMethodForVersionDefinition = (vadt: VersionArrayDefinitionType) => getGenerationMethodForSingleLevelContentTypeArray(vadt);
-export const getUpdateMethodForVersionDefintinition = (vadt: VersionArrayDefinitionType) => (state: StateDataType, entryToUpdate: DataEntry) =>
-  getGenerationMethodForVersionDefinition(vadt)([entryToUpdate, ...getDataEntryArray(state)]);
-export const getStateFromBase64String = (vadt: VersionArrayDefinitionType) => (base64string: string) =>
-  getGenerationMethodForVersionDefinition(vadt)(parseBase64ToBits(base64string));
-
-export const testOnlyResetCurrentDataEntryIndex = () => (currentDataEntryIndex = -1);
+export const testOnlyResetCurrentDataEntryIndex = (): number => (currentDataEntryIndex = -1);
