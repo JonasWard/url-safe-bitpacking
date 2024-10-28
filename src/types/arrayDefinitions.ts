@@ -12,6 +12,4 @@ export type OptionalEntryDataType = [boolean, NonEmptyValidEntryArrayType, []] |
 export type EnumEntryDataType = [number, NonEmptyValidEntryArrayType, NonEmptyValidEntryArrayType, ...SingleLevelContentType[][]]; // first number is the default index
 export type ArrayEntryDataType = [[number, number], NonEmptyValidEntryArrayType];
 
-export type VersionArrayDefinitionType = [VersionDataEntry, ...SingleLevelContentType[]];
-
 export const PREFIX_SEPERATOR_DELIMETER = '_';
