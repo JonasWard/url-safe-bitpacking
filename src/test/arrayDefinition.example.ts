@@ -1,15 +1,12 @@
 import { DataEntryFactory } from '../factory';
-import { parseVersionArrayDefinitionTypeToVersionDefinitionObject } from '../objectmap/versionArrayDefinitionToObjectDefintion';
 import {
-  ParsersForVersionObject,
-  VersionDefinitionObject,
   NestedContentDataType,
   OptionalEntryDataType,
   EnumEntryDataType,
-  VersionArrayDefinitionType,
   NestedContentType,
   ArrayEntryDataType,
   SingleLevelContentType,
+  VersionContentDefinition,
 } from '../types';
 
 export const ncdt_0: NestedContentDataType = ['a name', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]];
@@ -61,19 +58,20 @@ export const generalNestedContentDataType: NestedContentDataType = [
   [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat'), DataEntryFactory.createBoolean(true, 'someBoolean')],
 ];
 
-export const exampleVersion: VersionArrayDefinitionType = [
-  DataEntryFactory.createVersion(0, 8, 'version'),
-  ['someEntry', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]],
-  ['anotherEntry', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat'), DataEntryFactory.createBoolean(true, 'someBoolean')]],
-  ['enumDataType', eedt_0],
-  ['optionalDataTypes', oedt_0],
+export const exampleVersion: VersionContentDefinition = [
   [
-    'nestedeDataTypes',
+    ['someEntry', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]],
+    ['anotherEntry', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat'), DataEntryFactory.createBoolean(true, 'someBoolean')]],
+    ['enumDataType', eedt_0],
+    ['optionalDataTypes', oedt_0],
     [
-      2,
-      [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')],
-      [['nested data entry', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]]],
-      [['nestedOptionalExample', eedt_0]],
+      'nestedeDataTypes',
+      [
+        2,
+        [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')],
+        [['nested data entry', [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat')]]],
+        [['nestedOptionalExample', eedt_0]],
+      ],
     ],
   ],
 ];
@@ -198,32 +196,9 @@ export const shapePreProcessingDefinition: EnumEntryDataType = [
   [],
 ];
 
-export const lucernaeTurici: VersionArrayDefinitionType = [
-  DataEntryFactory.createVersion(0, 4, 'version'),
+export const lucernaeTurici: SingleLevelContentType[] = [
   ['extrusion', lucernaeTuricumArcExamples],
   ['footprint', footprintDefinition],
   ['heights', heightParsingDefinition],
   ['shapePreProcessing', shapePreProcessingDefinition],
 ];
-
-export const lucernaeTuriciVersions: ParsersForVersionObject = {
-  versionBitCount: 4,
-  parsers: [
-    {
-      definition: parseVersionArrayDefinitionTypeToVersionDefinitionObject(lucernaeTurici) as VersionDefinitionObject,
-    },
-  ],
-};
-
-export const arrayDataTypeTest: ArrayEntryDataType = [[1, 3], [DataEntryFactory.createBoolean(true, 'someBoolean')]];
-
-export const versionArrayDataTypeTest: VersionArrayDefinitionType = [DataEntryFactory.createVersion(0, 4, 'version'), ['arrayDataTypeTest', arrayDataTypeTest]];
-
-export const arrayVersionObjectDataType: ParsersForVersionObject = {
-  versionBitCount: 4,
-  parsers: [
-    {
-      definition: parseVersionArrayDefinitionTypeToVersionDefinitionObject(versionArrayDataTypeTest) as VersionDefinitionObject,
-    },
-  ],
-};

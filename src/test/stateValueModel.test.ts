@@ -1,26 +1,18 @@
 import { expect, test } from 'bun:test';
-import { StateDataType, VersionArrayDefinitionType } from '../types';
+import { StateDataType } from '../types';
 // import { createParserObject } from '../objectmap/versionUserMethods';
-import { DataEntryFactory } from '../factory';
 // import { getDefaultObject } from '../objectmap/stateValueDefaultObject';
 import {
-  findExistingDataEntry,
-  readDataEntry,
-  updateDataEntry,
-  internalGetDataEntry,
   getStateFromOptionalEntryDataType,
   getStateFromEnumEntryDataType,
   getStateFromArrayEntryDataType,
-  getStateDataFromDoubleLevelContentType,
   getStateDataFromNestedContentType,
-  getStateDataFromSingleLevelContentType,
   testOnlyResetCurrentDataEntryIndex,
-  getStateFromBase64String,
-  getGenerationMethodForVersionDefinition,
 } from '../objectmap/stateDataModel';
 import { ncdt_0, ncdt_1, ncdt_2, oedt_0, oedt_1, oedt_2, eedt_0, eedt_1, eedt_2, aedt_0, aedt_1, aedt_2, lucernaeTurici } from './arrayDefinition.example';
-import { getBase64String } from '../objectmap/stateValueHelperMethods';
+import { getBase64String, createParserObject } from '../objectmap';
 import { parseBase64ToBits } from '../parsers';
+import { DataEntry } from '../../dist';
 
 // wrapper method to reset the indexes after having run the parser one, only needs to be done for tests
 const r = (v: any) => {
@@ -135,7 +127,7 @@ const nctd_updatedValues: any = [
 
 const nctd_updated_urls = ['yA', 'A', 'Y'];
 
-test.only('stateValueModel - NestedContendDataType - method computing', () =>
+test('stateValueModel - NestedContendDataType - method computing', () =>
   [ncdt_0, ncdt_1, ncdt_2].forEach((ncdt) =>
     expect(
       (() => {
@@ -145,7 +137,7 @@ test.only('stateValueModel - NestedContendDataType - method computing', () =>
     ).toBe(true)
   ));
 
-test.only('stateValueModel - NestedContendDataType - default state data type', () => {
+test('stateValueModel - NestedContendDataType - default state data type', () => {
   testOnlyResetCurrentDataEntryIndex();
   [ncdt_0, ncdt_1, ncdt_2].forEach((ncdt, i) => expect(r(getStateDataFromNestedContentType(ncdt[1], '', ncdt[0])()[1][1])).toEqual(ncdt_results[i])); // checking whether the content is as expected
   [ncdt_0, ncdt_1, ncdt_2].forEach((ncdt) => expect(r(getStateDataFromNestedContentType(ncdt[1], '', ncdt[0])()[1][0])).toEqual(ncdt[0])); // checking whether the attribute name is the same
@@ -157,7 +149,7 @@ test.only('stateValueModel - NestedContendDataType - default state data type', (
   ); // checking whether it parses correctly to base64 and back
 });
 
-test.only('stateValueModel - NestedContendDataType - update data model', () => {
+test('stateValueModel - NestedContendDataType - update data model', () => {
   testOnlyResetCurrentDataEntryIndex();
   [ncdt_0, ncdt_1, ncdt_2].forEach((ncdt, i) =>
     expect(r(getStateDataFromNestedContentType(ncdt[1], '', ncdt[0])([ncdt_valuesToUpdate[i]])[1][1])).toEqual(nctd_updatedValues[i])
@@ -306,7 +298,7 @@ const oedt_updatedValues: any = [
 
 const oedt_updated_urls = ['AA', 'A', 'gA'];
 
-test.only('stateValueModel - OptionalContendDataType - method computing', () =>
+test('stateValueModel - OptionalContendDataType - method computing', () =>
   [oedt_0, oedt_1, oedt_2].forEach((oedt) =>
     expect(
       (() => {
@@ -316,7 +308,7 @@ test.only('stateValueModel - OptionalContendDataType - method computing', () =>
     ).toBe(true)
   ));
 
-test.only('stateValueModel - OptionalContendDataType - default state data type', () => {
+test('stateValueModel - OptionalContendDataType - default state data type', () => {
   testOnlyResetCurrentDataEntryIndex();
 
   [oedt_0, oedt_1, oedt_2].forEach((oedt, i) => expect(r(getStateFromOptionalEntryDataType(oedt, '', `oedt_${i}`)()[1][1])).toEqual(oedt_results[i])); // checking whether the content is as expected
@@ -329,7 +321,7 @@ test.only('stateValueModel - OptionalContendDataType - default state data type',
   ); // checking whether it parses correctly to base64 and back
 });
 
-test.only('stateValueModel - OptionalContendDataType - update data model', () => {
+test('stateValueModel - OptionalContendDataType - update data model', () => {
   testOnlyResetCurrentDataEntryIndex();
 
   [oedt_0, oedt_1, oedt_2].forEach((oedt, i) =>
@@ -471,7 +463,7 @@ const eedt_updatedValues: any = [
 
 const eedt_updated_urls = ['AA', 'AA', 'AA'];
 
-test.only('stateValueModel - EnumEntryContentDataType - method computing', () =>
+test('stateValueModel - EnumEntryContentDataType - method computing', () =>
   [eedt_0, eedt_1, eedt_2].forEach((eedt) =>
     expect(
       (() => {
@@ -481,7 +473,7 @@ test.only('stateValueModel - EnumEntryContentDataType - method computing', () =>
     ).toBe(true)
   ));
 
-test.only('stateValueModel - EnumEntryContentDataType - default state data type', () => {
+test('stateValueModel - EnumEntryContentDataType - default state data type', () => {
   testOnlyResetCurrentDataEntryIndex();
   [eedt_0, eedt_1, eedt_2].forEach((eedt, i) => expect(r(getStateFromEnumEntryDataType(eedt, '', `eedt_${i}`)()[1][1])).toEqual(eedt_results[i])); // checking whether the content is as expected
   [eedt_0, eedt_1, eedt_2].forEach((eedt, i) => expect(r(getStateFromEnumEntryDataType(eedt, '', `eedt_${i}`)()[1][0])).toEqual(`eedt_${i}`)); // checking whether the attribute name is the same
@@ -493,7 +485,7 @@ test.only('stateValueModel - EnumEntryContentDataType - default state data type'
   ); // checking whether it parses correctly to base64 and back
 });
 
-test.only('stateValueModel - EnumEntryContentDataType - update data model', () => {
+test('stateValueModel - EnumEntryContentDataType - update data model', () => {
   testOnlyResetCurrentDataEntryIndex();
   [eedt_0, eedt_1, eedt_2].forEach((eedt, i) =>
     expect(r(getStateFromEnumEntryDataType(eedt, '', `eedt_${i}`)([eedt_valuesToUpdate[i]])[1][1])).toEqual(eedt_updatedValues[i])
@@ -708,7 +700,7 @@ const aedt_updatedValues: any = [
 
 const aedt_updated_urls = ['wAAA', 'gAAAA', 'QAAAAAAA'];
 
-test.only('stateValueModel - ArrayEntryContentDataType - method computing', () =>
+test('stateValueModel - ArrayEntryContentDataType - method computing', () =>
   [aedt_0, aedt_1, aedt_2].forEach((aedt) =>
     expect(
       (() => {
@@ -718,7 +710,7 @@ test.only('stateValueModel - ArrayEntryContentDataType - method computing', () =
     ).toBe(true)
   ));
 
-test.only('stateValueModel - ArrayEntryContentDataType - default state data type', () => {
+test('stateValueModel - ArrayEntryContentDataType - default state data type', () => {
   testOnlyResetCurrentDataEntryIndex();
   [aedt_0, aedt_1, aedt_2].forEach((aedt, i) => expect(r(getStateFromArrayEntryDataType(aedt, '', `aedt_${i}`)()[1][1])).toEqual(aedt_results[i])); // checking whether the content is as expected
   [aedt_0, aedt_1, aedt_2].forEach((aedt, i) => expect(r(getStateFromArrayEntryDataType(aedt, '', `aedt_${i}`)()[1][0])).toEqual(`aedt_${i}`)); // checking whether the attribute name is the same
@@ -730,7 +722,7 @@ test.only('stateValueModel - ArrayEntryContentDataType - default state data type
   ); // checking whether it parses correctly to base64 and back
 });
 
-test.only('stateValueModel - ArrayEntryContentDataType - update data model', () => {
+test('stateValueModel - ArrayEntryContentDataType - update data model', () => {
   testOnlyResetCurrentDataEntryIndex();
   [aedt_0, aedt_1, aedt_2].forEach((aedt, i) =>
     expect(r(getStateFromArrayEntryDataType(aedt, '', `aedt_${i}`)([aedt_valuesToUpdate[i]])[1][1])).toEqual(aedt_updatedValues[i])
@@ -922,7 +914,284 @@ const lucernaeTurici_result: any = {
   },
 };
 
-test.only('stateValueModel - lucernaeTurici', () => {
-  console.log(JSON.stringify(getGenerationMethodForVersionDefinition(lucernaeTurici)()));
-  expect(getGenerationMethodForVersionDefinition(lucernaeTurici)()).toEqual(lucernaeTurici_result);
+const lucernaeTurici_base_64 = 'CD2GGMmQAMYQBQoyGSjIAgAQ';
+
+const valueToUpdate: DataEntry = {
+  value: 0,
+  type: 2,
+  max: 3,
+  bits: 2,
+  name: 'heightProcessingMethod',
+  index: 19,
+  internalName: '_heightProcessingMethod_heightProcessingMethod',
+};
+
+const lucernaeTurici_updated_results: StateDataType = {
+  version: {
+    value: 0,
+    type: 0,
+    bits: 4,
+    name: 'version',
+    index: 0,
+    internalName: '_version',
+  },
+  extrusion: {
+    s: {
+      value: 4,
+      type: 2,
+      max: 5,
+      bits: 3,
+      name: 'extrusion',
+      index: 1,
+      internalName: '_extrusion_extrusion',
+    },
+    v: {
+      radiusTop: {
+        value: 0.35,
+        type: 4,
+        min: 0.2,
+        max: 1,
+        precision: 2,
+        significand: 7,
+        name: 'radiusTop',
+        index: 2,
+        internalName: '_extrusion_extrusion_radiusTop',
+      },
+      insetTop: {
+        value: 0.25,
+        type: 4,
+        min: 0.01,
+        max: 0.45,
+        precision: 2,
+        significand: 6,
+        name: 'insetTop',
+        index: 3,
+        internalName: '_extrusion_extrusion_insetTop',
+      },
+      insetBottom: {
+        value: 0.25,
+        type: 4,
+        min: 0.01,
+        max: 0.45,
+        precision: 2,
+        significand: 6,
+        name: 'insetBottom',
+        index: 4,
+        internalName: '_extrusion_extrusion_insetBottom',
+      },
+      insetSides: {
+        value: 0.25,
+        type: 4,
+        min: 0.01,
+        max: 0.45,
+        precision: 2,
+        significand: 6,
+        name: 'insetSides',
+        index: 5,
+        internalName: '_extrusion_extrusion_insetSides',
+      },
+      pointedness: {
+        value: 1,
+        type: 4,
+        min: 0,
+        max: 1,
+        precision: 2,
+        significand: 7,
+        name: 'pointedness',
+        index: 6,
+        internalName: '_extrusion_extrusion_pointedness',
+      },
+      divisionPointedness: {
+        value: 1,
+        type: 4,
+        min: 0,
+        max: 1,
+        precision: 2,
+        significand: 7,
+        name: 'divisionPointedness',
+        index: 7,
+        internalName: '_extrusion_extrusion_divisionPointedness',
+      },
+      divisionCount: {
+        value: 1,
+        type: 3,
+        min: 1,
+        max: 10,
+        bits: 4,
+        name: 'divisionCount',
+        index: 8,
+        internalName: '_extrusion_extrusion_divisionCount',
+      },
+      divisionResolution: {
+        value: 1,
+        type: 3,
+        min: 1,
+        max: 32,
+        bits: 5,
+        name: 'divisionResolution',
+        index: 9,
+        internalName: '_extrusion_extrusion_divisionResolution',
+      },
+    },
+  },
+  footprint: {
+    s: {
+      value: 3,
+      type: 2,
+      max: 6,
+      bits: 3,
+      name: 'footprint',
+      index: 10,
+      internalName: '_footprint_footprint',
+    },
+    v: {
+      size: {
+        value: 20,
+        type: 4,
+        min: 8,
+        max: 120,
+        precision: 0,
+        significand: 7,
+        name: 'size',
+        index: 11,
+        internalName: '_footprint_footprint_size',
+      },
+      xCount: {
+        value: 3,
+        type: 3,
+        min: 1,
+        max: 16,
+        bits: 4,
+        name: 'xCount',
+        index: 12,
+        internalName: '_footprint_footprint_xCount',
+      },
+      yCount: {
+        value: 0,
+        type: 3,
+        min: 0,
+        max: 8,
+        bits: 4,
+        name: 'yCount',
+        index: 13,
+        internalName: '_footprint_footprint_yCount',
+      },
+      shellThickness: {
+        value: 0,
+        type: 2,
+        max: 3,
+        bits: 2,
+        name: 'shellThickness',
+        index: 14,
+        internalName: '_footprint_footprint_shellThickness',
+      },
+      bufferInside: {
+        value: 2,
+        type: 4,
+        min: 0,
+        max: 10,
+        precision: 1,
+        significand: 7,
+        name: 'bufferInside',
+        index: 15,
+        internalName: '_footprint_footprint_bufferInside',
+      },
+      bufferOutside: {
+        value: 2,
+        type: 4,
+        min: 0,
+        max: 10,
+        precision: 1,
+        significand: 7,
+        name: 'bufferOutside',
+        index: 16,
+        internalName: '_footprint_footprint_bufferOutside',
+      },
+    },
+  },
+  heights: {
+    totalHeight: {
+      value: 150,
+      type: 4,
+      min: 50,
+      max: 300,
+      precision: 0,
+      significand: 8,
+      name: 'totalHeight',
+      index: 17,
+      internalName: '_totalHeight',
+    },
+    storyCount: {
+      value: 7,
+      type: 3,
+      min: 1,
+      max: 20,
+      bits: 5,
+      name: 'storyCount',
+      index: 18,
+      internalName: '_storyCount',
+    },
+    heightProcessingMethod: {
+      s: {
+        value: 0,
+        type: 2,
+        max: 3,
+        bits: 2,
+        name: 'heightProcessingMethod',
+        index: 19,
+        internalName: '_heightProcessingMethod_heightProcessingMethod',
+      },
+      v: {
+        total: {
+          value: 20,
+          type: 4,
+          min: 10,
+          max: 200,
+          precision: -1,
+          significand: 5,
+          name: 'total',
+          index: 20,
+          internalName: '_heightProcessingMethod_heightProcessingMethod_total',
+        },
+        linearTwist: {
+          value: 5,
+          type: 4,
+          min: 0,
+          max: 15,
+          precision: 2,
+          significand: 11,
+          name: 'linearTwist',
+          index: 21,
+          internalName: '_heightProcessingMethod_heightProcessingMethod_linearTwist',
+        },
+      },
+    },
+  },
+  shapePreProcessing: {
+    s: {
+      value: 2,
+      type: 2,
+      max: 3,
+      bits: 2,
+      name: 'shapePreProcessing',
+      index: 22,
+      internalName: '_shapePreProcessing_shapePreProcessing',
+    },
+    v: {},
+  },
+};
+
+const lucernae_updated_base_64 = 'CD2GGMmQAMYQBQoyGAn0g';
+
+test('stateValueModel - lucernaeTurici', () => {
+  const versionHandler = createParserObject([lucernaeTurici], 1);
+  const stateData = versionHandler.parser();
+  expect(stateData).toEqual(lucernaeTurici_result);
+  const base64 = getBase64String(stateData);
+  expect(base64).toEqual(lucernaeTurici_base_64);
+  expect(versionHandler.parser(base64)).toEqual(lucernaeTurici_result);
+  const result = versionHandler.updater(stateData, valueToUpdate);
+  expect(getBase64String(result)).toEqual(lucernae_updated_base_64);
+  expect(result).toEqual(lucernaeTurici_updated_results);
+  expect(versionHandler.parser(getBase64String(result))).toEqual(lucernaeTurici_updated_results);
 });
