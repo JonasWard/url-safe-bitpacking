@@ -6,7 +6,7 @@
     "dist/*"
   ],
   "type": "module",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "author": "Jonas Ward",
   "description": "Library for creating web safe base64 objects with custom bith widths and dynamic values.",
   "scripts": {
