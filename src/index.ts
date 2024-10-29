@@ -21,6 +21,7 @@ export {
   StateDataType,
   StateValueType,
   EnumSemantics,
+  DerivativeStateDataType,
 } from './types';
 export { createParserObject, getStateValue, getBase64String, getDataEntryArray } from './objectmap';
 export { parseBase64ToBits } from './parsers';
