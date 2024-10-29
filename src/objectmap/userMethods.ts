@@ -69,21 +69,13 @@ export const createParserObject = (
   exposedVersions?: number[]
 ): VersionHandler => {
   const versionBitCount = getVersionValueRangeValueForNumber(maximumExpectedVersions);
+  const localDefaultVersion = Math.max(0, Math.min(versionContent.length - 1, defaultVersion ?? 0));
 
   if (versionContent.length > maximumExpectedVersions) throw new Error(`Cannot have more than ${maximumExpectedVersions} versions`);
-  if (Math.max(0, Math.min(versionContent.length - 1, defaultVersion ?? 0)) !== (defaultVersion ?? 0))
-    console.log(
-      `Default version must be between 0 and ${versionContent.length - 1}, instead of ${defaultVersion} will be using ${Math.max(
-        0,
-        Math.min(versionContent.length - 1, defaultVersion ?? 0)
-      )}`
-    );
+  if (localDefaultVersion !== (defaultVersion ?? 0))
+    console.log(`Default version must be between 0 and ${versionContent.length - 1}, instead of ${defaultVersion} will be using ${localDefaultVersion}`);
 
-  const parser = getParserMethodForVersionDefinition(
-    versionContent,
-    versionBitCount,
-    defaultVersion !== undefined ? Math.max(0, Math.min(versionContent.length - 1, defaultVersion)) : undefined
-  );
+  const parser = getParserMethodForVersionDefinition(versionContent, versionBitCount, localDefaultVersion);
   const updater = getUpdaterMethodForVersionDefinition(parser);
   const stringify = getStringifyMethodForVersionDefinition(parser);
 

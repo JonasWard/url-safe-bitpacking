@@ -2,6 +2,7 @@ import { DataEntryArray, DataEntry } from '../types/dataEntry';
 export declare const valueBitsParser: (bitString: string, mapData: DataEntry) => number | boolean;
 export declare const dataBitsParser: (rawString: string, mapData: DataEntry) => DataEntry;
 export declare const getBitsCount: (mapData: DataEntry) => number;
+export declare const dataEntryBitstringParser: (bitstring: string, dataEntry: DataEntry) => [DataEntry, string];
 /**
  * Method to convert a bitstring into an array of data entries
  * @param bitString bitstring to parse into bits and then data entries

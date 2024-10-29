@@ -1,0 +1,13 @@
+import { DataEntryArray, NestedContentType, SingleLevelContentType } from '../types';
+import { StateDataType, StateValueType } from '../types/stateValueModel';
+export declare const getStateValue: (stateValue: StateDataType) => StateValueType;
+export declare const getDataEntryArray: (stateValue: StateDataType) => DataEntryArray;
+export declare const getBase64String: (stateValue: StateDataType) => string;
+export declare const isSingleLevelContentType: (data: NestedContentType) => boolean;
+export declare const isDoubleLevelContentType: (data: NestedContentType) => boolean;
+export declare const singleLevelContentTypeIsDataEntry: (data: SingleLevelContentType) => boolean;
+export declare const singleLevelContentTypeIsNestedContentDataType: (data: SingleLevelContentType) => boolean;
+export declare const doubleLevelContentTypeIsEnumEntryDataType: (data: NestedContentType) => boolean;
+export declare const doubleLevelContentTypeIsOptionalEntryDataType: (data: NestedContentType) => boolean;
+export declare const doubleLevelContentTypeIsArrayDefinitionType: (data: NestedContentType) => boolean;
+export declare const isDataEntry: (v: any) => boolean;
