@@ -18,7 +18,10 @@ export {
   BooleanData,
   DataEntry,
   DataEntryArray,
+  StateDataType,
+  StateValueType,
+  EnumSemantics,
 } from './types';
-export { createParserObject, getStateValue, getBase64String } from './objectmap';
+export { createParserObject, getStateValue, getBase64String, getDataEntryArray } from './objectmap';
 export { parseBase64ToBits } from './parsers';
 export { interpolateEntryAt, getRelativeValue } from './utils';
