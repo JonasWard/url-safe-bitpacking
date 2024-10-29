@@ -547,6 +547,7 @@ export {
   interpolateEntryAt,
   getStateValue,
   getRelativeValue,
+  getDataEntryArray,
   getBase64String,
   createParserObject,
   SignificandMaxBits,
