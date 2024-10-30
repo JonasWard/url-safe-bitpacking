@@ -187,7 +187,11 @@ export const getStateDataFromSingleLevelContentType = (slct: SingleLevelContentT
   if (singleLevelContentTypeIsDataEntry(slct))
     return (additionalData?: DataEntryArray | string) => internalGetDataEntry(slct as DataEntry, prefix, additionalData);
   else if (singleLevelContentTypeIsNestedContentDataType(slct))
-    return getStateDataFromNestedContentType((slct as NestedContentDataType)[1], prefix, (slct as NestedContentDataType)[0]);
+    return getStateDataFromNestedContentType(
+      (slct as NestedContentDataType)[1],
+      `${prefix}_${(slct as NestedContentDataType)[0]}`,
+      (slct as NestedContentDataType)[0]
+    );
 
   throw new Error('this is an invalid output value, wonder why?');
 };
