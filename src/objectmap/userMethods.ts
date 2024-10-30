@@ -42,8 +42,8 @@ const getParserMethodForVersionDefinition =
 
 const getUpdaterMethodForVersionDefinition =
   (parser: ExposedParserStateDataMethod): UpdateStateDataMethod =>
-  (state: StateDataType, entryToUpdate: DataEntry) =>
-    parser([entryToUpdate, ...getDataEntryArray(state)]);
+  (state: StateDataType, entryToUpdate: DataEntry | DataEntry[]) =>
+    parser([...(Array.isArray(entryToUpdate) ? entryToUpdate : [entryToUpdate]), ...getDataEntryArray(state)]);
 
 const getStringifyMethodForVersionDefinition =
   (parser: ExposedParserStateDataMethod): StringifyStateDataMethod =>
