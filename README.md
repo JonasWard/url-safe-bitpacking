@@ -11,7 +11,7 @@ Package for creating definitions of parametric models that can be stored as comp
 | updating model entries                               | &check;  | &check;  |          |
 | re-using data from old model on change in definition | &frac12; | &frac14; |          |
 | flattening and reading of the objects                | &check;  | &check;  | &iquest; |
-| arrays (both bit-level as arrays of objects)         | &frac12; | &frac14; |          |
+| arrays (both bit-level as arrays of objects)         | &frac12; | &frac12; |          |
 | utility to create StateValueType                     |          |          |          |
 
 ## concept
