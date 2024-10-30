@@ -19,7 +19,7 @@ export type StateDataGenerationMethod = (additionalData?: DataEntryArray | strin
 export type DataEntryParsingReturnType = [DataEntryArray | string | undefined, [string, DataEntry]];
 export type InternalStateDataGenerationMethod = (additionalData?: DataEntryArray | string) => [DataEntryArray | string | undefined, [string, DataEntry | StateDataType | DerivativeStateDataType]];
 export type ExposedParserStateDataMethod = (additionalData?: StateDataType | DataEntryArray | string) => StateDataType;
-export type UpdateStateDataMethod = (state: StateDataType, entryToUpdate: DataEntry) => StateDataType;
+export type UpdateStateDataMethod = (state: StateDataType, entryToUpdate: DataEntry | DataEntry[]) => StateDataType;
 export type StringifyStateDataMethod = (data: StateDataType | DataEntryArray) => string;
 export type VersionContentDefinition = SingleLevelContentType[][];
 export type VersionHandler = {

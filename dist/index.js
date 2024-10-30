@@ -459,7 +459,7 @@ var getStateDataFromSingleLevelContentType = (slct, prefix) => {
   if (singleLevelContentTypeIsDataEntry(slct))
     return (additionalData) => internalGetDataEntry(slct, prefix, additionalData);
   else if (singleLevelContentTypeIsNestedContentDataType(slct))
-    return getStateDataFromNestedContentType(slct[1], prefix, slct[0]);
+    return getStateDataFromNestedContentType(slct[1], `${prefix}_${slct[0]}`, slct[0]);
   throw new Error("this is an invalid output value, wonder why?");
 };
 var getGenerationMethodForSingleLevelContentTypeArray = (slct) => {
@@ -488,7 +488,7 @@ var getParserMethodForVersionDefinition = (vadt, versionBits, defaultVersion) =>
   const versionEntry = DataEntryFactory.createVersion(versionIndex, versionBits, "version");
   return getGenerationMethodForSingleLevelContentTypeArray([versionEntry, ...versionDefinition])(additionalData);
 };
-var getUpdaterMethodForVersionDefinition = (parser) => (state, entryToUpdate) => parser([entryToUpdate, ...getDataEntryArray(state)]);
+var getUpdaterMethodForVersionDefinition = (parser) => (state, entryToUpdate) => parser([...Array.isArray(entryToUpdate) ? entryToUpdate : [entryToUpdate], ...getDataEntryArray(state)]);
 var getStringifyMethodForVersionDefinition = (parser) => (data) => getBase64String(parser(data));
 var createParserObject = (versionContent, maximumExpectedVersions, defaultVersion, enumSemanticsMapping, attributeSemanticsMapping, exposedVersions) => {
   const versionBitCount = getVersionValueRangeValueForNumber(maximumExpectedVersions);
