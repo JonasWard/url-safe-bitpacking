@@ -743,7 +743,7 @@ test('stateValueModel - ArrayEntryContentDataType - update data model', () => {
 const lucernaeTurici_result: any = {
   version: { value: 0, type: 0, bits: 4, name: 'version', index: 0, internalName: '_version' },
   extrusion: {
-    s: { value: 4, type: 2, max: 5, bits: 3, name: 'extrusion', index: 1, internalName: '_extrusion_extrusion' },
+    s: { value: 4, type: 2, max: 5, bits: 3, name: 'extrusion', index: 1, internalName: '_extrusion_extrusion_extrusion' },
     v: {
       radiusTop: {
         value: 0.35,
@@ -754,7 +754,7 @@ const lucernaeTurici_result: any = {
         significand: 7,
         name: 'radiusTop',
         index: 2,
-        internalName: '_extrusion_extrusion_radiusTop',
+        internalName: '_extrusion_extrusion_extrusion_radiusTop',
       },
       insetTop: {
         value: 0.25,
@@ -765,7 +765,7 @@ const lucernaeTurici_result: any = {
         significand: 6,
         name: 'insetTop',
         index: 3,
-        internalName: '_extrusion_extrusion_insetTop',
+        internalName: '_extrusion_extrusion_extrusion_insetTop',
       },
       insetBottom: {
         value: 0.25,
@@ -776,7 +776,7 @@ const lucernaeTurici_result: any = {
         significand: 6,
         name: 'insetBottom',
         index: 4,
-        internalName: '_extrusion_extrusion_insetBottom',
+        internalName: '_extrusion_extrusion_extrusion_insetBottom',
       },
       insetSides: {
         value: 0.25,
@@ -787,7 +787,7 @@ const lucernaeTurici_result: any = {
         significand: 6,
         name: 'insetSides',
         index: 5,
-        internalName: '_extrusion_extrusion_insetSides',
+        internalName: '_extrusion_extrusion_extrusion_insetSides',
       },
       pointedness: {
         value: 1,
@@ -798,7 +798,7 @@ const lucernaeTurici_result: any = {
         significand: 7,
         name: 'pointedness',
         index: 6,
-        internalName: '_extrusion_extrusion_pointedness',
+        internalName: '_extrusion_extrusion_extrusion_pointedness',
       },
       divisionPointedness: {
         value: 1,
@@ -809,9 +809,18 @@ const lucernaeTurici_result: any = {
         significand: 7,
         name: 'divisionPointedness',
         index: 7,
-        internalName: '_extrusion_extrusion_divisionPointedness',
+        internalName: '_extrusion_extrusion_extrusion_divisionPointedness',
       },
-      divisionCount: { value: 1, type: 3, min: 1, max: 10, bits: 4, name: 'divisionCount', index: 8, internalName: '_extrusion_extrusion_divisionCount' },
+      divisionCount: {
+        value: 1,
+        type: 3,
+        min: 1,
+        max: 10,
+        bits: 4,
+        name: 'divisionCount',
+        index: 8,
+        internalName: '_extrusion_extrusion_extrusion_divisionCount',
+      },
       divisionResolution: {
         value: 1,
         type: 3,
@@ -820,17 +829,27 @@ const lucernaeTurici_result: any = {
         bits: 5,
         name: 'divisionResolution',
         index: 9,
-        internalName: '_extrusion_extrusion_divisionResolution',
+        internalName: '_extrusion_extrusion_extrusion_divisionResolution',
       },
     },
   },
   footprint: {
-    s: { value: 3, type: 2, max: 6, bits: 3, name: 'footprint', index: 10, internalName: '_footprint_footprint' },
+    s: { value: 3, type: 2, max: 6, bits: 3, name: 'footprint', index: 10, internalName: '_footprint_footprint_footprint' },
     v: {
-      size: { value: 20, type: 4, min: 8, max: 120, precision: 0, significand: 7, name: 'size', index: 11, internalName: '_footprint_footprint_size' },
-      xCount: { value: 3, type: 3, min: 1, max: 16, bits: 4, name: 'xCount', index: 12, internalName: '_footprint_footprint_xCount' },
-      yCount: { value: 0, type: 3, min: 0, max: 8, bits: 4, name: 'yCount', index: 13, internalName: '_footprint_footprint_yCount' },
-      shellThickness: { value: 0, type: 2, max: 3, bits: 2, name: 'shellThickness', index: 14, internalName: '_footprint_footprint_shellThickness' },
+      size: {
+        value: 20,
+        type: 4,
+        min: 8,
+        max: 120,
+        precision: 0,
+        significand: 7,
+        name: 'size',
+        index: 11,
+        internalName: '_footprint_footprint_footprint_size',
+      },
+      xCount: { value: 3, type: 3, min: 1, max: 16, bits: 4, name: 'xCount', index: 12, internalName: '_footprint_footprint_footprint_xCount' },
+      yCount: { value: 0, type: 3, min: 0, max: 8, bits: 4, name: 'yCount', index: 13, internalName: '_footprint_footprint_footprint_yCount' },
+      shellThickness: { value: 0, type: 2, max: 3, bits: 2, name: 'shellThickness', index: 14, internalName: '_footprint_footprint_footprint_shellThickness' },
       bufferInside: {
         value: 2,
         type: 4,
@@ -840,7 +859,7 @@ const lucernaeTurici_result: any = {
         significand: 7,
         name: 'bufferInside',
         index: 15,
-        internalName: '_footprint_footprint_bufferInside',
+        internalName: '_footprint_footprint_footprint_bufferInside',
       },
       bufferOutside: {
         value: 2,
@@ -851,15 +870,23 @@ const lucernaeTurici_result: any = {
         significand: 7,
         name: 'bufferOutside',
         index: 16,
-        internalName: '_footprint_footprint_bufferOutside',
+        internalName: '_footprint_footprint_footprint_bufferOutside',
       },
     },
   },
   heights: {
-    totalHeight: { value: 150, type: 4, min: 50, max: 300, precision: 0, significand: 8, name: 'totalHeight', index: 17, internalName: '_totalHeight' },
-    storyCount: { value: 7, type: 3, min: 1, max: 20, bits: 5, name: 'storyCount', index: 18, internalName: '_storyCount' },
+    totalHeight: { value: 150, type: 4, min: 50, max: 300, precision: 0, significand: 8, name: 'totalHeight', index: 17, internalName: '_heights_totalHeight' },
+    storyCount: { value: 7, type: 3, min: 1, max: 20, bits: 5, name: 'storyCount', index: 18, internalName: '_heights_storyCount' },
     heightProcessingMethod: {
-      s: { value: 1, type: 2, max: 3, bits: 2, name: 'heightProcessingMethod', index: 19, internalName: '_heightProcessingMethod_heightProcessingMethod' },
+      s: {
+        value: 1,
+        type: 2,
+        max: 3,
+        bits: 2,
+        name: 'heightProcessingMethod',
+        index: 19,
+        internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod',
+      },
       v: {
         maxAmplitude: {
           value: 1,
@@ -870,7 +897,7 @@ const lucernaeTurici_result: any = {
           significand: 6,
           name: 'maxAmplitude',
           index: 20,
-          internalName: '_heightProcessingMethod_heightProcessingMethod_maxAmplitude',
+          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_maxAmplitude',
         },
         minAmplitude: {
           value: 1,
@@ -881,7 +908,7 @@ const lucernaeTurici_result: any = {
           significand: 9,
           name: 'minAmplitude',
           index: 21,
-          internalName: '_heightProcessingMethod_heightProcessingMethod_minAmplitude',
+          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_minAmplitude',
         },
         period: {
           value: 1,
@@ -892,7 +919,7 @@ const lucernaeTurici_result: any = {
           significand: 11,
           name: 'period',
           index: 22,
-          internalName: '_heightProcessingMethod_heightProcessingMethod_period',
+          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_period',
         },
         phaseShift: {
           value: 0,
@@ -903,13 +930,13 @@ const lucernaeTurici_result: any = {
           significand: 9,
           name: 'phaseShift',
           index: 23,
-          internalName: '_heightProcessingMethod_heightProcessingMethod_phaseShift',
+          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_phaseShift',
         },
       },
     },
   },
   shapePreProcessing: {
-    s: { value: 2, type: 2, max: 3, bits: 2, name: 'shapePreProcessing', index: 24, internalName: '_shapePreProcessing_shapePreProcessing' },
+    s: { value: 2, type: 2, max: 3, bits: 2, name: 'shapePreProcessing', index: 24, internalName: '_shapePreProcessing_shapePreProcessing_shapePreProcessing' },
     v: {},
   },
 };
@@ -923,28 +950,13 @@ const valueToUpdate: DataEntry = {
   bits: 2,
   name: 'heightProcessingMethod',
   index: 19,
-  internalName: '_heightProcessingMethod_heightProcessingMethod',
+  internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod',
 };
 
 const lucernaeTurici_updated_results: StateDataType = {
-  version: {
-    value: 0,
-    type: 0,
-    bits: 4,
-    name: 'version',
-    index: 0,
-    internalName: '_version',
-  },
+  version: { value: 0, type: 0, bits: 4, name: 'version', index: 0, internalName: '_version' },
   extrusion: {
-    s: {
-      value: 4,
-      type: 2,
-      max: 5,
-      bits: 3,
-      name: 'extrusion',
-      index: 1,
-      internalName: '_extrusion_extrusion',
-    },
+    s: { value: 4, type: 2, max: 5, bits: 3, name: 'extrusion', index: 1, internalName: '_extrusion_extrusion_extrusion' },
     v: {
       radiusTop: {
         value: 0.35,
@@ -955,7 +967,7 @@ const lucernaeTurici_updated_results: StateDataType = {
         significand: 7,
         name: 'radiusTop',
         index: 2,
-        internalName: '_extrusion_extrusion_radiusTop',
+        internalName: '_extrusion_extrusion_extrusion_radiusTop',
       },
       insetTop: {
         value: 0.25,
@@ -966,7 +978,7 @@ const lucernaeTurici_updated_results: StateDataType = {
         significand: 6,
         name: 'insetTop',
         index: 3,
-        internalName: '_extrusion_extrusion_insetTop',
+        internalName: '_extrusion_extrusion_extrusion_insetTop',
       },
       insetBottom: {
         value: 0.25,
@@ -977,7 +989,7 @@ const lucernaeTurici_updated_results: StateDataType = {
         significand: 6,
         name: 'insetBottom',
         index: 4,
-        internalName: '_extrusion_extrusion_insetBottom',
+        internalName: '_extrusion_extrusion_extrusion_insetBottom',
       },
       insetSides: {
         value: 0.25,
@@ -988,7 +1000,7 @@ const lucernaeTurici_updated_results: StateDataType = {
         significand: 6,
         name: 'insetSides',
         index: 5,
-        internalName: '_extrusion_extrusion_insetSides',
+        internalName: '_extrusion_extrusion_extrusion_insetSides',
       },
       pointedness: {
         value: 1,
@@ -999,7 +1011,7 @@ const lucernaeTurici_updated_results: StateDataType = {
         significand: 7,
         name: 'pointedness',
         index: 6,
-        internalName: '_extrusion_extrusion_pointedness',
+        internalName: '_extrusion_extrusion_extrusion_pointedness',
       },
       divisionPointedness: {
         value: 1,
@@ -1010,7 +1022,7 @@ const lucernaeTurici_updated_results: StateDataType = {
         significand: 7,
         name: 'divisionPointedness',
         index: 7,
-        internalName: '_extrusion_extrusion_divisionPointedness',
+        internalName: '_extrusion_extrusion_extrusion_divisionPointedness',
       },
       divisionCount: {
         value: 1,
@@ -1020,7 +1032,7 @@ const lucernaeTurici_updated_results: StateDataType = {
         bits: 4,
         name: 'divisionCount',
         index: 8,
-        internalName: '_extrusion_extrusion_divisionCount',
+        internalName: '_extrusion_extrusion_extrusion_divisionCount',
       },
       divisionResolution: {
         value: 1,
@@ -1030,20 +1042,12 @@ const lucernaeTurici_updated_results: StateDataType = {
         bits: 5,
         name: 'divisionResolution',
         index: 9,
-        internalName: '_extrusion_extrusion_divisionResolution',
+        internalName: '_extrusion_extrusion_extrusion_divisionResolution',
       },
     },
   },
   footprint: {
-    s: {
-      value: 3,
-      type: 2,
-      max: 6,
-      bits: 3,
-      name: 'footprint',
-      index: 10,
-      internalName: '_footprint_footprint',
-    },
+    s: { value: 3, type: 2, max: 6, bits: 3, name: 'footprint', index: 10, internalName: '_footprint_footprint_footprint' },
     v: {
       size: {
         value: 20,
@@ -1054,37 +1058,11 @@ const lucernaeTurici_updated_results: StateDataType = {
         significand: 7,
         name: 'size',
         index: 11,
-        internalName: '_footprint_footprint_size',
+        internalName: '_footprint_footprint_footprint_size',
       },
-      xCount: {
-        value: 3,
-        type: 3,
-        min: 1,
-        max: 16,
-        bits: 4,
-        name: 'xCount',
-        index: 12,
-        internalName: '_footprint_footprint_xCount',
-      },
-      yCount: {
-        value: 0,
-        type: 3,
-        min: 0,
-        max: 8,
-        bits: 4,
-        name: 'yCount',
-        index: 13,
-        internalName: '_footprint_footprint_yCount',
-      },
-      shellThickness: {
-        value: 0,
-        type: 2,
-        max: 3,
-        bits: 2,
-        name: 'shellThickness',
-        index: 14,
-        internalName: '_footprint_footprint_shellThickness',
-      },
+      xCount: { value: 3, type: 3, min: 1, max: 16, bits: 4, name: 'xCount', index: 12, internalName: '_footprint_footprint_footprint_xCount' },
+      yCount: { value: 0, type: 3, min: 0, max: 8, bits: 4, name: 'yCount', index: 13, internalName: '_footprint_footprint_footprint_yCount' },
+      shellThickness: { value: 0, type: 2, max: 3, bits: 2, name: 'shellThickness', index: 14, internalName: '_footprint_footprint_footprint_shellThickness' },
       bufferInside: {
         value: 2,
         type: 4,
@@ -1094,7 +1072,7 @@ const lucernaeTurici_updated_results: StateDataType = {
         significand: 7,
         name: 'bufferInside',
         index: 15,
-        internalName: '_footprint_footprint_bufferInside',
+        internalName: '_footprint_footprint_footprint_bufferInside',
       },
       bufferOutside: {
         value: 2,
@@ -1105,32 +1083,13 @@ const lucernaeTurici_updated_results: StateDataType = {
         significand: 7,
         name: 'bufferOutside',
         index: 16,
-        internalName: '_footprint_footprint_bufferOutside',
+        internalName: '_footprint_footprint_footprint_bufferOutside',
       },
     },
   },
   heights: {
-    totalHeight: {
-      value: 150,
-      type: 4,
-      min: 50,
-      max: 300,
-      precision: 0,
-      significand: 8,
-      name: 'totalHeight',
-      index: 17,
-      internalName: '_totalHeight',
-    },
-    storyCount: {
-      value: 7,
-      type: 3,
-      min: 1,
-      max: 20,
-      bits: 5,
-      name: 'storyCount',
-      index: 18,
-      internalName: '_storyCount',
-    },
+    totalHeight: { value: 150, type: 4, min: 50, max: 300, precision: 0, significand: 8, name: 'totalHeight', index: 17, internalName: '_heights_totalHeight' },
+    storyCount: { value: 7, type: 3, min: 1, max: 20, bits: 5, name: 'storyCount', index: 18, internalName: '_heights_storyCount' },
     heightProcessingMethod: {
       s: {
         value: 0,
@@ -1139,7 +1098,7 @@ const lucernaeTurici_updated_results: StateDataType = {
         bits: 2,
         name: 'heightProcessingMethod',
         index: 19,
-        internalName: '_heightProcessingMethod_heightProcessingMethod',
+        internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod',
       },
       v: {
         total: {
@@ -1151,7 +1110,7 @@ const lucernaeTurici_updated_results: StateDataType = {
           significand: 5,
           name: 'total',
           index: 20,
-          internalName: '_heightProcessingMethod_heightProcessingMethod_total',
+          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_total',
         },
         linearTwist: {
           value: 5,
@@ -1162,21 +1121,13 @@ const lucernaeTurici_updated_results: StateDataType = {
           significand: 11,
           name: 'linearTwist',
           index: 21,
-          internalName: '_heightProcessingMethod_heightProcessingMethod_linearTwist',
+          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_linearTwist',
         },
       },
     },
   },
   shapePreProcessing: {
-    s: {
-      value: 2,
-      type: 2,
-      max: 3,
-      bits: 2,
-      name: 'shapePreProcessing',
-      index: 22,
-      internalName: '_shapePreProcessing_shapePreProcessing',
-    },
+    s: { value: 2, type: 2, max: 3, bits: 2, name: 'shapePreProcessing', index: 22, internalName: '_shapePreProcessing_shapePreProcessing_shapePreProcessing' },
     v: {},
   },
 };
