@@ -1,4 +1,4 @@
-import { DataEntry, VersionDataEntry } from './dataEntry';
+import { DataEntry } from './dataEntry';
 
 // basic content type
 export type SingleLevelContentType = DataEntry | NestedContentDataType;
