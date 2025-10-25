@@ -99,7 +99,7 @@ export const parseBitsToBase64 = (bits: string): string => {
 
 export const parseBase64ToBits = (base64: string): string => {
   // map the base64 characters to numbers
-  const numbers = base64.split('').map((c) => base64url.indexOf(c));
+  const numbers = base64.match(/.{1,6}/g)?.map((c) => base64url.indexOf(c)) ?? [];
   // parse the numbers into 6 bit chunks
   const chunks = numbers.map((n) => n.toString(2).padStart(6, '0'));
   // join the chunks
