@@ -2,6 +2,12 @@ import { IntData } from '../types/intData';
 
 export const getBitsCount = (intData: IntData): number => intData.bits;
 
+/**
+ * Method that parses a state bitstring into a raw positive int
+ * @param stateString - `string` 0 | 1
+ * @param bitCount - `number` amount of bits to consider
+ * @returns number
+ */
 export const rawValueParser = (stateString: string, bitCount: number): number => {
   if (stateString.length < bitCount) throw new Error(`To few bits for this int bit string (${stateString.length} instead of ${bitCount})`);
   if (stateString.length > bitCount) throw new Error(`To many bits for this int bit string (${stateString.length} instead of ${bitCount})`);

@@ -16,6 +16,7 @@ const dataMap = [
   DataEntryFactory.createFloat(0.024, 0, 10, 3, 'floatC', 5),
   DataEntryFactory.createBoolean(true, 'boolA', 6),
   DataEntryFactory.createBoolean(false, 'boolB', 7),
+  DataEntryFactory.createEnumArray([0, 1, 2], 0, 10, 3, 5, 'enumArrayA', 8)
 ];
 
 const testStrings_user = [
@@ -94,8 +95,13 @@ test('simple data array parsing', () => {
   unpacked.forEach((data, index) => expect(dataMap[index].value).toBe(data.value));
 });
 
-test.only('content type test', () => dataMap.forEach((s, i) => expect(getDataEntryTypeString(s)).toEqual(testStrings_user[i])));
-test.only('content type with internal data test', () => dataMap.map((s, i) => expect(getDataEntryTypeString(s, true)).toEqual(testStrings_internalData[i])));
-test.only('content type named test', () => dataMap.map((s, i) => expect(getDateEntryTypeNamedString(s, true)).toEqual(testStrings_definedType[i])));
-test.only('content StateData attribute type test', () => dataMap.map((s, i) => expect(getStateDataContentType(s)).toEqual(testString_stateDataType[i])));
-test.only('content StateValue attribute type test', () => dataMap.map((s, i) => expect(getStateValueContentType(s)).toEqual(testString_stateValueType[i])));
+test.only('content type test', async () =>
+  dataMap.forEach((s, i) => expect(getDataEntryTypeString(s)).toEqual(testStrings_user[i])));
+test.only('content type with internal data test', async () =>
+  dataMap.map((s, i) => expect(getDataEntryTypeString(s, true)).toEqual(testStrings_internalData[i])));
+test.only('content type named test', async () =>
+  dataMap.map((s, i) => expect(getDateEntryTypeNamedString(s, true)).toEqual(testStrings_definedType[i])));
+test.only('content StateData attribute type test', async () =>
+  dataMap.map((s, i) => expect(getStateDataContentType(s)).toEqual(testString_stateDataType[i])));
+test.only('content StateValue attribute type test', async () =>
+  dataMap.map((s, i) => expect(getStateValueContentType(s)).toEqual(testString_stateValueType[i])));

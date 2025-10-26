@@ -11,11 +11,11 @@ export type DerivativeStateDataType = {
 };
 
 export type StateValueType = {
-  [attribute: string]: boolean | number | string | StateValueType | DerivativeStateValueType;
+  [attribute: string]: boolean | number | number[] | string | StateValueType | DerivativeStateValueType;
 };
 
 export type DerivativeStateValueType = {
-  s: boolean | number | string;
+  s: boolean | number | string | number[];
   v: StateValueType | StateValueType[];
 };
 

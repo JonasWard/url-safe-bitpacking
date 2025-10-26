@@ -19,14 +19,17 @@ const internalGetDataEntryArray = (stateValue: StateDataType): DataEntryArray =>
 
 const getStateValueHelperMethod = (
   stateValue: StateDataType | DataEntry | DerivativeStateDataType
-): boolean | number | string | StateValueType | DerivativeStateValueType => {
+): boolean | number | number[] | string | StateValueType | DerivativeStateValueType => {
   if ((stateValue as DataEntry).type !== undefined) return (stateValue as DataEntry).value;
-  else if ((stateValue as DerivativeStateDataType).s !== undefined && (stateValue as DerivativeStateDataType).v !== undefined)
+  else if (
+    (stateValue as DerivativeStateDataType).s !== undefined &&
+    (stateValue as DerivativeStateDataType).v !== undefined
+  )
     return {
       s: (stateValue as DerivativeStateDataType).s.value,
       v: Array.isArray((stateValue as DerivativeStateDataType).v)
         ? ((stateValue as DerivativeStateDataType).v as StateDataType[]).map(getStateValue)
-        : getStateValue((stateValue as DerivativeStateDataType).v as StateDataType),
+        : getStateValue((stateValue as DerivativeStateDataType).v as StateDataType)
     };
   else return getStateValue(stateValue as StateDataType);
 };

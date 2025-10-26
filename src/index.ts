@@ -22,7 +22,7 @@ export {
   StateValueType,
   EnumSemantics,
   DerivativeStateDataType,
-  PREFIX_SEPERATOR_DELIMETER,
+  PREFIX_SEPERATOR_DELIMETER
 } from './types';
 export { createParserObject, getStateValue, getBase64String, getDataEntryArray } from './objectmap';
 export { parseBase64ToBits } from './parsers';

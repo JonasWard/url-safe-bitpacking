@@ -27,7 +27,7 @@ import {
   doubleLevelContentTypeIsOptionalEntryDataType,
   isDoubleLevelContentType,
   singleLevelContentTypeIsDataEntry,
-  singleLevelContentTypeIsNestedContentDataType,
+  singleLevelContentTypeIsNestedContentDataType
 } from './stateValueHelperMethods';
 
 let currentDataEntryIndex = 0;
@@ -49,9 +49,22 @@ export const readDataEntry = (dataEntry: DataEntry, bitString: string): DataEntr
 export const updateDataEntry = (dataEntry: DataEntry, existingData: DataEntryArray): DataEntryParsingReturnType => {
   const existingDataEntry = findExistingDataEntry(dataEntry, existingData);
   currentDataEntryIndex++;
-  return [existingData, [dataEntry.name, { ...(existingDataEntry ? updateValue(dataEntry, existingDataEntry) : dataEntry), index: currentDataEntryIndex }]];
+  return [
+    existingData,
+    [
+      dataEntry.name,
+      { ...(existingDataEntry ? updateValue(dataEntry, existingDataEntry) : dataEntry), index: currentDataEntryIndex }
+    ]
+  ];
 };
 
+/**
+ * Method that extracts the data for a data entry from the given data
+ * @param dataEntry - `DataEntry` object that represents the data entry to extract the data for
+ * @param prefix - `string` that represents the prefix of the data internam name of the `DataEntry` object
+ * @param additionalData - `DataEntryArray` or `string` that represents the additional data to extract the data from, if not provided, the default value will be returned
+ * @returns `[DataEntryArray | string | undefined, [string, DataEntry]]` tuple that represents the updated additional data and the extracted data entry
+ */
 export const internalGetDataEntry = (
   dataEntry: DataEntry,
   prefix: string,
@@ -70,7 +83,11 @@ export const internalGetDataEntry = (
 export const getStateFromOptionalEntryDataType =
   (oedt: OptionalEntryDataType, prefix: string, attributeName: string): InternalStateDataGenerationMethod =>
   (additionalData?: DataEntryArray | string): [DataEntryArray | string | undefined, [string, StateDataType]] => {
-    const [updatedLocalAdditionalData, [__, s]] = internalGetDataEntry(DataEntryFactory.createBoolean(oedt[0], attributeName), prefix, additionalData);
+    const [updatedLocalAdditionalData, [__, s]] = internalGetDataEntry(
+      DataEntryFactory.createBoolean(oedt[0], attributeName),
+      prefix,
+      additionalData
+    );
 
     const [localAdditionalData, [_, v]] = getStateDateFromSingleLevelContentTypeArray(
       oedt[Number(s.value) + 1] as NonEmptyValidEntryArrayType | [],
@@ -84,9 +101,9 @@ export const getStateFromOptionalEntryDataType =
         attributeName,
         {
           s,
-          v,
-        },
-      ],
+          v
+        }
+      ]
     ];
   };
 
@@ -95,11 +112,19 @@ export const getStateFromEnumEntryDataType =
   (additionalData?: DataEntryArray | string): [DataEntryArray | string | undefined, [string, StateDataType]] => {
     if (Math.round(eedt[0]) !== eedt[0]) `given default (${eedt[0]}) value isn't an integer, rounding it`;
     if (eedt.length - 2 < Math.round(eedt[0]))
-      console.log(`given default value (${eedt[0]}) was larger than the amount of options available, using the largest value (${eedt.length - 2}) instead`);
-    if (eedt[0] < 0) console.log(`given default value (${eedt[0]}) was negative, using first index (0) instead`);
+      throw new Error(
+        `given default value (${eedt[0]}) was larger than the amount of options available, using the largest value (${
+          eedt.length - 2
+        }) instead`
+      );
+    if (eedt[0] < 0) throw new Error(`given default value (${eedt[0]}) was negative, using first index (0) instead`);
 
     const [updatedLocalAdditionalData, [__, s]] = internalGetDataEntry(
-      DataEntryFactory.createEnum(Math.max(Math.min(eedt.length - 2, Math.round(eedt[0])), 0), eedt.length - 1, attributeName),
+      DataEntryFactory.createEnum(
+        Math.max(Math.min(eedt.length - 2, Math.round(eedt[0])), 0),
+        eedt.length - 1,
+        attributeName
+      ),
       prefix,
       additionalData
     );
@@ -116,17 +141,23 @@ export const getStateFromEnumEntryDataType =
         attributeName,
         {
           s,
-          v,
-        },
-      ],
+          v
+        }
+      ]
     ];
   };
 
 export const getStateFromArrayEntryDataType =
   (aedt: ArrayEntryDataType, prefix: string, attributeName: string) =>
-  (additionalData?: DataEntryArray | string): [DataEntryArray | string | undefined, [string, DerivativeStateDataType]] => {
+  (
+    additionalData?: DataEntryArray | string
+  ): [DataEntryArray | string | undefined, [string, DerivativeStateDataType]] => {
     const [min, max] = [aedt[0][0], aedt[0][1]].sort((a, b) => a - b);
-    const [updatedAdditionalData, [__, s]] = internalGetDataEntry(DataEntryFactory.createInt(min, min, max, attributeName), prefix, additionalData);
+    const [updatedAdditionalData, [__, s]] = internalGetDataEntry(
+      DataEntryFactory.createInt(min, min, max, attributeName),
+      prefix,
+      additionalData
+    );
 
     const v: StateDataType[] = [];
     let localAdditionalData: DataEntryArray | string | undefined = updatedAdditionalData;
@@ -146,9 +177,9 @@ export const getStateFromArrayEntryDataType =
         attributeName,
         {
           s,
-          v,
-        },
-      ],
+          v
+        }
+      ]
     ];
   };
 
@@ -157,9 +188,12 @@ export const getStateDataFromDoubleLevelContentType = (
   prefix: string,
   attributeName: string
 ): InternalStateDataGenerationMethod => {
-  if (doubleLevelContentTypeIsEnumEntryDataType(dct)) return getStateFromEnumEntryDataType(dct as EnumEntryDataType, prefix, attributeName);
-  else if (doubleLevelContentTypeIsOptionalEntryDataType(dct)) return getStateFromOptionalEntryDataType(dct as OptionalEntryDataType, prefix, attributeName);
-  else if (doubleLevelContentTypeIsArrayDefinitionType(dct)) return getStateFromArrayEntryDataType(dct as ArrayEntryDataType, prefix, attributeName);
+  if (doubleLevelContentTypeIsEnumEntryDataType(dct))
+    return getStateFromEnumEntryDataType(dct as EnumEntryDataType, prefix, attributeName);
+  else if (doubleLevelContentTypeIsOptionalEntryDataType(dct))
+    return getStateFromOptionalEntryDataType(dct as OptionalEntryDataType, prefix, attributeName);
+  else if (doubleLevelContentTypeIsArrayDefinitionType(dct))
+    return getStateFromArrayEntryDataType(dct as ArrayEntryDataType, prefix, attributeName);
 
   throw new Error('this is an invalid output value, wonder why?');
 };
