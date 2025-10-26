@@ -31,6 +31,7 @@ const testStrings_user = [
   '{ value: number, name: "floatC", type: DataType.FLOAT, min: 0, max: 10, precision: 3, significand: 14 }',
   '{ value: boolean, name: "boolA", type: DataType.BOOLEAN }',
   '{ value: boolean, name: "boolB", type: DataType.BOOLEAN }',
+  '{ value: number[], name: "enumArrayA", type: DataType.ENUM_ARRAY, minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 }'
 ];
 
 const testStrings_internalData = [
@@ -45,6 +46,7 @@ const testStrings_internalData = [
   '{ value: number, name: "floatC", type: DataType.FLOAT, min: 0, max: 10, precision: 3, significand: 14 ,internalName: undefined, index: 5 }',
   '{ value: boolean, name: "boolA", type: DataType.BOOLEAN ,internalName: undefined, index: 6 }',
   '{ value: boolean, name: "boolB", type: DataType.BOOLEAN ,internalName: undefined, index: 7 }',
+  '{ value: number[], name: "enumArrayA", type: DataType.ENUM_ARRAY, minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 ,internalName: undefined, index: 8 }'
 ];
 
 const testStrings_definedType = [
@@ -59,6 +61,7 @@ const testStrings_definedType = [
   'export type FFloatC = { value: number, name: "floatC", type: DataType.FLOAT, min: 0, max: 10, precision: 3, significand: 14 ,internalName: undefined, index: 5 };',
   'export type BBoolA = { value: boolean, name: "boolA", type: DataType.BOOLEAN ,internalName: undefined, index: 6 };',
   'export type BBoolB = { value: boolean, name: "boolB", type: DataType.BOOLEAN ,internalName: undefined, index: 7 };',
+  'export type AEnumArrayA = { value: number[], name: "enumArrayA", type: DataType.ENUM_ARRAY, minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 ,internalName: undefined, index: 8 };'
 ];
 
 const testString_stateDataType = [
@@ -73,6 +76,7 @@ const testString_stateDataType = [
   '["floatC"]: { value: number, name: "floatC", type: DataType.FLOAT, min: 0, max: 10, precision: 3, significand: 14 }',
   '["boolA"]: { value: boolean, name: "boolA", type: DataType.BOOLEAN }',
   '["boolB"]: { value: boolean, name: "boolB", type: DataType.BOOLEAN }',
+  '["enumArrayA"]: { value: number[], name: "enumArrayA", type: DataType.ENUM_ARRAY, minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 }'
 ];
 
 const testString_stateValueType = [
@@ -87,6 +91,7 @@ const testString_stateValueType = [
   '["floatC"]: number',
   '["boolA"]: boolean',
   '["boolB"]: boolean',
+  '["enumArrayA"]: number[]'
 ];
 
 test('simple data array parsing', () => {
