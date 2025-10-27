@@ -3,7 +3,17 @@ import * as intUpdate from './intUpdate';
 import * as enumUpdate from './enumUpdate';
 import * as versionUpdate from './versionUpdate';
 import * as booleanUpdate from './booleanUpdate';
-import { BooleanDataEntry, DataEntry, EnumDataEntry, FloatDataEntry, IntDataEntry, VersionDataEntry } from '../types/dataEntry';
+import * as enumArrayUpdate from './enumArrayUpdate';
+
+import {
+  BooleanDataEntry,
+  DataEntry,
+  EnumDataEntry,
+  EnumArrayDataEntry,
+  FloatDataEntry,
+  IntDataEntry,
+  VersionDataEntry
+} from '../types/dataEntry';
 import { DataType } from '../enums/dataTypes';
 
 export const updateValue = (original: DataEntry, update: DataEntry): DataEntry => {
@@ -19,5 +29,7 @@ export const updateValue = (original: DataEntry, update: DataEntry): DataEntry =
       return booleanUpdate.updateValue(original, update as BooleanDataEntry);
     case DataType.VERSION:
       return versionUpdate.updateValue(original, update as VersionDataEntry);
+    case DataType.ENUM_ARRAY:
+      return enumArrayUpdate.updateValue(original, update as EnumArrayDataEntry);
   }
 };
