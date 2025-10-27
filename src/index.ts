@@ -13,6 +13,8 @@ export {
   FloatDataEntry,
   IntegerMaxBits,
   IntDataEntry,
+  EnumDataEntry,
+  EnumArrayDataEntry,
   VersionRangeType,
   VersionDataEntry,
   BooleanDataEntry,
@@ -22,7 +24,8 @@ export {
   StateValueType,
   EnumSemantics,
   DerivativeStateDataType,
-  PREFIX_SEPERATOR_DELIMETER
+  PREFIX_SEPERATOR_DELIMETER,
+  PROTECTED_ATTRIBUTE_NAMES
 } from './types';
 export { createParserObject, getStateValue, getBase64String, getDataEntryArray } from './objectmap';
 export { parseBase64ToBits } from './parsers';
