@@ -16,6 +16,12 @@ import {
 } from '../types/dataEntry';
 import { DataType } from '../enums/dataTypes';
 
+/**
+ * Method to update the value of a data entry
+ * @param original - the original data entry
+ * @param update - the update data entry
+ * @returns the updated data entry
+ */
 export const updateValue = (original: DataEntry, update: DataEntry): DataEntry => {
   if (original.type !== update.type) throw new Error('Types do not match');
   switch (original.type) {
