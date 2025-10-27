@@ -13,6 +13,7 @@ Package for creating definitions of parametric models that can be stored as comp
 | flattening and reading of the objects                | &check;  | &check;  | &iquest; |
 | arrays (both bit-level as arrays of objects)         | &frac12; | &frac12; |          |
 | utility to create StateValueType                     |          |          |          |
+| ability to migrate one version to another            |          |          |          |
 
 ## concept
 
@@ -52,6 +53,14 @@ Floating points work very much like the integer type, with the main difference t
 
 ```typescript
 DataEntryFactory.createFloat(20, 10, 200, -1, 'shapePreProcessingWarptotal');
+```
+
+### enum array
+
+Enum arrays are a special type of arrays where integer values are intepreted as being values of a **specific base** to then be transformed to base 2. The base is derived from the delta of the max `and` the `min` value of the enums. Besides that, there is also a `minCount` and `maxCount` value (which can be the same value, but `minCount` is at least 1). This only offers a compression rate of upto 22% vis-a-vis an array of `IntDataEntry`, so sometimes questionable whether it makese sense to use ^^.
+
+```typescript
+DataEntryFactory.createEnumArray([0, 1, 2], 0, 10, 3, 5, 'enumArrayA')
 ```
 
 ### version
