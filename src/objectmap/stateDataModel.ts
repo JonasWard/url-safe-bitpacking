@@ -147,8 +147,19 @@ export const getStateFromEnumEntryDataType =
     ];
   };
 
+  /**
+   * Helper method to get the method to parse, initiliaze, or update the state data for an array entry data type
+   * @param aedt - `ArrayEntryDataType` object that represents the array entry data type
+   * @param prefix - `string` that represents the prefix of the data internam name of the `DataEntry` object
+   * @param attributeName - `string` that represents the name of the attribute to extract the data from
+   * @returns `InternalStateDataGenerationMethod` object that represents the method to parse, initiliaze, or update the state data for an array entry data type
+   */
 export const getStateFromArrayEntryDataType =
   (aedt: ArrayEntryDataType, prefix: string, attributeName: string) =>
+  /**
+   * Helper method to parse, initiliaze, or update the state data for an array entry data type
+   * @param additionalData - `DataEntryArray` or `bitstring` that represents the additional data to extract the data from, if not provided, the default value will be returned
+   */
   (
     additionalData?: DataEntryArray | string
   ): [DataEntryArray | string | undefined, [string, DerivativeStateDataType]] => {
