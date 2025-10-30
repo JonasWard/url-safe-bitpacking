@@ -12,5 +12,7 @@ export const getRelativeValue = (dataEntry: DataEntry): number => {
       return dataEntry.value / (2 ** dataEntry.bits - 1);
     case DataType.ENUM:
       return dataEntry.value / dataEntry.max;
+    case DataType.ENUM_ARRAY:
+      return dataEntry.value.reduce((acc, v) => acc + v, 0) / dataEntry.value.length;
   }
 };

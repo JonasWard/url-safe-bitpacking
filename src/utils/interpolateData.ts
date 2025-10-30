@@ -24,5 +24,7 @@ export const interpolateEntryAt: (dataEntry: DataEntry, t: number) => DataEntry 
     case DataType.FLOAT:
       const v = dataEntry.min + cosT * (dataEntry.max - dataEntry.min);
       return dataEntryCorrecting({ ...dataEntry, value: Math.min(dataEntry.max, Math.max(v, dataEntry.min)) });
+    case DataType.ENUM_ARRAY:
+      return { ...dataEntry, value: dataEntry.value.map((v) => Math.floor(localT * (v + 0.999))) };
   }
 };
