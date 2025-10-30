@@ -73,7 +73,7 @@ export const createParserObject = (
 
   if (versionContent.length > maximumExpectedVersions) throw new Error(`Cannot have more than ${maximumExpectedVersions} versions`);
   if (localDefaultVersion !== (defaultVersion ?? 0))
-    console.log(`Default version must be between 0 and ${versionContent.length - 1}, instead of ${defaultVersion} will be using ${localDefaultVersion}`);
+    throw new Error(`Default version must be between 0 and ${versionContent.length - 1}.`);
 
   const parser = getParserMethodForVersionDefinition(versionContent, versionBitCount, localDefaultVersion);
   const updater = getUpdaterMethodForVersionDefinition(parser);

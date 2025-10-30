@@ -3,6 +3,15 @@ import { FloatDataEntry } from '../types';
 import { PrecisionRangeType, SignificandMaxBits } from '../types/floatData';
 import { getBitsForIntegerNumber } from './helperMethod';
 
+/**
+ * Method to create a float data entry
+ * @param value - `number` default value, should be between `min` and `max`
+ * @param min - `number` (default: 0), should be smaller than `max`
+ * @param max - `number` (default: 1), should be larger than `min`
+ * @param precision - `PrecisionRangeType` (default: 2 -> .01), 
+ * @param name - `string`
+ * @param index - `number`
+ */
 export const create = (
   value: number,
   min: number = 0,

@@ -3,7 +3,11 @@
 import { DataType } from '../enums';
 import { DataEntry } from '../types';
 
-export const getDataEntryTypeString = (d: DataEntry, withLibraryInformation: boolean = false, retainValue: boolean = false): string => {
+export const getDataEntryTypeString = (
+  d: DataEntry,
+  withLibraryInformation: boolean = false,
+  retainValue: boolean = false
+): string => {
   const sInfo = `value: ${retainValue ? d.value : getDataValueType(d)}, name: "${d.name}", `;
   const iInfo = withLibraryInformation ? ` ,internalName: ${d.internalName}, index: ${d.index}` : '';
   switch (d.type) {
@@ -17,18 +21,21 @@ export const getDataEntryTypeString = (d: DataEntry, withLibraryInformation: boo
       return `{ ${sInfo}type: DataType.INT, min: ${d.min}, max: ${d.max}, bits: ${d.bits}${iInfo} }`;
     case DataType.FLOAT:
       return `{ ${sInfo}type: DataType.FLOAT, min: ${d.min}, max: ${d.max}, precision: ${d.precision}, significand: ${d.significand}${iInfo} }`;
+    case DataType.ENUM_ARRAY:
+      return `{ ${sInfo}type: DataType.ENUM_ARRAY, minCount: ${d.minCount}, maxCount: ${d.maxCount}, min: ${d.min}, max: ${d.max}, value: ${d.value}${iInfo} }`;
   }
 };
 
-const getDataValueType = (d: DataEntry): string => (d.type === DataType.BOOLEAN ? 'boolean' : 'number');
+const getDataValueType = (d: DataEntry): string =>
+  d.type === DataType.BOOLEAN ? 'boolean' : d.type === DataType.ENUM_ARRAY ? 'number[]' : 'number';
 const getAttributeName = (d: DataEntry): string => `["${d.name}"]`;
 
 export const getStateDataContentType = (d: DataEntry): string => `${getAttributeName(d)}: ${getDataEntryTypeString(d)}`;
 export const getStateValueContentType = (d: DataEntry): string => `${getAttributeName(d)}: ${getDataValueType(d)}`;
 
-const typeNameStringAddition = 'VBEIF';
+const typeNameStringAddition = 'VBEIFA';
 
-export const getSafeName = (name: string) => {
+export const getSafeName = (name: string): string => {
   let localName = name.replaceAll(' ', '');
   return localName.charAt(0).toUpperCase() + localName.slice(1);
 };

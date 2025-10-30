@@ -6,6 +6,7 @@ export {
   NestedContentType,
   DoubleLevelContentType,
   NonEmptyValidEntryArrayType,
+  ArrayEntryDataType,
   OptionalEntryDataType,
   EnumEntryDataType,
   PrecisionRangeType,
@@ -13,6 +14,8 @@ export {
   FloatDataEntry,
   IntegerMaxBits,
   IntDataEntry,
+  EnumDataEntry,
+  EnumArrayDataEntry,
   VersionRangeType,
   VersionDataEntry,
   BooleanDataEntry,
@@ -22,8 +25,29 @@ export {
   StateValueType,
   EnumSemantics,
   DerivativeStateDataType,
+  VersionContentDefinition,
   PREFIX_SEPERATOR_DELIMETER,
+  PROTECTED_ATTRIBUTE_NAMES
 } from './types';
-export { createParserObject, getStateValue, getBase64String, getDataEntryArray } from './objectmap';
-export { parseBase64ToBits } from './parsers';
+export {
+  createParserObject,
+  getStateValue,
+  getBase64String,
+  getDataEntryArray,
+  isDataEntry,
+  isDoubleLevelContentType,
+  isSingleLevelContentType,
+  doubleLevelContentTypeIsEnumEntryDataType,
+  doubleLevelContentTypeIsOptionalEntryDataType,
+  doubleLevelContentTypeIsArrayDefinitionType
+} from './objectmap';
+export {
+  parseBase64ToBits,
+  getBitsCount,
+  valueBitsParser,
+  dataBitsParser,
+  dataEntryBitstringParser,
+  dataBitsStringifier,
+  dataEntryCorrecting
+} from './parsers';
 export { interpolateEntryAt, getRelativeValue } from './utils';

@@ -24,9 +24,9 @@ export const eedt_0: EnumEntryDataType = [
   [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_0_2')],
 ];
 export const eedt_1: EnumEntryDataType = [
-  2,
+  1,
   [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_1_0')],
-  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_1_1')],
+  [DataEntryFactory.createFloat(0, 0, 1, 2, 'someFloat_eedt_1_1')]
 ];
 export const eedt_2: EnumEntryDataType = [
   2,

@@ -2,8 +2,13 @@ import { DataType } from '../enums/dataTypes';
 
 export const IntegerMaxBits = 12;
 
-// int max and int min can be any in javascript integer representable valid number
-// however, the delta between the two should neve exceed 12 bits or 4096
+/**
+ * Int object
+ * 
+ * Int objects are a simple integer value, starting at its min upto its max.
+ * The maximum and minimum value can be any integar values represntabled as a double yet,
+ * the maximum acceptable delta between min and max is `4095` (12 bits).
+ */
 export type IntData = {
   type: DataType.INT;
   value: number;

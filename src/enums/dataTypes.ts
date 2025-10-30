@@ -4,6 +4,7 @@ export enum DataType {
   ENUM,
   INT,
   FLOAT,
+  ENUM_ARRAY
 }
 
 export const getDataTypeName = (type: DataType): string => {
@@ -18,5 +19,7 @@ export const getDataTypeName = (type: DataType): string => {
       return 'INT';
     case DataType.FLOAT:
       return 'FLOAT';
+    case DataType.ENUM_ARRAY:
+      return 'ENUM_ARRAY';
   }
 };
