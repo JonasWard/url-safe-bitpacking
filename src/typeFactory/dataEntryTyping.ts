@@ -35,7 +35,7 @@ export const getStateValueContentType = (d: DataEntry): string => `${getAttribut
 
 const typeNameStringAddition = 'VBEIFA';
 
-export const getSafeName = (name: string) => {
+export const getSafeName = (name: string): string => {
   let localName = name.replaceAll(' ', '');
   return localName.charAt(0).toUpperCase() + localName.slice(1);
 };
