@@ -16,8 +16,10 @@ const ncdt_strings = [
   '{\n  ["anEnum"]: { value: number, name: "anEnum", type: DataType.ENUM, max: 4, bits: 3 }\n}',
 ];
 
-test.only('type parsing - NestedContendDataType - method computing', () =>
-  [ncdt_0, ncdt_1, ncdt_2].forEach((ncdt, i) => expect(getStateDataTypeNestedContentType(ncdt[1], ncdt[0])).toBe(ncdt_strings[i])));
+test('type parsing - NestedContendDataType - method computing', () =>
+  [ncdt_0, ncdt_1, ncdt_2].forEach((ncdt, i) =>
+    expect(getStateDataTypeNestedContentType(ncdt[1], ncdt[0])).toBe(ncdt_strings[i])
+  ));
 
 const oedt_strings = [
   '  {\n    s: { value: true, name: "", type: DataType.BOOLEAN },\n    v: \n    {\n      ["someFloat"]: { value: number, name: "someFloat", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n    }\n  } | \n    {\n    s: { value: false, name: "", type: DataType.BOOLEAN },\n    v: \n    {\n    \n    }\n  }',
@@ -25,8 +27,10 @@ const oedt_strings = [
   '  {\n    s: { value: true, name: "", type: DataType.BOOLEAN },\n    v: \n    {\n    \n    }\n  } | \n    {\n    s: { value: false, name: "", type: DataType.BOOLEAN },\n    v: \n    {\n      ["someFloat"]: { value: number, name: "someFloat", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n    }\n  }',
 ];
 
-test.only('type parsing - NestedContendDataType - method computing', () =>
-  [oedt_0, oedt_1, oedt_2].forEach((oedt, i) => expect(getStateDataTypeForOptionalEntryDataType(oedt, '')).toBe(oedt_strings[i])));
+test('type parsing - NestedContendDataType - method computing', () =>
+  [oedt_0, oedt_1, oedt_2].forEach((oedt, i) =>
+    expect(getStateDataTypeForOptionalEntryDataType(oedt, '')).toBe(oedt_strings[i])
+  ));
 
 const eedt_strings = [
   '  {\n    s: { value: 0, name: "", type: DataType.ENUM, max: 2, bits: 2 },\n    v: \n    {\n      ["someFloat_eedt_0_0"]: { value: number, name: "someFloat_eedt_0_0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n    }\n  } |\n  {\n    s: { value: 1, name: "", type: DataType.ENUM, max: 2, bits: 2 },\n    v: \n    {\n      ["someFloat_eedt_0_1"]: { value: number, name: "someFloat_eedt_0_1", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n    }\n  } |\n  {\n    s: { value: 2, name: "", type: DataType.ENUM, max: 2, bits: 2 },\n    v: \n    {\n      ["someFloat_eedt_0_2"]: { value: number, name: "someFloat_eedt_0_2", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n    }\n  }',
@@ -34,8 +38,10 @@ const eedt_strings = [
   '  {\n    s: { value: 0, name: "", type: DataType.ENUM, max: 3, bits: 2 },\n    v: \n    {\n      ["someFloat_eedt_2_0"]: { value: number, name: "someFloat_eedt_2_0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n    }\n  } |\n  {\n    s: { value: 1, name: "", type: DataType.ENUM, max: 3, bits: 2 },\n    v: \n    {\n      ["someFloat_eedt_2_1"]: { value: number, name: "someFloat_eedt_2_1", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n    }\n  } |\n  {\n    s: { value: 2, name: "", type: DataType.ENUM, max: 3, bits: 2 },\n    v: \n    {\n      ["someFloat_eedt_2_2"]: { value: number, name: "someFloat_eedt_2_2", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n    }\n  } |\n  {\n    s: { value: 3, name: "", type: DataType.ENUM, max: 3, bits: 2 },\n    v: \n    {\n      ["someFloat_eedt_2_3"]: { value: number, name: "someFloat_eedt_2_3", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n    }\n  }',
 ];
 
-test.only('type parsing - NestedContendDataType - method computing', () =>
-  [eedt_0, eedt_1, eedt_2].forEach((eedt, i) => expect(getStateDataTypeForEnumEntryDataType(eedt, '')).toBe(eedt_strings[i])));
+test('type parsing - NestedContendDataType - method computing', () =>
+  [eedt_0, eedt_1, eedt_2].forEach((eedt, i) =>
+    expect(getStateDataTypeForEnumEntryDataType(eedt, '')).toBe(eedt_strings[i])
+  ));
 
 const aedt_strings = [
   '  {\n    s: { value: 0, name: "", type: DataType.INT, min: 0, max: 3, bits: 2 },\n    v: \n    [\n      {\n        ["aedt_0_someFloat0"]: { value: number, name: "aedt_0_someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      }\n    ]\n  } |\n  {\n    s: { value: 1, name: "", type: DataType.INT, min: 0, max: 3, bits: 2 },\n    v: \n    [\n      {\n        ["aedt_0_someFloat0"]: { value: number, name: "aedt_0_someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      },\n      {\n        ["aedt_0_someFloat0"]: { value: number, name: "aedt_0_someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      }\n    ]\n  } |\n  {\n    s: { value: 2, name: "", type: DataType.INT, min: 0, max: 3, bits: 2 },\n    v: \n    [\n      {\n        ["aedt_0_someFloat0"]: { value: number, name: "aedt_0_someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      },\n      {\n        ["aedt_0_someFloat0"]: { value: number, name: "aedt_0_someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      },\n      {\n        ["aedt_0_someFloat0"]: { value: number, name: "aedt_0_someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      }\n    ]\n  }',
@@ -43,8 +49,10 @@ const aedt_strings = [
   '  {\n    s: { value: 2, name: "", type: DataType.INT, min: 2, max: 4, bits: 2 },\n    v: \n    [\n      {\n        ["someFloat0"]: { value: number, name: "someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 },\n        ["aedt_2_someFloat1"]: { value: number, name: "aedt_2_someFloat1", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      },\n      {\n        ["someFloat0"]: { value: number, name: "someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 },\n        ["aedt_2_someFloat1"]: { value: number, name: "aedt_2_someFloat1", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      },\n      {\n        ["someFloat0"]: { value: number, name: "someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 },\n        ["aedt_2_someFloat1"]: { value: number, name: "aedt_2_someFloat1", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      }\n    ]\n  } |\n  {\n    s: { value: 3, name: "", type: DataType.INT, min: 2, max: 4, bits: 2 },\n    v: \n    [\n      {\n        ["someFloat0"]: { value: number, name: "someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 },\n        ["aedt_2_someFloat1"]: { value: number, name: "aedt_2_someFloat1", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      },\n      {\n        ["someFloat0"]: { value: number, name: "someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 },\n        ["aedt_2_someFloat1"]: { value: number, name: "aedt_2_someFloat1", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      },\n      {\n        ["someFloat0"]: { value: number, name: "someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 },\n        ["aedt_2_someFloat1"]: { value: number, name: "aedt_2_someFloat1", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      },\n      {\n        ["someFloat0"]: { value: number, name: "someFloat0", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 },\n        ["aedt_2_someFloat1"]: { value: number, name: "aedt_2_someFloat1", type: DataType.FLOAT, min: 0, max: 1, precision: 2, significand: 7 }\n      }\n    ]\n  }',
 ];
 
-test.only('type parsing - NestedContendDataType - method computing', () =>
-  [aedt_0, aedt_1, aedt_2].forEach((aedt, i) => expect(getStateDataTypeForArrayEntryDataType(aedt, '')).toBe(aedt_strings[i])));
+test('type parsing - NestedContendDataType - method computing', () =>
+  [aedt_0, aedt_1, aedt_2].forEach((aedt, i) =>
+    expect(getStateDataTypeForArrayEntryDataType(aedt, '')).toBe(aedt_strings[i])
+  ));
 
 const lucernaeType = `{
   ["extrusion"]:   {
@@ -226,7 +234,8 @@ const lucernaeType = `{
     }
 }`;
 
-test.only('testing type parsing of lucernaeTurici', () => expect(getStateDataTypeForSingleLevelContentTypeArray(lucernaeTurici)).toEqual(lucernaeType));
+test('testing type parsing of lucernaeTurici', () =>
+  expect(getStateDataTypeForSingleLevelContentTypeArray(lucernaeTurici)).toEqual(lucernaeType));
 
 const glslRayMarching_typeString = `{
   ["Viewport"]: {
@@ -642,5 +651,5 @@ const glslRayMarching_typeString = `{
   }
 }`;
 
-test.only('testing type parsing of glslRayMarching', () =>
+test('testing type parsing of glslRayMarching', () =>
   expect(getStateDataTypeForSingleLevelContentTypeArray(verionArrayDefinition0)).toEqual(glslRayMarching_typeString));

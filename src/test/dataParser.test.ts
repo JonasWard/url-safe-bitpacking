@@ -97,16 +97,16 @@ const testString_stateValueType = [
 test('simple data array parsing', () => {
   const bitstring = dataArrayStringifier(dataMap);
   const unpacked = dataBitsArrayParser(bitstring, dataMap);
-  unpacked.forEach((data, index) => expect(dataMap[index].value).toBe(data.value));
+  unpacked.forEach((data, index) => expect(dataMap[index].value.toString()).toEqual(data.value.toString()));
 });
 
-test.only('content type test', async () =>
+test('content type test', async () =>
   dataMap.forEach((s, i) => expect(getDataEntryTypeString(s)).toEqual(testStrings_user[i])));
-test.only('content type with internal data test', async () =>
+test('content type with internal data test', async () =>
   dataMap.map((s, i) => expect(getDataEntryTypeString(s, true)).toEqual(testStrings_internalData[i])));
-test.only('content type named test', async () =>
+test('content type named test', async () =>
   dataMap.map((s, i) => expect(getDateEntryTypeNamedString(s, true)).toEqual(testStrings_definedType[i])));
-test.only('content StateData attribute type test', async () =>
+test('content StateData attribute type test', async () =>
   dataMap.map((s, i) => expect(getStateDataContentType(s)).toEqual(testString_stateDataType[i])));
-test.only('content StateValue attribute type test', async () =>
+test('content StateValue attribute type test', async () =>
   dataMap.map((s, i) => expect(getStateValueContentType(s)).toEqual(testString_stateValueType[i])));

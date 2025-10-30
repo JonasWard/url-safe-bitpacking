@@ -96,6 +96,7 @@ export const dataBitsArrayParser = (bitString: string, mapDataArray: DataEntryAr
   for (const dataEntry of mapDataArray) {
     const bitCount = getBitsCount(dataEntry, bitString);
     dataEntries.push(dataBitsParser(bitString.slice(startIndex, startIndex + bitCount), dataEntry));
+    startIndex += bitCount;
   }
   return dataEntries;
 };
