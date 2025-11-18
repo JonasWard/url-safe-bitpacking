@@ -46,5 +46,5 @@ export const create = (
       `value length must be between minCount and maxCount, ${value.length} is not between ${minCount} and ${maxCount}`
     );
 
-  return { type: DataType.ENUM_ARRAY, minCount, maxCount, value, min, max, name, index };
+  return { type: 'ENUM_ARRAY', minCount, maxCount, value, min, max, name, index };
 };

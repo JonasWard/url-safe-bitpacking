@@ -1,5 +1,3 @@
-import { DataType } from '../enums/dataTypes';
-
 /**
  * Enum Array object
  *
@@ -13,7 +11,7 @@ import { DataType } from '../enums/dataTypes';
  * Note: the partical maximum benefit of using this versus using a `ArrayEntryDataType` with only enums is only about 22% for base_5
  */
 export type EnumArrayData = {
-  type: DataType.ENUM_ARRAY;
+  type: 'ENUM_ARRAY';
   minCount: number;
   maxCount: number;
   value: number[];

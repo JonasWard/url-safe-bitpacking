@@ -15,7 +15,7 @@ import {
   StringifyStateDataMethod,
   VersionContentDefinition,
 } from '../types';
-import { getGenerationMethodForSingleLevelContentTypeArray, getStateDateFromSingleLevelContentTypeArray, readDataEntry } from './stateDataModel';
+import { getGenerationMethodForSingleLevelContentTypeArray, readDataEntry } from './stateDataModel';
 import { getBase64String, getDataEntryArray } from './stateValueHelperMethods';
 
 const getParsedAdditionalData = (additionalData?: StateDataType | DataEntryArray | string): undefined | string | DataEntryArray => {

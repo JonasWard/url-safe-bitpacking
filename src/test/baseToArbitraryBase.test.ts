@@ -90,11 +90,11 @@ test('convert types', () => {
 
     p = performance.now();
     const base64From = parseBitsToBase64(bitStringFrom);
-    console.log('parseBitsToBase64', performance.now() - p);
+    // console.log('parseBitsToBase64', performance.now() - p);
 
     p = performance.now();
     const bitArrayFrom = parseBase64ToBits(resultString);
-    console.log('parseBase64ToBits', performance.now() - p);
+    // console.log('parseBase64ToBits', performance.now() - p);
 
     const bitArrayOut: number[] = [];
     for (let i = 0; i < bitArrayFrom.length; i++) bitArrayOut.push(Number(bitArrayFrom[i]));

@@ -1,6 +1,4 @@
-import { DataType } from '../enums/dataTypes';
-
 export type BooleanData = {
-  type: DataType.BOOLEAN;
+  type: 'BOOLEAN';
   value: boolean;
 };

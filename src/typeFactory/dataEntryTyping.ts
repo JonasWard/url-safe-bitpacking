@@ -11,29 +11,36 @@ export const getDataEntryTypeString = (
   const sInfo = `value: ${retainValue ? d.value : getDataValueType(d)}, name: "${d.name}", `;
   const iInfo = withLibraryInformation ? ` ,internalName: ${d.internalName}, index: ${d.index}` : '';
   switch (d.type) {
-    case DataType.BOOLEAN:
-      return `{ ${sInfo}type: DataType.BOOLEAN${iInfo} }`;
-    case DataType.VERSION:
-      return `{ ${sInfo}type: DataType.VERSION, bits: ${d.bits}${iInfo} }`;
-    case DataType.ENUM:
-      return `{ ${sInfo}type: DataType.ENUM, max: ${d.max}, bits: ${d.bits}${iInfo} }`;
-    case DataType.INT:
-      return `{ ${sInfo}type: DataType.INT, min: ${d.min}, max: ${d.max}, bits: ${d.bits}${iInfo} }`;
-    case DataType.FLOAT:
-      return `{ ${sInfo}type: DataType.FLOAT, min: ${d.min}, max: ${d.max}, precision: ${d.precision}, significand: ${d.significand}${iInfo} }`;
-    case DataType.ENUM_ARRAY:
-      return `{ ${sInfo}type: DataType.ENUM_ARRAY, minCount: ${d.minCount}, maxCount: ${d.maxCount}, min: ${d.min}, max: ${d.max}, value: ${d.value}${iInfo} }`;
+    case 'BOOLEAN':
+      return `{ ${sInfo}type: "BOOLEAN"${iInfo} }`;
+    case 'VERSION':
+      return `{ ${sInfo}type: "VERSION", bits: ${d.bits}${iInfo} }`;
+    case 'ENUM':
+      return `{ ${sInfo}type: "ENUM", max: ${d.max}, bits: ${d.bits}${iInfo} }`;
+    case 'INT':
+      return `{ ${sInfo}type: "INT", min: ${d.min}, max: ${d.max}, bits: ${d.bits}${iInfo} }`;
+    case 'FLOAT':
+      return `{ ${sInfo}type: "FLOAT", min: ${d.min}, max: ${d.max}, precision: ${d.precision}, significand: ${d.significand}${iInfo} }`;
+    case 'ENUM_ARRAY':
+      return `{ ${sInfo}type: "ENUM_ARRAY", minCount: ${d.minCount}, maxCount: ${d.maxCount}, min: ${d.min}, max: ${d.max}, value: ${d.value}${iInfo} }`;
   }
 };
 
+const typeNameStringAddition: Record<DataType, string> = {
+  VERSION: 'V',
+  BOOLEAN: 'B',
+  ENUM: 'E',
+  INT: 'I',
+  FLOAT: 'F',
+  ENUM_ARRAY: 'A'
+};
+
 const getDataValueType = (d: DataEntry): string =>
-  d.type === DataType.BOOLEAN ? 'boolean' : d.type === DataType.ENUM_ARRAY ? 'number[]' : 'number';
+  d.type === 'BOOLEAN' ? 'boolean' : d.type === 'ENUM_ARRAY' ? 'number[]' : 'number';
 const getAttributeName = (d: DataEntry): string => `["${d.name}"]`;
 
 export const getStateDataContentType = (d: DataEntry): string => `${getAttributeName(d)}: ${getDataEntryTypeString(d)}`;
 export const getStateValueContentType = (d: DataEntry): string => `${getAttributeName(d)}: ${getDataValueType(d)}`;
-
-const typeNameStringAddition = 'VBEIFA';
 
 export const getSafeName = (name: string): string => {
   let localName = name.replaceAll(' ', '');

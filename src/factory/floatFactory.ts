@@ -30,12 +30,12 @@ export const create = (
 
   return {
     value,
-    type: DataType.FLOAT,
+    type: 'FLOAT',
     min: roundedMin / precisionMultiplier,
     max: roundedMax / precisionMultiplier,
     precision,
     significand,
     name,
-    index,
+    index
   };
 };

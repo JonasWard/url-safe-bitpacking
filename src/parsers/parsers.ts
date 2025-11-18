@@ -15,17 +15,17 @@ import * as enumArrayParser from './enumArrayParser.ts';
  */
 export const valueBitsParser = (bitString: string, mapData: DataEntry): number | boolean | number[] => {
   switch (mapData.type) {
-    case DataType.BOOLEAN:
+    case 'BOOLEAN':
       return booleanParser.rawParser(bitString);
-    case DataType.INT:
+    case 'INT':
       return intParser.rawParser(bitString, mapData);
-    case DataType.ENUM:
+    case 'ENUM':
       return enumParser.rawParser(bitString, mapData);
-    case DataType.FLOAT:
+    case 'FLOAT':
       return floatParser.rawParser(bitString, mapData);
-    case DataType.VERSION:
+    case 'VERSION':
       return versionParser.rawParser(bitString, mapData);
-    case DataType.ENUM_ARRAY:
+    case 'ENUM_ARRAY':
       return enumArrayParser.rawParser(bitString, mapData);
   }
 };
@@ -38,14 +38,14 @@ export const valueBitsParser = (bitString: string, mapData: DataEntry): number |
  */
 export const dataBitsParser = (rawString: string, mapData: DataEntry): DataEntry => {
   switch (mapData.type) {
-    case DataType.BOOLEAN:
+    case 'BOOLEAN':
       return { ...mapData, value: valueBitsParser(rawString, mapData) as boolean };
-    case DataType.ENUM:
-    case DataType.INT:
-    case DataType.FLOAT:
-    case DataType.VERSION:
+    case 'ENUM':
+    case 'INT':
+    case 'FLOAT':
+    case 'VERSION':
       return { ...mapData, value: valueBitsParser(rawString, mapData) as number };
-    case DataType.ENUM_ARRAY:
+    case 'ENUM_ARRAY':
       return { ...mapData, value: valueBitsParser(rawString, mapData) as number[] };
   }
 };
@@ -58,17 +58,17 @@ export const dataBitsParser = (rawString: string, mapData: DataEntry): DataEntry
  */
 export const getBitsCount = (mapData: DataEntry, bitString: string): number => {
   switch (mapData.type) {
-    case DataType.BOOLEAN:
+    case 'BOOLEAN':
       return booleanParser.getBitsCount();
-    case DataType.INT:
+    case 'INT':
       return intParser.getBitsCount(mapData);
-    case DataType.FLOAT:
+    case 'FLOAT':
       return floatParser.getBitsCount(mapData);
-    case DataType.VERSION:
+    case 'VERSION':
       return versionParser.getBitsCount(mapData);
-    case DataType.ENUM:
+    case 'ENUM':
       return enumParser.getBitsCount(mapData);
-    case DataType.ENUM_ARRAY:
+    case 'ENUM_ARRAY':
       return enumArrayParser.getBitsCount(mapData, bitString);
   }
 };
@@ -103,17 +103,17 @@ export const dataBitsArrayParser = (bitString: string, mapDataArray: DataEntryAr
 
 export const dataBitsStringifier = (data: DataEntry): string => {
   switch (data.type) {
-    case DataType.BOOLEAN:
+    case 'BOOLEAN':
       return booleanParser.rawStringifier(data.value as boolean);
-    case DataType.INT:
+    case 'INT':
       return intParser.rawStringifier(data.value as number, data);
-    case DataType.FLOAT:
+    case 'FLOAT':
       return floatParser.rawStringifier(data.value as number, data);
-    case DataType.VERSION:
+    case 'VERSION':
       return versionParser.rawStringifier(data.value as number, data);
-    case DataType.ENUM:
+    case 'ENUM':
       return enumParser.rawStringifier(data.value as number, data);
-    case DataType.ENUM_ARRAY:
+    case 'ENUM_ARRAY':
       return enumArrayParser.rawStringifier(data.value as number[], data);
   }
 };

@@ -1,5 +1,3 @@
-import { DataType } from '../enums/dataTypes';
-
 export type PrecisionRangeType = -3 | -2 | -1 | 0 | 1 | 2 | 3;
 export const SignificandMaxBits = 20; // 1 million
 
@@ -13,7 +11,7 @@ export const SignificandMaxBits = 20; // 1 million
  * Maximum value for the significand is `20` bits, which allows for a maximum of 1048576 possible values.
  */
 export type FloatData = {
-  type: DataType.FLOAT;
+  type: 'FLOAT';
   value: number;
   min: number;
   max: number;

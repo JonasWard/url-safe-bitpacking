@@ -25,17 +25,17 @@ import { DataType } from '../enums/dataTypes';
 export const updateValue = (original: DataEntry, update: DataEntry): DataEntry => {
   if (original.type !== update.type) throw new Error('Types do not match');
   switch (original.type) {
-    case DataType.FLOAT:
+    case 'FLOAT':
       return floatUpdate.updateValue(original, update as FloatDataEntry);
-    case DataType.INT:
+    case 'INT':
       return intUpdate.updateValue(original, update as IntDataEntry);
-    case DataType.ENUM:
+    case 'ENUM':
       return enumUpdate.updateValue(original, update as EnumDataEntry);
-    case DataType.BOOLEAN:
+    case 'BOOLEAN':
       return booleanUpdate.updateValue(original, update as BooleanDataEntry);
-    case DataType.VERSION:
+    case 'VERSION':
       return versionUpdate.updateValue(original, update as VersionDataEntry);
-    case DataType.ENUM_ARRAY:
+    case 'ENUM_ARRAY':
       return enumArrayUpdate.updateValue(original, update as EnumArrayDataEntry);
   }
 };

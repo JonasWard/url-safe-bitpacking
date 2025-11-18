@@ -8,5 +8,5 @@ export const create = (value: number, max: number = 10, name: string = '', index
   if (max < 1) throw new Error('max must be at least one');
   if (max > 2 ** EnumMaxBits - 1) throw new Error('max - min must be less than 256');
   const bits = getBitsForIntegerNumber(max + 1, EnumMaxBits);
-  return { value, type: DataType.ENUM, max, bits, name, index };
+  return { value, type: 'ENUM', max, bits, name, index };
 };

@@ -20,63 +20,63 @@ const dataMap = [
 ];
 
 const testStrings_user = [
-  '{ value: number, name: "versionA", type: DataType.VERSION, bits: 4 }',
-  '{ value: number, name: "versionB", type: DataType.VERSION, bits: 4 }',
-  '{ value: number, name: "versionC", type: DataType.VERSION, bits: 4 }',
-  '{ value: number, name: "intA", type: DataType.INT, min: 0, max: 10, bits: 4 }',
-  '{ value: number, name: "intB", type: DataType.INT, min: 0, max: 10, bits: 4 }',
-  '{ value: number, name: "intC", type: DataType.INT, min: 0, max: 10, bits: 4 }',
-  '{ value: number, name: "floatA", type: DataType.FLOAT, min: 0, max: 10, precision: 1, significand: 7 }',
-  '{ value: number, name: "floatB", type: DataType.FLOAT, min: 0, max: 10, precision: 2, significand: 10 }',
-  '{ value: number, name: "floatC", type: DataType.FLOAT, min: 0, max: 10, precision: 3, significand: 14 }',
-  '{ value: boolean, name: "boolA", type: DataType.BOOLEAN }',
-  '{ value: boolean, name: "boolB", type: DataType.BOOLEAN }',
-  '{ value: number[], name: "enumArrayA", type: DataType.ENUM_ARRAY, minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 }'
+  '{ value: number, name: "versionA", type: "VERSION", bits: 4 }',
+  '{ value: number, name: "versionB", type: "VERSION", bits: 4 }',
+  '{ value: number, name: "versionC", type: "VERSION", bits: 4 }',
+  '{ value: number, name: "intA", type: "INT", min: 0, max: 10, bits: 4 }',
+  '{ value: number, name: "intB", type: "INT", min: 0, max: 10, bits: 4 }',
+  '{ value: number, name: "intC", type: "INT", min: 0, max: 10, bits: 4 }',
+  '{ value: number, name: "floatA", type: "FLOAT", min: 0, max: 10, precision: 1, significand: 7 }',
+  '{ value: number, name: "floatB", type: "FLOAT", min: 0, max: 10, precision: 2, significand: 10 }',
+  '{ value: number, name: "floatC", type: "FLOAT", min: 0, max: 10, precision: 3, significand: 14 }',
+  '{ value: boolean, name: "boolA", type: "BOOLEAN" }',
+  '{ value: boolean, name: "boolB", type: "BOOLEAN" }',
+  '{ value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 }'
 ];
 
 const testStrings_internalData = [
-  '{ value: number, name: "versionA", type: DataType.VERSION, bits: 4 ,internalName: undefined, index: 0 }',
-  '{ value: number, name: "versionB", type: DataType.VERSION, bits: 4 ,internalName: undefined, index: 1 }',
-  '{ value: number, name: "versionC", type: DataType.VERSION, bits: 4 ,internalName: undefined, index: 2 }',
-  '{ value: number, name: "intA", type: DataType.INT, min: 0, max: 10, bits: 4 ,internalName: undefined, index: 3 }',
-  '{ value: number, name: "intB", type: DataType.INT, min: 0, max: 10, bits: 4 ,internalName: undefined, index: 4 }',
-  '{ value: number, name: "intC", type: DataType.INT, min: 0, max: 10, bits: 4 ,internalName: undefined, index: 5 }',
-  '{ value: number, name: "floatA", type: DataType.FLOAT, min: 0, max: 10, precision: 1, significand: 7 ,internalName: undefined, index: 3 }',
-  '{ value: number, name: "floatB", type: DataType.FLOAT, min: 0, max: 10, precision: 2, significand: 10 ,internalName: undefined, index: 4 }',
-  '{ value: number, name: "floatC", type: DataType.FLOAT, min: 0, max: 10, precision: 3, significand: 14 ,internalName: undefined, index: 5 }',
-  '{ value: boolean, name: "boolA", type: DataType.BOOLEAN ,internalName: undefined, index: 6 }',
-  '{ value: boolean, name: "boolB", type: DataType.BOOLEAN ,internalName: undefined, index: 7 }',
-  '{ value: number[], name: "enumArrayA", type: DataType.ENUM_ARRAY, minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 ,internalName: undefined, index: 8 }'
+  '{ value: number, name: "versionA", type: "VERSION", bits: 4 ,internalName: undefined, index: 0 }',
+  '{ value: number, name: "versionB", type: "VERSION", bits: 4 ,internalName: undefined, index: 1 }',
+  '{ value: number, name: "versionC", type: "VERSION", bits: 4 ,internalName: undefined, index: 2 }',
+  '{ value: number, name: "intA", type: "INT", min: 0, max: 10, bits: 4 ,internalName: undefined, index: 3 }',
+  '{ value: number, name: "intB", type: "INT", min: 0, max: 10, bits: 4 ,internalName: undefined, index: 4 }',
+  '{ value: number, name: "intC", type: "INT", min: 0, max: 10, bits: 4 ,internalName: undefined, index: 5 }',
+  '{ value: number, name: "floatA", type: "FLOAT", min: 0, max: 10, precision: 1, significand: 7 ,internalName: undefined, index: 3 }',
+  '{ value: number, name: "floatB", type: "FLOAT", min: 0, max: 10, precision: 2, significand: 10 ,internalName: undefined, index: 4 }',
+  '{ value: number, name: "floatC", type: "FLOAT", min: 0, max: 10, precision: 3, significand: 14 ,internalName: undefined, index: 5 }',
+  '{ value: boolean, name: "boolA", type: "BOOLEAN" ,internalName: undefined, index: 6 }',
+  '{ value: boolean, name: "boolB", type: "BOOLEAN" ,internalName: undefined, index: 7 }',
+  '{ value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 ,internalName: undefined, index: 8 }'
 ];
 
 const testStrings_definedType = [
-  'export type VVersionA = { value: number, name: "versionA", type: DataType.VERSION, bits: 4 ,internalName: undefined, index: 0 };',
-  'export type VVersionB = { value: number, name: "versionB", type: DataType.VERSION, bits: 4 ,internalName: undefined, index: 1 };',
-  'export type VVersionC = { value: number, name: "versionC", type: DataType.VERSION, bits: 4 ,internalName: undefined, index: 2 };',
-  'export type IIntA = { value: number, name: "intA", type: DataType.INT, min: 0, max: 10, bits: 4 ,internalName: undefined, index: 3 };',
-  'export type IIntB = { value: number, name: "intB", type: DataType.INT, min: 0, max: 10, bits: 4 ,internalName: undefined, index: 4 };',
-  'export type IIntC = { value: number, name: "intC", type: DataType.INT, min: 0, max: 10, bits: 4 ,internalName: undefined, index: 5 };',
-  'export type FFloatA = { value: number, name: "floatA", type: DataType.FLOAT, min: 0, max: 10, precision: 1, significand: 7 ,internalName: undefined, index: 3 };',
-  'export type FFloatB = { value: number, name: "floatB", type: DataType.FLOAT, min: 0, max: 10, precision: 2, significand: 10 ,internalName: undefined, index: 4 };',
-  'export type FFloatC = { value: number, name: "floatC", type: DataType.FLOAT, min: 0, max: 10, precision: 3, significand: 14 ,internalName: undefined, index: 5 };',
-  'export type BBoolA = { value: boolean, name: "boolA", type: DataType.BOOLEAN ,internalName: undefined, index: 6 };',
-  'export type BBoolB = { value: boolean, name: "boolB", type: DataType.BOOLEAN ,internalName: undefined, index: 7 };',
-  'export type AEnumArrayA = { value: number[], name: "enumArrayA", type: DataType.ENUM_ARRAY, minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 ,internalName: undefined, index: 8 };'
+  'export type VVersionA = { value: number, name: "versionA", type: "VERSION", bits: 4 ,internalName: undefined, index: 0 };',
+  'export type VVersionB = { value: number, name: "versionB", type: "VERSION", bits: 4 ,internalName: undefined, index: 1 };',
+  'export type VVersionC = { value: number, name: "versionC", type: "VERSION", bits: 4 ,internalName: undefined, index: 2 };',
+  'export type IIntA = { value: number, name: "intA", type: "INT", min: 0, max: 10, bits: 4 ,internalName: undefined, index: 3 };',
+  'export type IIntB = { value: number, name: "intB", type: "INT", min: 0, max: 10, bits: 4 ,internalName: undefined, index: 4 };',
+  'export type IIntC = { value: number, name: "intC", type: "INT", min: 0, max: 10, bits: 4 ,internalName: undefined, index: 5 };',
+  'export type FFloatA = { value: number, name: "floatA", type: "FLOAT", min: 0, max: 10, precision: 1, significand: 7 ,internalName: undefined, index: 3 };',
+  'export type FFloatB = { value: number, name: "floatB", type: "FLOAT", min: 0, max: 10, precision: 2, significand: 10 ,internalName: undefined, index: 4 };',
+  'export type FFloatC = { value: number, name: "floatC", type: "FLOAT", min: 0, max: 10, precision: 3, significand: 14 ,internalName: undefined, index: 5 };',
+  'export type BBoolA = { value: boolean, name: "boolA", type: "BOOLEAN" ,internalName: undefined, index: 6 };',
+  'export type BBoolB = { value: boolean, name: "boolB", type: "BOOLEAN" ,internalName: undefined, index: 7 };',
+  'export type AEnumArrayA = { value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 ,internalName: undefined, index: 8 };'
 ];
 
 const testString_stateDataType = [
-  '["versionA"]: { value: number, name: "versionA", type: DataType.VERSION, bits: 4 }',
-  '["versionB"]: { value: number, name: "versionB", type: DataType.VERSION, bits: 4 }',
-  '["versionC"]: { value: number, name: "versionC", type: DataType.VERSION, bits: 4 }',
-  '["intA"]: { value: number, name: "intA", type: DataType.INT, min: 0, max: 10, bits: 4 }',
-  '["intB"]: { value: number, name: "intB", type: DataType.INT, min: 0, max: 10, bits: 4 }',
-  '["intC"]: { value: number, name: "intC", type: DataType.INT, min: 0, max: 10, bits: 4 }',
-  '["floatA"]: { value: number, name: "floatA", type: DataType.FLOAT, min: 0, max: 10, precision: 1, significand: 7 }',
-  '["floatB"]: { value: number, name: "floatB", type: DataType.FLOAT, min: 0, max: 10, precision: 2, significand: 10 }',
-  '["floatC"]: { value: number, name: "floatC", type: DataType.FLOAT, min: 0, max: 10, precision: 3, significand: 14 }',
-  '["boolA"]: { value: boolean, name: "boolA", type: DataType.BOOLEAN }',
-  '["boolB"]: { value: boolean, name: "boolB", type: DataType.BOOLEAN }',
-  '["enumArrayA"]: { value: number[], name: "enumArrayA", type: DataType.ENUM_ARRAY, minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 }'
+  '["versionA"]: { value: number, name: "versionA", type: "VERSION", bits: 4 }',
+  '["versionB"]: { value: number, name: "versionB", type: "VERSION", bits: 4 }',
+  '["versionC"]: { value: number, name: "versionC", type: "VERSION", bits: 4 }',
+  '["intA"]: { value: number, name: "intA", type: "INT", min: 0, max: 10, bits: 4 }',
+  '["intB"]: { value: number, name: "intB", type: "INT", min: 0, max: 10, bits: 4 }',
+  '["intC"]: { value: number, name: "intC", type: "INT", min: 0, max: 10, bits: 4 }',
+  '["floatA"]: { value: number, name: "floatA", type: "FLOAT", min: 0, max: 10, precision: 1, significand: 7 }',
+  '["floatB"]: { value: number, name: "floatB", type: "FLOAT", min: 0, max: 10, precision: 2, significand: 10 }',
+  '["floatC"]: { value: number, name: "floatC", type: "FLOAT", min: 0, max: 10, precision: 3, significand: 14 }',
+  '["boolA"]: { value: boolean, name: "boolA", type: "BOOLEAN" }',
+  '["boolB"]: { value: boolean, name: "boolB", type: "BOOLEAN" }',
+  '["enumArrayA"]: { value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 }'
 ];
 
 const testString_stateValueType = [
