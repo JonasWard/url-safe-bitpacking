@@ -31,7 +31,7 @@ export const getVersionValueRangeValueForNumber = (v: number): VersionRangeType 
 };
 
 /**
- * Helper method to get the maximum integer value for a given bit width
+ * Helper method to get the maximum integer value for a given bit count
  * @param bitCount - `number` bit width to get the maximum integer value for
  * @returns `number` the maximum integer value
  */
