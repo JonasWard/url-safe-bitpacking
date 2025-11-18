@@ -1,25 +1,3 @@
-export enum DataType {
-  VERSION,
-  BOOLEAN,
-  ENUM,
-  INT,
-  FLOAT,
-  ENUM_ARRAY
-}
+const DataTypeValues = ['VERSION', 'BOOLEAN', 'ENUM', 'INT', 'FLOAT', 'ENUM_ARRAY'] as const;
 
-export const getDataTypeName = (type: DataType): string => {
-  switch (type) {
-    case DataType.VERSION:
-      return 'VERSION';
-    case DataType.BOOLEAN:
-      return 'BOOLEAN';
-    case DataType.ENUM:
-      return 'ENUM';
-    case DataType.INT:
-      return 'INT';
-    case DataType.FLOAT:
-      return 'FLOAT';
-    case DataType.ENUM_ARRAY:
-      return 'ENUM_ARRAY';
-  }
-};
+export type DataType = (typeof DataTypeValues)[number];
