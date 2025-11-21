@@ -11,7 +11,7 @@ import {
 const getCountBitsCount = (enumArrayData: EnumArrayData): number =>
   getBitsForIntegerNumber(enumArrayData.maxCount - enumArrayData.minCount + 1, IntegerMaxBits);
 const getNumberBitsCountForBase = (count: number, base: number): number => getBitsForEnumArrayCountOfBase(count, base);
-const getEnumArrayBase = (enumArrayData: EnumArrayData): number => enumArrayData.max - enumArrayData.min + 1;
+const getEnumArrayBase = (enumArrayData: EnumArrayData): number => enumArrayData.max + 1;
 
 const getCount = (enumArrayData: EnumArrayData, bitString: string): number => {
   const countBits = getCountBitsCount(enumArrayData);
@@ -33,8 +33,7 @@ export const rawParser = (bitString: string, enumArrayData: EnumArrayData): numb
   const base = getEnumArrayBase(enumArrayData);
   const valuesBitCount = getNumberBitsCountForBase(count, base);
 
-  const value = convertBitStringToArbitraryBase(bitString.slice(countBits, countBits + valuesBitCount), base, count);
-  return value.map((v) => v + enumArrayData.min);
+  return convertBitStringToArbitraryBase(bitString.slice(countBits, countBits + valuesBitCount), base, count);
 };
 
 export const rawStringifier = (value: number[], enumArrayData: EnumArrayData): string => {
@@ -43,11 +42,7 @@ export const rawStringifier = (value: number[], enumArrayData: EnumArrayData): s
   const base = getEnumArrayBase(enumArrayData);
 
   const countBitstring = countBits ? rawIntStringifier(count - enumArrayData.minCount, countBits) : '';
-
-  const enumArrayBitstring = convertArbitraryBaseToBitString(
-    value.map((v) => v - enumArrayData.min),
-    base
-  );
+  const enumArrayBitstring = convertArbitraryBaseToBitString(value, base);
 
   return countBitstring + enumArrayBitstring;
 };
