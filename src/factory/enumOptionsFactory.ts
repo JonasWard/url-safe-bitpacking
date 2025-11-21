@@ -15,7 +15,7 @@ export const create = (
     throw new Error('defaultState must be less than the length of the descriptor');
 
   return {
-    value: descriptor[defaultState],
+    value: JSON.parse(JSON.stringify(descriptor[defaultState])),
     descriptor,
     name,
     index,

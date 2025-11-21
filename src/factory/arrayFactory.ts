@@ -30,7 +30,7 @@ export const create = (
   const stateBits = getMinimumBitsForInteger(maxCount - minCount);
 
   return {
-    value: [...Array(defaultState)].map(() => descriptor),
+    value: [...Array(defaultState)].map(() => JSON.parse(JSON.stringify(descriptor))),
     descriptor,
     type: 'ARRAY',
     minCount,

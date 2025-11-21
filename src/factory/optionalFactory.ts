@@ -14,7 +14,7 @@ export const create = (
     type: 'OPTIONAL',
     state: defaultState,
     descriptor,
-    value: defaultState ? descriptor[0] : descriptor[1],
+    value: JSON.parse(JSON.stringify(defaultState ? descriptor[1] : descriptor[0])),
     name,
     index
   };
