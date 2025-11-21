@@ -14,8 +14,8 @@ export type Prettify<T> = {
 
 type DataDescription = {
   name: string; // only used to make things more legible
-  internalName?: string; // data entry name used internally
-  index: number; // value doesn't need to be continuos
+  internalName?: number[]; // data entry name used internally
+  index?: number; // value doesn't need to be continuos
 };
 
 /**
