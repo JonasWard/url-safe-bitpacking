@@ -11,5 +11,5 @@ export type EnumData = {
   value: number;
   max: number;
   bits: number;
-  mapping: any[];
+  mapping: (string | number | object)[];
 };
