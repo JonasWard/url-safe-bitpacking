@@ -1,6 +1,6 @@
 import { BooleanDataEntry } from '../types/dataEntry';
 
-export const updateValue = (original: BooleanDataEntry, update: BooleanDataEntry): BooleanDataEntry => ({
-  ...original,
-  value: update.value,
-});
+export const updateValue = (original: BooleanDataEntry, update: BooleanDataEntry): BooleanDataEntry => {
+  original.value = update.value;
+  return original;
+};
