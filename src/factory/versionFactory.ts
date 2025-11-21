@@ -1,4 +1,3 @@
-import { DataType } from '../enums/dataTypes';
 import { VersionDataEntry } from '../types';
 import { VersionRangeType } from '../types/versionData';
 

@@ -1,4 +1,3 @@
-import { DataType } from '../enums/dataTypes';
 import { EnumDataEntry } from '../types';
 import { EnumMaxBits } from '../types/enumData';
 import { getBitsForIntegerNumber } from './helperMethod';
