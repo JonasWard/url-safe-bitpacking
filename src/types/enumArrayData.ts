@@ -15,6 +15,6 @@ export type EnumArrayData = {
   minCount: number;
   maxCount: number;
   value: number[];
-  min: number;
   max: number;
+  mapping: any[];
 };
