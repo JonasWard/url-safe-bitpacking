@@ -123,7 +123,7 @@ export const footprintDefinition: EnumEntryDataType = [
     DataEntryFactory.createInt(0, 0, 8, 'yCount'),
     DataEntryFactory.createEnum(0, 3, 'shellThickness'),
     DataEntryFactory.createFloat(2, 0, 10, 1, 'bufferInside'),
-    DataEntryFactory.createFloat(2, 0, 10, 1, 'bufferOutside'),
+    DataEntryFactory.createFloat(2, 0, 10, 1, 'bufferOutside')
   ],
   [
     DataEntryFactory.createFloat(20, 8, 120, 0, 'size'),
@@ -131,7 +131,7 @@ export const footprintDefinition: EnumEntryDataType = [
     DataEntryFactory.createInt(0, 0, 8, 'yCount'),
     DataEntryFactory.createEnum(0, 3, 'shellThickness'),
     DataEntryFactory.createFloat(2, 0, 10, 1, 'bufferInside'),
-    DataEntryFactory.createFloat(2, 0, 10, 1, 'bufferOutside'),
+    DataEntryFactory.createFloat(2, 0, 10, 1, 'bufferOutside')
   ],
   [
     DataEntryFactory.createFloat(20, 8, 120, 0, 'size'),
@@ -139,7 +139,7 @@ export const footprintDefinition: EnumEntryDataType = [
     DataEntryFactory.createInt(0, 0, 8, 'yCount'),
     DataEntryFactory.createEnum(0, 3, 'shellThickness'),
     DataEntryFactory.createFloat(2, 0, 10, 1, 'bufferInside'),
-    DataEntryFactory.createFloat(2, 0, 10, 1, 'bufferOutside'),
+    DataEntryFactory.createFloat(2, 0, 10, 1, 'bufferOutside')
   ],
   [
     DataEntryFactory.createFloat(2, 0, 10, 1, 'bufferInside'),
@@ -147,7 +147,7 @@ export const footprintDefinition: EnumEntryDataType = [
     DataEntryFactory.createFloat(12, 0, 40, 1, 'radius1'),
     DataEntryFactory.createFloat(12, 0, 40, 1, 'radius2'),
     DataEntryFactory.createFloat(2, 0, 10, 1, 'bufferOutside'),
-    DataEntryFactory.createInt(5, 3, 20, 'segments'),
+    DataEntryFactory.createInt(5, 3, 20, 'segments')
   ],
 
   [
@@ -156,8 +156,8 @@ export const footprintDefinition: EnumEntryDataType = [
     DataEntryFactory.createFloat(0.5, 0.1, 0.9, 2, 'angleSplit'),
     DataEntryFactory.createFloat(0, -20, 20, 1, 'offsetA'),
     DataEntryFactory.createFloat(0, -20, 20, 1, 'offsetB'),
-    DataEntryFactory.createFloat(5, 4, 40, 1, 'innerRadius'),
-  ],
+    DataEntryFactory.createFloat(5, 4, 40, 1, 'innerRadius')
+  ]
 ];
 
 export const heightParsingDefinition: NestedContentType = [

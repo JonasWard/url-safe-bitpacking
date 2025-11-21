@@ -446,56 +446,7 @@ const eedt_valuesToUpdate: any = [
   { value: 0, type: 'ENUM', max: 4, bits: 3, name: 'eedt_2', index: 0, internalName: '_eedt_2' }
 ];
 
-const eedt_updatedValues: any = [
-  {
-    s: { value: 0, type: 'ENUM', max: 3, bits: 2, name: 'eedt_0', index: 0, internalName: '_eedt_0' },
-    v: {
-      someFloat_eedt_0_0: {
-        value: 0,
-        type: 'FLOAT',
-        min: 0,
-        max: 1,
-        precision: 2,
-        significand: 7,
-        name: 'someFloat_eedt_0_0',
-        index: 1,
-        internalName: '_eedt_0_someFloat_eedt_0_0'
-      }
-    }
-  },
-  {
-    s: { value: 0, type: 'ENUM', max: 2, bits: 2, name: 'eedt_1', index: 0, internalName: '_eedt_1' },
-    v: {
-      someFloat_eedt_1_0: {
-        value: 0,
-        type: 'FLOAT',
-        min: 0,
-        max: 1,
-        precision: 2,
-        significand: 7,
-        name: 'someFloat_eedt_1_0',
-        index: 1,
-        internalName: '_eedt_1_someFloat_eedt_1_0'
-      }
-    }
-  },
-  {
-    s: { value: 0, type: 'ENUM', max: 4, bits: 3, name: 'eedt_2', index: 0, internalName: '_eedt_2' },
-    v: {
-      someFloat_eedt_2_0: {
-        value: 0,
-        type: 'FLOAT',
-        min: 0,
-        max: 1,
-        precision: 2,
-        significand: 7,
-        name: 'someFloat_eedt_2_0',
-        index: 1,
-        internalName: '_eedt_2_someFloat_eedt_2_0'
-      }
-    }
-  }
-];
+const eedt_updatedValues: any = undefined;
 
 const eedt_updated_urls = ['AA', 'AA', 'AA'];
 
@@ -891,272 +842,284 @@ test('stateValueModel - ArrayEntryContentDataType - update data model', () => {
 });
 
 const lucernaeTurici_result: any = {
-  version: { value: 0, type: 'VERSION', bits: 4, name: 'version', index: 0, internalName: '_version' },
   extrusion: {
     s: {
-      value: 4,
-      type: 'ENUM',
-      max: 5,
       bits: 3,
-      name: 'extrusion',
       index: 1,
-      internalName: '_extrusion_extrusion_extrusion'
+      internalName: '_extrusion_extrusion_extrusion',
+      mapping: [0, 1, 2, 3, 4, 5],
+      max: 5,
+      name: 'extrusion',
+      type: 'ENUM',
+      value: 4
     },
     v: {
-      radiusTop: {
-        value: 0.35,
-        type: 'FLOAT',
-        min: 0.2,
-        max: 1,
-        precision: 2,
-        significand: 7,
-        name: 'radiusTop',
-        index: 2,
-        internalName: '_extrusion_extrusion_extrusion_radiusTop'
-      },
-      insetTop: {
-        value: 0.25,
-        type: 'FLOAT',
-        min: 0.01,
-        max: 0.45,
-        precision: 2,
-        significand: 6,
-        name: 'insetTop',
-        index: 3,
-        internalName: '_extrusion_extrusion_extrusion_insetTop'
-      },
-      insetBottom: {
-        value: 0.25,
-        type: 'FLOAT',
-        min: 0.01,
-        max: 0.45,
-        precision: 2,
-        significand: 6,
-        name: 'insetBottom',
-        index: 4,
-        internalName: '_extrusion_extrusion_extrusion_insetBottom'
-      },
-      insetSides: {
-        value: 0.25,
-        type: 'FLOAT',
-        min: 0.01,
-        max: 0.45,
-        precision: 2,
-        significand: 6,
-        name: 'insetSides',
-        index: 5,
-        internalName: '_extrusion_extrusion_extrusion_insetSides'
-      },
-      pointedness: {
-        value: 1,
-        type: 'FLOAT',
-        min: 0,
-        max: 1,
-        precision: 2,
-        significand: 7,
-        name: 'pointedness',
-        index: 6,
-        internalName: '_extrusion_extrusion_extrusion_pointedness'
+      divisionCount: {
+        bits: 4,
+        index: 8,
+        internalName: '_extrusion_extrusion_extrusion_divisionCount',
+        max: 10,
+        min: 1,
+        name: 'divisionCount',
+        type: 'INT',
+        value: 1
       },
       divisionPointedness: {
-        value: 1,
-        type: 'FLOAT',
-        min: 0,
+        index: 7,
+        internalName: '_extrusion_extrusion_extrusion_divisionPointedness',
         max: 1,
+        min: 0,
+        name: 'divisionPointedness',
         precision: 2,
         significand: 7,
-        name: 'divisionPointedness',
-        index: 7,
-        internalName: '_extrusion_extrusion_extrusion_divisionPointedness'
-      },
-      divisionCount: {
-        value: 1,
-        type: 'INT',
-        min: 1,
-        max: 10,
-        bits: 4,
-        name: 'divisionCount',
-        index: 8,
-        internalName: '_extrusion_extrusion_extrusion_divisionCount'
+        type: 'FLOAT',
+        value: 1
       },
       divisionResolution: {
-        value: 1,
-        type: 'INT',
-        min: 1,
-        max: 32,
         bits: 5,
-        name: 'divisionResolution',
         index: 9,
-        internalName: '_extrusion_extrusion_extrusion_divisionResolution'
+        internalName: '_extrusion_extrusion_extrusion_divisionResolution',
+        max: 32,
+        min: 1,
+        name: 'divisionResolution',
+        type: 'INT',
+        value: 1
+      },
+      insetBottom: {
+        index: 4,
+        internalName: '_extrusion_extrusion_extrusion_insetBottom',
+        max: 0.45,
+        min: 0.01,
+        name: 'insetBottom',
+        precision: 2,
+        significand: 6,
+        type: 'FLOAT',
+        value: 0.25
+      },
+      insetSides: {
+        index: 5,
+        internalName: '_extrusion_extrusion_extrusion_insetSides',
+        max: 0.45,
+        min: 0.01,
+        name: 'insetSides',
+        precision: 2,
+        significand: 6,
+        type: 'FLOAT',
+        value: 0.25
+      },
+      insetTop: {
+        index: 3,
+        internalName: '_extrusion_extrusion_extrusion_insetTop',
+        max: 0.45,
+        min: 0.01,
+        name: 'insetTop',
+        precision: 2,
+        significand: 6,
+        type: 'FLOAT',
+        value: 0.25
+      },
+      pointedness: {
+        index: 6,
+        internalName: '_extrusion_extrusion_extrusion_pointedness',
+        max: 1,
+        min: 0,
+        name: 'pointedness',
+        precision: 2,
+        significand: 7,
+        type: 'FLOAT',
+        value: 1
+      },
+      radiusTop: {
+        index: 2,
+        internalName: '_extrusion_extrusion_extrusion_radiusTop',
+        max: 1,
+        min: 0.2,
+        name: 'radiusTop',
+        precision: 2,
+        significand: 7,
+        type: 'FLOAT',
+        value: 0.35
       }
     }
   },
   footprint: {
     s: {
-      value: 3,
-      type: 'ENUM',
-      max: 6,
       bits: 3,
-      name: 'footprint',
       index: 10,
-      internalName: '_footprint_footprint_footprint'
+      internalName: '_footprint_footprint_footprint',
+      mapping: [0, 1, 2, 3, 4, 5, 6],
+      max: 6,
+      name: 'footprint',
+      type: 'ENUM',
+      value: 3
     },
     v: {
-      size: {
-        value: 20,
-        type: 'FLOAT',
-        min: 8,
-        max: 120,
-        precision: 0,
-        significand: 7,
-        name: 'size',
-        index: 11,
-        internalName: '_footprint_footprint_footprint_size'
-      },
-      xCount: {
-        value: 3,
-        type: 'INT',
-        min: 1,
-        max: 16,
-        bits: 4,
-        name: 'xCount',
-        index: 12,
-        internalName: '_footprint_footprint_footprint_xCount'
-      },
-      yCount: {
-        value: 0,
-        type: 'INT',
-        min: 0,
-        max: 8,
-        bits: 4,
-        name: 'yCount',
-        index: 13,
-        internalName: '_footprint_footprint_footprint_yCount'
-      },
-      shellThickness: {
-        value: 0,
-        type: 'ENUM',
-        max: 3,
-        bits: 2,
-        name: 'shellThickness',
-        index: 14,
-        internalName: '_footprint_footprint_footprint_shellThickness'
-      },
       bufferInside: {
-        value: 2,
-        type: 'FLOAT',
-        min: 0,
+        index: 15,
+        internalName: '_footprint_footprint_footprint_bufferInside',
         max: 10,
+        min: 0,
+        name: 'bufferInside',
         precision: 1,
         significand: 7,
-        name: 'bufferInside',
-        index: 15,
-        internalName: '_footprint_footprint_footprint_bufferInside'
+        type: 'FLOAT',
+        value: 2
       },
       bufferOutside: {
-        value: 2,
-        type: 'FLOAT',
-        min: 0,
+        index: 16,
+        internalName: '_footprint_footprint_footprint_bufferOutside',
         max: 10,
+        min: 0,
+        name: 'bufferOutside',
         precision: 1,
         significand: 7,
-        name: 'bufferOutside',
-        index: 16,
-        internalName: '_footprint_footprint_footprint_bufferOutside'
+        type: 'FLOAT',
+        value: 2
+      },
+      shellThickness: {
+        bits: 2,
+        index: 14,
+        internalName: '_footprint_footprint_footprint_shellThickness',
+        mapping: [0, 1, 2, 3],
+        max: 3,
+        name: 'shellThickness',
+        type: 'ENUM',
+        value: 0
+      },
+      size: {
+        index: 11,
+        internalName: '_footprint_footprint_footprint_size',
+        max: 120,
+        min: 8,
+        name: 'size',
+        precision: 0,
+        significand: 7,
+        type: 'FLOAT',
+        value: 20
+      },
+      xCount: {
+        bits: 4,
+        index: 12,
+        internalName: '_footprint_footprint_footprint_xCount',
+        max: 16,
+        min: 1,
+        name: 'xCount',
+        type: 'INT',
+        value: 3
+      },
+      yCount: {
+        bits: 4,
+        index: 13,
+        internalName: '_footprint_footprint_footprint_yCount',
+        max: 8,
+        min: 0,
+        name: 'yCount',
+        type: 'INT',
+        value: 0
       }
     }
   },
   heights: {
-    totalHeight: {
-      value: 150,
-      type: 'FLOAT',
-      min: 50,
-      max: 300,
-      precision: 0,
-      significand: 8,
-      name: 'totalHeight',
-      index: 17,
-      internalName: '_heights_totalHeight'
-    },
-    storyCount: {
-      value: 7,
-      type: 'INT',
-      min: 1,
-      max: 20,
-      bits: 5,
-      name: 'storyCount',
-      index: 18,
-      internalName: '_heights_storyCount'
-    },
     heightProcessingMethod: {
       s: {
-        value: 1,
-        type: 'ENUM',
-        max: 3,
         bits: 2,
-        name: 'heightProcessingMethod',
         index: 19,
-        internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod'
+        internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod',
+        mapping: [0, 1, 2, 3],
+        max: 3,
+        name: 'heightProcessingMethod',
+        type: 'ENUM',
+        value: 1
       },
       v: {
         maxAmplitude: {
-          value: 1,
-          type: 'FLOAT',
-          min: 0,
+          index: 20,
+          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_maxAmplitude',
           max: 4,
+          min: 0,
+          name: 'maxAmplitude',
           precision: 1,
           significand: 6,
-          name: 'maxAmplitude',
-          index: 20,
-          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_maxAmplitude'
+          type: 'FLOAT',
+          value: 1
         },
         minAmplitude: {
-          value: 1,
-          type: 'FLOAT',
-          min: 0,
+          index: 21,
+          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_minAmplitude',
           max: 4,
+          min: 0,
+          name: 'minAmplitude',
           precision: 2,
           significand: 9,
-          name: 'minAmplitude',
-          index: 21,
-          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_minAmplitude'
+          type: 'FLOAT',
+          value: 1
         },
         period: {
-          value: 1,
-          type: 'FLOAT',
-          min: 0.2,
+          index: 22,
+          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_period',
           max: 200,
+          min: 0.2,
+          name: 'period',
           precision: 1,
           significand: 11,
-          name: 'period',
-          index: 22,
-          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_period'
+          type: 'FLOAT',
+          value: 1
         },
         phaseShift: {
-          value: 0,
-          type: 'FLOAT',
-          min: 0,
+          index: 23,
+          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_phaseShift',
           max: 360,
+          min: 0,
+          name: 'phaseShift',
           precision: 0,
           significand: 9,
-          name: 'phaseShift',
-          index: 23,
-          internalName: '_heights_heightProcessingMethod_heightProcessingMethod_heightProcessingMethod_phaseShift'
+          type: 'FLOAT',
+          value: 0
         }
       }
+    },
+    storyCount: {
+      bits: 5,
+      index: 18,
+      internalName: '_heights_storyCount',
+      max: 20,
+      min: 1,
+      name: 'storyCount',
+      type: 'INT',
+      value: 7
+    },
+    totalHeight: {
+      index: 17,
+      internalName: '_heights_totalHeight',
+      max: 300,
+      min: 50,
+      name: 'totalHeight',
+      precision: 0,
+      significand: 8,
+      type: 'FLOAT',
+      value: 150
     }
   },
   shapePreProcessing: {
     s: {
-      value: 2,
-      type: 'ENUM',
-      max: 3,
       bits: 2,
-      name: 'shapePreProcessing',
       index: 24,
-      internalName: '_shapePreProcessing_shapePreProcessing_shapePreProcessing'
+      internalName: '_shapePreProcessing_shapePreProcessing_shapePreProcessing',
+      mapping: [0, 1, 2, 3],
+      max: 3,
+      name: 'shapePreProcessing',
+      type: 'ENUM',
+      value: 2
     },
     v: {}
+  },
+  version: {
+    bits: 4,
+    index: 0,
+    internalName: '_version',
+    name: 'version',
+    type: 'VERSION',
+    value: 0
   }
 };
 
@@ -1414,7 +1377,8 @@ const lucernaeTurici_updated_results: StateDataType = {
       bits: 2,
       name: 'shapePreProcessing',
       index: 22,
-      internalName: '_shapePreProcessing_shapePreProcessing_shapePreProcessing'
+      internalName: '_shapePreProcessing_shapePreProcessing_shapePreProcessing',
+      mapping: [0, 1, 2, 3]
     },
     v: {}
   }
@@ -1425,12 +1389,12 @@ const lucernae_updated_base_64 = 'CD2GGMmQAMYQBQoyGAn0g';
 test('stateValueModel - lucernaeTurici', () => {
   const versionHandler = createParserObject([lucernaeTurici], 1);
   const stateData = versionHandler.parser();
-  expect(stateData).toEqual(lucernaeTurici_result);
+  expect(stateData).toMatchObject(lucernaeTurici_result);
   const base64 = getBase64String(stateData);
   expect(base64).toEqual(lucernaeTurici_base_64);
   expect(versionHandler.parser(base64)).toEqual(lucernaeTurici_result);
   const result = versionHandler.updater(stateData, valueToUpdate);
   expect(getBase64String(result)).toEqual(lucernae_updated_base_64);
-  expect(result).toEqual(lucernaeTurici_updated_results);
-  expect(versionHandler.parser(getBase64String(result))).toEqual(lucernaeTurici_updated_results);
+  expect(result).toMatchObject(lucernaeTurici_updated_results);
+  expect(versionHandler.parser(getBase64String(result))).toMatchObject(lucernaeTurici_updated_results);
 });

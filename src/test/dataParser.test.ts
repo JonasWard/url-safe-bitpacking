@@ -16,7 +16,7 @@ const dataMap = [
   DataEntryFactory.createFloat(0.024, 0, 10, 3, 'floatC', 5),
   DataEntryFactory.createBoolean(true, 'boolA', 6),
   DataEntryFactory.createBoolean(false, 'boolB', 7),
-  DataEntryFactory.createEnumArray([0, 1, 2], 0, 10, 3, 5, 'enumArrayA', 8)
+  DataEntryFactory.createEnumArray([0, 1, 2], 10, 3, 5, 'enumArrayA', 8)
 ];
 
 const testStrings_user = [
@@ -31,7 +31,7 @@ const testStrings_user = [
   '{ value: number, name: "floatC", type: "FLOAT", min: 0, max: 10, precision: 3, significand: 14 }',
   '{ value: boolean, name: "boolA", type: "BOOLEAN" }',
   '{ value: boolean, name: "boolB", type: "BOOLEAN" }',
-  '{ value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 }'
+  '{ value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, max: 10, value: 0,1,2 }'
 ];
 
 const testStrings_internalData = [
@@ -46,7 +46,7 @@ const testStrings_internalData = [
   '{ value: number, name: "floatC", type: "FLOAT", min: 0, max: 10, precision: 3, significand: 14 ,internalName: undefined, index: 5 }',
   '{ value: boolean, name: "boolA", type: "BOOLEAN" ,internalName: undefined, index: 6 }',
   '{ value: boolean, name: "boolB", type: "BOOLEAN" ,internalName: undefined, index: 7 }',
-  '{ value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 ,internalName: undefined, index: 8 }'
+  '{ value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, max: 10, value: 0,1,2 ,internalName: undefined, index: 8 }'
 ];
 
 const testStrings_definedType = [
@@ -61,7 +61,7 @@ const testStrings_definedType = [
   'export type FFloatC = { value: number, name: "floatC", type: "FLOAT", min: 0, max: 10, precision: 3, significand: 14 ,internalName: undefined, index: 5 };',
   'export type BBoolA = { value: boolean, name: "boolA", type: "BOOLEAN" ,internalName: undefined, index: 6 };',
   'export type BBoolB = { value: boolean, name: "boolB", type: "BOOLEAN" ,internalName: undefined, index: 7 };',
-  'export type AEnumArrayA = { value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 ,internalName: undefined, index: 8 };'
+  'export type AEnumArrayA = { value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, max: 10, value: 0,1,2 ,internalName: undefined, index: 8 };'
 ];
 
 const testString_stateDataType = [
@@ -76,7 +76,7 @@ const testString_stateDataType = [
   '["floatC"]: { value: number, name: "floatC", type: "FLOAT", min: 0, max: 10, precision: 3, significand: 14 }',
   '["boolA"]: { value: boolean, name: "boolA", type: "BOOLEAN" }',
   '["boolB"]: { value: boolean, name: "boolB", type: "BOOLEAN" }',
-  '["enumArrayA"]: { value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, min: 0, max: 10, value: 0,1,2 }'
+  '["enumArrayA"]: { value: number[], name: "enumArrayA", type: "ENUM_ARRAY", minCount: 3, maxCount: 5, max: 10, value: 0,1,2 }'
 ];
 
 const testString_stateValueType = [

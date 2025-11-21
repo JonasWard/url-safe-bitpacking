@@ -3,40 +3,38 @@ import { expect, test } from 'bun:test';
 import { DataEntryFactory } from '../factory/factory';
 import { dataArrayStringifier, dataBitsParser, dataBitsStringifier } from '../parsers';
 import { ArrayEntryDataType, StateDataType } from '../types';
-import { getDataEntryArray, getStateFromArrayEntryDataType, getStateValue } from '../objectmap';
+import { getDataEntryArray, getStateFromArrayEntryDataType } from '../objectmap';
 
 /**
  * `value` - array of numbers
- * `min` - minimum value of the numbers
  * `max` - maximum value of the numbers
  * `minCount` - minimum count of the numbers
  * `maxCount` - maximum count of the numbers
  * `bitString` - Stringified output -> bit string of the numbers
  */
-export const values: [number[], number, number, number, number, string][] = [
-  [[0], 0, 1, 1, 2, '00'],
-  [[0, 1, 2, 2, 3, 4, 5, 6, 7, 7, 8], 0, 8, 1, 13, '101011100110100000111100001011010111101'],
-  [[0, 1, 2, 2, 3, 4, 5, 6, 7, 7, 8], 0, 8, 11, 11, '11100110100000111100001011010111101'],
-  [[0, 1, 2, 2, 3, 4, 5, 6, 7, 7, 8], -16, 15, 11, 11, '1100010111101111011010101101001001110010100101000110000'],
+export const values: [number[], number, number, number, string][] = [
+  [[0], 1, 1, 2, '00'],
+  [[0, 1, 2, 2, 3, 4, 5, 6, 7, 7, 8], 8, 1, 13, '101011100110100000111100001011010111101'],
+  [[0, 1, 2, 2, 3, 4, 5, 6, 7, 7, 8], 8, 11, 11, '11100110100000111100001011010111101'],
+  [[0, 1, 2, 2, 3, 4, 5, 6, 7, 7, 8], 15, 11, 11, '10000111011101100101010000110010001000010000'],
   [
-    [...Array.from({ length: 32 }, (_, i) => i - 16)],
-    -16,
-    15,
+    [...Array.from({ length: 32 }, (_, i) => i)],
+    31,
     1,
     32,
     '111111111111110111011110011011110101100111000101111011010101101001001110010100011000001111011100110101100010110101001001010000011100110001010010000011000100000100000'
   ]
 ];
 
-values.forEach(([value, min, max, minCount, maxCount, bitString]) =>
+values.forEach(([value, max, minCount, maxCount, bitString]) =>
   test(`enum_array ${value}`, () =>
-    expect(dataBitsStringifier(DataEntryFactory.createEnumArray(value, min, max, minCount, maxCount))).toBe(bitString))
+    expect(dataBitsStringifier(DataEntryFactory.createEnumArray(value, max, minCount, maxCount))).toBe(bitString))
 );
 
-values.forEach(([value, min, max, minCount, maxCount, bitString]) =>
+values.forEach(([value, max, minCount, maxCount, bitString]) =>
   test(`parsing '${bitString}' as enum_array`, () =>
     expect(
-      dataBitsParser(bitString, DataEntryFactory.createEnumArray(value, min, max, minCount, maxCount)).value
+      dataBitsParser(bitString, DataEntryFactory.createEnumArray(value, max, minCount, maxCount)).value
     ).toMatchObject(value))
 );
 
@@ -49,7 +47,6 @@ test('enum_array vs array_int', () => {
 
       const dataEntry = DataEntryFactory.createEnumArray(
         [...Array.from({ length: count }, (_, i) => i % base)],
-        0,
         base,
         count,
         count + 1
