@@ -5,7 +5,7 @@ import { getOptionsFromEnumOptions } from './utils';
 
 export const create = (
   value: number,
-  options: any[] | string | number,
+  options: (string | number | object)[] | string | number,
   name: string = '',
   index: number = -1
 ): EnumDataEntry => {

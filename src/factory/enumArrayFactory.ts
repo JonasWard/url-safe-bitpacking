@@ -3,7 +3,7 @@ import { getOptionsFromEnumOptions } from './utils';
 
 export const create = (
   value: number[],
-  options: any[] | string | number,
+  options: (string | number | object)[] | string | number,
   minCount: number = 1,
   maxCount: number = 10,
   name: string = '',
@@ -44,5 +44,14 @@ export const create = (
       `value length must be between minCount and maxCount, ${value.length} is not between ${minCount} and ${maxCount}`
     );
 
-  return { type: 'ENUM_ARRAY', minCount, maxCount, value, max, name, index, mapping };
+  return {
+    type: 'ENUM_ARRAY',
+    minCount,
+    maxCount,
+    value: JSON.parse(JSON.stringify(value)),
+    max,
+    name,
+    index,
+    mapping
+  };
 };
