@@ -1,9 +1,7 @@
 import { expect, test } from 'bun:test';
 
 import { DataEntryFactory } from '../factory/factory';
-import { dataArrayStringifier, dataBitsParser, dataBitsStringifier } from '../parsers';
-import { ArrayEntryDataType, StateDataType } from '../types';
-import { getDataEntryArray, getStateFromArrayEntryDataType } from '../objectmap';
+import { dataBitsParser, dataBitsStringifier } from '../parsers';
 
 /**
  * `value` - array of numbers
@@ -37,43 +35,3 @@ values.forEach(([value, max, minCount, maxCount, bitString]) =>
       dataBitsParser(bitString, DataEntryFactory.createEnumArray(value, max, minCount, maxCount)).value
     ).toMatchObject(value))
 );
-
-test('enum_array vs array_int', () => {
-  const values: [number, number, number][] = [];
-
-  for (let base = 1; base < 256; base++) {
-    for (let count = 125; count <= 125; count++) {
-      const arrayIntDefintion: ArrayEntryDataType = [[count, count + 1], [DataEntryFactory.createInt(0, 0, base)]];
-
-      const dataEntry = DataEntryFactory.createEnumArray(
-        [...Array.from({ length: count }, (_, i) => i % base)],
-        base,
-        count,
-        count + 1
-      );
-
-      const [_, [__, stateData]] = getStateFromArrayEntryDataType(arrayIntDefintion, '', 'arrayInt')();
-
-      const dataEntryBitString = dataBitsStringifier(dataEntry);
-      const bitString = dataArrayStringifier(getDataEntryArray(stateData as StateDataType));
-
-      values.push([dataEntryBitString.length / bitString.length, count, base]);
-    }
-  }
-
-  const sorted = values.sort((a, b) => a[0] - b[0]);
-
-  const avgPerBase: { [key: number]: number[] } = {};
-  for (const [avg, count, base] of sorted) {
-    if (!avgPerBase[base]) avgPerBase[base] = [];
-    avgPerBase[base].push(avg);
-  }
-
-  // for (const [base, avgs] of Object.entries(avgPerBase)) {
-  //   console.log(`Base ${base}: ${Math.min(...avgs)}`);
-  // }
-
-  // console.log({ min: sorted[0], max: sorted[sorted.length - 1], median: sorted[Math.floor(values.length / 2)] });
-
-  expect(true).toBe(true);
-});

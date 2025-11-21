@@ -126,5 +126,3 @@ export const PROTECTED_ATTRIBUTE_NAMES = [
   'descriptor',
   'mapping'
 ] as const;
-
-export type DataEntryArray = DataEntry[];
