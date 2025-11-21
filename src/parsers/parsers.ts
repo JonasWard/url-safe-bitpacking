@@ -1,5 +1,5 @@
-import { ComplexDataType, ComplexDataValues, DataType } from '../enums/dataTypes';
-import { DataEntryArray, DataEntry, ComplexDataEntry, NestedData } from '../types/dataEntry';
+import { ComplexDataType, ComplexDataValues } from '../enums/dataTypes';
+import { DataEntry, ComplexDataEntry, NestedData } from '../types/dataEntry';
 import * as floatParser from './floatParser';
 import * as intParser from './intParser';
 import * as enumParser from './enumParser';
@@ -123,23 +123,6 @@ export const complexDataEntryBitstringParser = <T extends ComplexDataEntry>(
     case 'ENUM_OPTIONS':
       return enumOptionsParser.rawParser(bitstring, complexDataEntry) as [T, string];
   }
-};
-
-/**
- * Method to convert a bitstring into an array of data entries
- * @param bitString bitstring to parse into bits and then data entries
- * @param mapDataArray Data descriptions to map the bits to data entries
- * @returns array of data entries
- */
-export const dataBitsArrayParser = (bitString: string, mapDataArray: DataEntryArray): DataEntryArray => {
-  const dataEntries: DataEntryArray = [];
-  let startIndex = 0;
-  for (const dataEntry of mapDataArray) {
-    const bitCount = getBitsCount(dataEntry, bitString);
-    dataEntries.push(dataBitsParser(bitString.slice(startIndex, startIndex + bitCount), dataEntry));
-    startIndex += bitCount;
-  }
-  return dataEntries;
 };
 
 export const dataBitsStringifier = (data: DataEntry): string => {
@@ -319,15 +302,4 @@ export const parseBase64ToBits = (base64: string): string => {
   const chunks = numbers.map((n) => n.toString(2).padStart(6, '0'));
   // join the chunks
   return chunks.join('');
-};
-
-// *** only relevant exports for actual use ***
-
-/**
- * Method to convert an array of data entries into a base64 string
- * @param dataArray Data Entries to read to parse into bits and then a base64 string
- * @returns bitstring representation of the data entries
- */
-export const dataArrayStringifier = (dataEntryArray: DataEntryArray): string => {
-  return dataEntryArray.map(dataBitsStringifier).join('');
 };
