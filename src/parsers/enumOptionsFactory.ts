@@ -17,7 +17,8 @@ export const rawParser = (bitString: string, enumOptionsData: EnumOptionsDataEnt
   return [{ ...enumOptionsData, value, state }, remainingBitstring];
 };
 
-export const rawStringifier = (enumOptionsData: EnumOptionsDataEntry): string => {
-  const descriptorIndex = rawIntStringifier(enumOptionsData.state, enumOptionsData.stateBits);
-  return descriptorIndex + nestedDataStringifier(enumOptionsData.value);
-};
+export const rawStateStringifier = (enumOptionsData: EnumOptionsDataEntry): string =>
+  rawIntStringifier(enumOptionsData.state, enumOptionsData.stateBits);
+
+export const rawStringifier = (enumOptionsData: EnumOptionsDataEntry): string =>
+  rawStateStringifier(enumOptionsData) + nestedDataStringifier(enumOptionsData.value);

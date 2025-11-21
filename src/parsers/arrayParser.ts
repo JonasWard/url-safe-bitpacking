@@ -22,10 +22,9 @@ export const rawParser = (bitString: string, arrayData: ArrayDataEntry): [ArrayD
   return [{ ...arrayData, value, state }, bitString];
 };
 
-export const rawStringifier = (arrayData: ArrayDataEntry): string => {
-  const countBitstring = arrayData.stateBits
-    ? rawIntStringifier(arrayData.value.length - arrayData.minCount, arrayData.stateBits)
-    : '';
+export const rawStateStringifier = (arrayData: ArrayDataEntry): string =>
+  arrayData.stateBits ? rawIntStringifier(arrayData.value.length - arrayData.minCount, arrayData.stateBits) : '';
 
-  return countBitstring + arrayData.value.map(nestedDataStringifier).join('');
+export const rawStringifier = (arrayData: ArrayDataEntry): string => {
+  return rawStateStringifier(arrayData) + arrayData.value.map(nestedDataStringifier).join('');
 };

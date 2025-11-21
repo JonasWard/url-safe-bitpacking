@@ -170,6 +170,17 @@ export const complexDataStringifier = <T extends ComplexDataEntry>(complexDataEn
   }
 };
 
+export const complexDataStateStringifier = <T extends ComplexDataEntry>(complexDataEntry: T): string => {
+  switch (complexDataEntry.type) {
+    case 'ARRAY':
+      return arrayParser.rawStateStringifier(complexDataEntry);
+    case 'OPTIONAL':
+      return optionalParser.rawStateStringifier(complexDataEntry);
+    case 'ENUM_OPTIONS':
+      return enumOptionsParser.rawStateStringifier(complexDataEntry);
+  }
+};
+
 export const nestedDataStringifier = (nestedData: NestedData): string =>
   nestedData
     .map((d) =>

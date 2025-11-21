@@ -16,9 +16,9 @@ export const rawParser = (bitString: string, optionalData: OptionalDataEntry): [
   return [{ ...optionalData, value, state }, remainingBitstring];
 };
 
-export const rawStringifier = (optionalData: OptionalDataEntry): string => {
-  const descriptorIndex = optionalData.state ? '1' : '0';
+export const rawStateStringifier = (optionalData: OptionalDataEntry): string => (optionalData.state ? '1' : '0');
 
-  if (optionalData.value === null) return descriptorIndex;
-  return descriptorIndex + nestedDataStringifier(optionalData.value);
-};
+export const rawStringifier = (optionalData: OptionalDataEntry): string =>
+  optionalData.value === null
+    ? rawStateStringifier(optionalData)
+    : rawStateStringifier(optionalData) + nestedDataStringifier(optionalData.value);
