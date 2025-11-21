@@ -1,11 +1,14 @@
-import { DataType } from '../enums/dataTypes';
-import { DataEntryArray, DataEntry } from '../types/dataEntry';
+import { ComplexDataType, ComplexDataValues, DataType } from '../enums/dataTypes';
+import { DataEntryArray, DataEntry, ComplexDataEntry, NestedData } from '../types/dataEntry';
 import * as floatParser from './floatParser';
 import * as intParser from './intParser';
 import * as enumParser from './enumParser';
 import * as versionParser from './versionParser';
 import * as booleanParser from './booleanParser';
 import * as enumArrayParser from './enumArrayParser.ts';
+import * as arrayParser from './arrayParser';
+import * as optionalParser from './optionalParser';
+import * as enumOptionsParser from './enumOptionsFactory';
 
 /**
  * Method that parses a bitstring into a value
@@ -85,6 +88,44 @@ export const dataEntryBitstringParser = (bitstring: string, dataEntry: DataEntry
 ];
 
 /**
+ * Method that parses a bitstring for a given nested data descriptor
+ * @param bitstring - `string` of 0 | 1
+ * @param descriptor - `NestedData` that represents the framework applicable to the bitstring
+ * @returns `[NestedData, string]` that represents the actual data and the remaining bitstring
+ */
+export const nestedDataBitstringParser = (bitstring: string, descriptor: NestedData): [NestedData, string] => {
+  const resultingNestedData: NestedData = descriptor.map((data) => {
+    const [resultingData, remainingBitstring] = ComplexDataValues.includes(data.type as ComplexDataType)
+      ? complexDataEntryBitstringParser(bitstring, data as ComplexDataEntry)
+      : dataEntryBitstringParser(bitstring, data as DataEntry);
+    bitstring = remainingBitstring;
+    return resultingData;
+  });
+
+  return [resultingNestedData, bitstring];
+};
+
+/**
+ * Method that parses a bitstring into its data for complex data entries
+ * @param bitstring - `string` of 0 | 1
+ * @param complexDataEntry - `DataEntry` that represents the data entry to parse
+ * @returns `[DataEntry, string]` that represents the data entry and the remaining bitstring
+ */
+export const complexDataEntryBitstringParser = <T extends ComplexDataEntry>(
+  bitstring: string,
+  complexDataEntry: T
+): [T, string] => {
+  switch (complexDataEntry.type) {
+    case 'ARRAY':
+      return arrayParser.rawParser(bitstring, complexDataEntry) as [T, string];
+    case 'OPTIONAL':
+      return optionalParser.rawParser(bitstring, complexDataEntry) as [T, string];
+    case 'ENUM_OPTIONS':
+      return enumOptionsParser.rawParser(bitstring, complexDataEntry) as [T, string];
+  }
+};
+
+/**
  * Method to convert a bitstring into an array of data entries
  * @param bitString bitstring to parse into bits and then data entries
  * @param mapDataArray Data descriptions to map the bits to data entries
@@ -117,6 +158,26 @@ export const dataBitsStringifier = (data: DataEntry): string => {
       return enumArrayParser.rawStringifier(data.value as number[], data);
   }
 };
+
+export const complexDataStringifier = <T extends ComplexDataEntry>(complexDataEntry: T): string => {
+  switch (complexDataEntry.type) {
+    case 'ARRAY':
+      return arrayParser.rawStringifier(complexDataEntry);
+    case 'OPTIONAL':
+      return optionalParser.rawStringifier(complexDataEntry);
+    case 'ENUM_OPTIONS':
+      return enumOptionsParser.rawStringifier(complexDataEntry);
+  }
+};
+
+export const nestedDataStringifier = (nestedData: NestedData): string =>
+  nestedData
+    .map((d) =>
+      ComplexDataValues.includes(d.type as ComplexDataType)
+        ? complexDataStringifier(d as ComplexDataEntry)
+        : dataBitsStringifier(d as DataEntry)
+    )
+    .join('');
 
 export const dataEntryCorrecting = (dataEntry: DataEntry): DataEntry =>
   dataBitsParser(dataBitsStringifier(dataEntry), dataEntry);
