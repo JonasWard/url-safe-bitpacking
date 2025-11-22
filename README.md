@@ -28,7 +28,7 @@ Currently, there are 4 data types implemented (+1 special case for safety). All 
 Bool type values are simple yes or no, 1 or 0s, nothing special
 
 ```typescript
-DataEntryFactory.createBoolean(false, 'shapePreProcessingWarpabsolute');
+DescriptorFactory.BOOLEAN(false, 'shapePreProcessingWarpabsolute');
 ```
 
 ### enum
@@ -36,7 +36,7 @@ DataEntryFactory.createBoolean(false, 'shapePreProcessingWarpabsolute');
 An enum in this context is a continuous array of integers. The Bitwidth of this data type is defined by the maximum entry. eg. in case you you would need 21 states, the larges value would be 20. The value 20 would require at least five bits (log2(20) ~ 4.32). The maximum bitwidth for enums is right now hardcoded to 8-bit (which would be the range [0, 255] ).
 
 ```typescript
-DataEntryFactory.createEnum(0, 3, 'footprintType');
+DescriptorFactory.ENUM(0, 3, 'footprintType');
 ```
 
 ### int
@@ -44,7 +44,7 @@ DataEntryFactory.createEnum(0, 3, 'footprintType');
 An int type is rather similar to the enum, except that it starts at a specific minimum value. The range that then needs to be able to be stored is: max - min. In case you would need values from -30 to 10, you would have to be able to store 10 - 30 + 1 = 51 states. This would require a bitwidth of 6 (log2(51) ~ 5.67). The max bitwidth is now hardcoded to be 12 (which would be the range [minimum, 4095 - minimum])
 
 ```typescript
-DataEntryFactory.createInt(5, 3, 20, 'circleDivisions');
+DescriptorFactory.INT(5, 3, 20, 'circleDivisions');
 ```
 
 ### float
@@ -52,7 +52,7 @@ DataEntryFactory.createInt(5, 3, 20, 'circleDivisions');
 Floating points work very much like the integer type, with the main difference that one can also define a precision to define at what order of magnitude (from -3 to +3) the variable should be considered. The significand can be up to 20 bits, which eg. at precision -3 would allow a range of .001 to 1048.576.
 
 ```typescript
-DataEntryFactory.createFloat(20, 10, 200, -1, 'shapePreProcessingWarptotal');
+DescriptorFactory.FLOAT(20, 10, 200, -1, 'shapePreProcessingWarptotal');
 ```
 
 ### enum array
@@ -60,7 +60,7 @@ DataEntryFactory.createFloat(20, 10, 200, -1, 'shapePreProcessingWarptotal');
 Enum arrays are a special type of arrays where integer values are intepreted as being values of a **specific base** to then be transformed to base 2. The base is derived from the delta of the max `and` the `min` value of the enums. Besides that, there is also a `minCount` and `maxCount` value (which can be the same value, but `minCount` is at least 1). This only offers a compression rate of upto 22% vis-a-vis an array of `IntDataEntry` (worst case its 0% percent, it never takes up more space), so sometimes questionable whether it makese sense to use ^^.
 
 ```typescript
-DataEntryFactory.createEnumArray([0, 1, 2], 0, 10, 3, 5, 'enumArrayA')    
+DescriptorFactory.ENUM_ARRAY([0, 1, 2], 0, 10, 3, 5, 'enumArrayA')    
 ```
 
 ### version
@@ -68,7 +68,7 @@ DataEntryFactory.createEnumArray([0, 1, 2], 0, 10, 3, 5, 'enumArrayA')
 There is also a Version object which is a special case of the enum data type and has a bitwidth of 4, 6, 8 or, 10 and always occupies the first bits of the bitarray.
 
 ```typescript
-DataEntryFactory.createVersion(0, 8, 'version');
+DescriptorFactory.VERSION(0, 8, 'version');
 ```
 
 ## nested attribute definitions
