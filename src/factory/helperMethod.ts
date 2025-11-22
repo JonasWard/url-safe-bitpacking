@@ -15,7 +15,7 @@ export const getBitsForIntegerNumber = (number: number, maxBits: number): number
  * Helper method to get the minimum bits required to store a given integer value
  * @param v - `number` value to get the minimum bits for
  */
-export const getMinimumBitsForInteger = (v: number): number => Math.ceil(Math.log2(v));
+export const getMinimumBitsForInteger = (v: number): number => Math.ceil(Math.log2(v + 1));
 
 /**
  * Helper method to get the version value range value for a given number

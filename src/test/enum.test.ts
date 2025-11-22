@@ -9,8 +9,11 @@ export const values: [number, number, string][] = [
   [7, 7, '111'],
 ];
 
-values.forEach(([v, maxValue, bitString]) => test(`enum ${v}`, () => expect(dataBitsStringifier(DataEntryFactory.createEnum(v, maxValue))).toBe(bitString)));
+values.forEach(([v, maxValue, bitString]) =>
+  test(`enum ${v}`, () => expect(dataBitsStringifier(DataEntryFactory.createEnum(v, maxValue))).toBe(bitString))
+);
 
 values.forEach(([v, maxValue, bitString]) =>
-  test(`parsing '${bitString}' as enum`, () => expect(dataBitsParser(bitString, DataEntryFactory.createEnum(v, maxValue)).value).toBe(v))
+  test(`parsing '${bitString}' as enum`, () =>
+    expect(dataBitsParser(bitString, DataEntryFactory.createEnum(v, maxValue)).value).toBe(v))
 );

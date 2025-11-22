@@ -22,7 +22,7 @@ export const getDataEntryTypeString = (
     case 'FLOAT':
       return `{ ${sInfo}type: "FLOAT", min: ${d.min}, max: ${d.max}, precision: ${d.precision}, significand: ${d.significand}${iInfo} }`;
     case 'ENUM_ARRAY':
-      return `{ ${sInfo}type: "ENUM_ARRAY", minCount: ${d.minCount}, maxCount: ${d.maxCount}, min: ${d.min}, max: ${d.max}, value: ${d.value}${iInfo} }`;
+      return `{ ${sInfo}type: "ENUM_ARRAY", minCount: ${d.minCount}, maxCount: ${d.maxCount}, max: ${d.max}, value: ${d.value}${iInfo} }`;
   }
 };
 

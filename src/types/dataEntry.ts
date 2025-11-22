@@ -4,6 +4,9 @@ import { FloatData } from './floatData';
 import { IntData } from './intData';
 import { VersionData } from './versionData';
 import { EnumArrayData } from './enumArrayData.ts';
+import { OptionalData } from './optionalData.ts';
+import { EnumOptionsData } from './enumOptionsData.ts';
+import { ArrayData } from './arrayData.ts';
 
 export type Prettify<T> = {
   [K in keyof T]: T[K];
@@ -11,20 +14,20 @@ export type Prettify<T> = {
 
 type DataDescription = {
   name: string; // only used to make things more legible
-  internalName?: string; // data entry name used internally
-  index: number; // value doesn't need to be continuos
+  internalName?: number[]; // data entry name used internally
+  index?: number; // value doesn't need to be continuos
 };
 
 /**
  * Boolean object
- * 
+ *
  * Boolean objects are a simple `true` or `false`, 1 or 0 - one bitwidth object.
  */
 export type BooleanDataEntry = Prettify<BooleanData & DataDescription>;
 
 /**
  * Enum object
- * 
+ *
  * An enum object is a continious range of integer values, starting at 0 upto its max.
  * The maximum acceptable value for the max is `255` (8 bits)
  */
@@ -32,7 +35,7 @@ export type EnumDataEntry = Prettify<EnumData & DataDescription>;
 
 /**
  * Int object
- * 
+ *
  * Int objects are a simple integer value, starting at its min upto its max.
  * The maximum and minimum value can be any integar values represntabled as a double yet,
  * the maximum acceptable delta between min and max is `4095` (12 bits).
@@ -52,10 +55,10 @@ export type FloatDataEntry = Prettify<FloatData & DataDescription>;
 
 /**
  * Version object
- * 
+ *
  * Version objects are a special type of the enum object, which have a fixed amount of bits assigned to them (and therefore a fixed amount of optional values)
  * They are only used as the beginning of a DataStateDefinition to be able to find out which version of the data is actually being used
- * 
+ *
  * Acceptable bitwidths are: `4 | 6 | 8 | 10`, giving a total of respectively 16, 64, 256 and 1024 possible versions
  * Choose wisely, as it is not possible to increase this value later on (that would require the inclusion of an additional version object)
  */
@@ -83,6 +86,16 @@ export type DataEntry =
   | VersionDataEntry
   | EnumArrayDataEntry;
 
+export type OptionalDataEntry = Prettify<OptionalData & DataDescription>;
+
+export type EnumOptionsDataEntry = Prettify<EnumOptionsData & DataDescription>;
+
+export type ArrayDataEntry = Prettify<ArrayData & DataDescription>;
+
+export type ComplexDataEntry = OptionalDataEntry | EnumOptionsDataEntry | ArrayDataEntry;
+
+export type NestedData = (DataEntry | ComplexDataEntry)[];
+
 export type ProtectedAttributeNames = Prettify<
   | keyof BooleanDataEntry
   | keyof IntDataEntry
@@ -90,6 +103,9 @@ export type ProtectedAttributeNames = Prettify<
   | keyof FloatDataEntry
   | keyof VersionDataEntry
   | keyof EnumArrayDataEntry
+  | keyof OptionalDataEntry
+  | keyof EnumOptionsDataEntry
+  | keyof ArrayDataEntry
 >;
 
 export const PROTECTED_ATTRIBUTE_NAMES = [
@@ -104,7 +120,9 @@ export const PROTECTED_ATTRIBUTE_NAMES = [
   'precision',
   'significand',
   'minCount',
-  'maxCount'
+  'maxCount',
+  'state',
+  'stateBits',
+  'descriptor',
+  'mapping'
 ] as const;
-
-export type DataEntryArray = DataEntry[];

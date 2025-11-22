@@ -1,4 +1,3 @@
-import { DataType } from '../enums/dataTypes';
 import { dataEntryCorrecting } from '../parsers/parsers';
 import { DataEntry } from '../types/dataEntry';
 
@@ -8,23 +7,26 @@ import { DataEntry } from '../types/dataEntry';
  * @param t - number between 0 and 1
  * @returns updated data entry
  */
-export const interpolateEntryAt: (dataEntry: DataEntry, t: number) => DataEntry = (dataEntry: DataEntry, t: number): DataEntry => {
+export const interpolateEntryAt: (dataEntry: DataEntry, t: number) => DataEntry = (
+  dataEntry: DataEntry,
+  t: number
+): DataEntry => {
   const localT = Math.max(Math.min(1, t), 0);
   const cosT = Math.cos(localT * 2 * Math.PI) * 0.5 + 0.5;
 
   switch (dataEntry.type) {
-    case DataType.BOOLEAN:
+    case 'BOOLEAN':
       return { ...dataEntry, value: Boolean(Math.round(localT)) };
-    case DataType.VERSION:
+    case 'VERSION':
       return { ...dataEntry, value: Math.floor(localT * (dataEntry.bits ** 2 - 0.001)) };
-    case DataType.ENUM:
+    case 'ENUM':
       return { ...dataEntry, value: Math.floor(localT * (dataEntry.max + 0.999)) };
-    case DataType.INT:
+    case 'INT':
       return { ...dataEntry, value: dataEntry.min + Math.floor(cosT * (dataEntry.max - dataEntry.min + 0.999)) };
-    case DataType.FLOAT:
+    case 'FLOAT':
       const v = dataEntry.min + cosT * (dataEntry.max - dataEntry.min);
       return dataEntryCorrecting({ ...dataEntry, value: Math.min(dataEntry.max, Math.max(v, dataEntry.min)) });
-    case DataType.ENUM_ARRAY:
+    case 'ENUM_ARRAY':
       return { ...dataEntry, value: dataEntry.value.map((v) => Math.floor(localT * (v + 0.999))) };
   }
 };

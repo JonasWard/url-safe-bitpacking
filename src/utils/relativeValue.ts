@@ -1,18 +1,17 @@
-import { DataType } from '../enums/dataTypes';
 import { DataEntry } from '../types/dataEntry';
 
 export const getRelativeValue = (dataEntry: DataEntry): number => {
   switch (dataEntry.type) {
-    case DataType.BOOLEAN:
+    case 'BOOLEAN':
       return Number(dataEntry.value);
-    case DataType.INT:
-    case DataType.FLOAT:
+    case 'INT':
+    case 'FLOAT':
       return (dataEntry.value - dataEntry.min) / (dataEntry.max - dataEntry.min);
-    case DataType.VERSION:
+    case 'VERSION':
       return dataEntry.value / (2 ** dataEntry.bits - 1);
-    case DataType.ENUM:
+    case 'ENUM':
       return dataEntry.value / dataEntry.max;
-    case DataType.ENUM_ARRAY:
+    case 'ENUM_ARRAY':
       return dataEntry.value.reduce((acc, v) => acc + v, 0) / dataEntry.value.length;
   }
 };

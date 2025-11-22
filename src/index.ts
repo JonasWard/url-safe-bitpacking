@@ -1,14 +1,6 @@
-export { DataType } from './enums';
-export { DataEntryFactory } from './factory';
+export { DataType, DataTypeValues, ComplexDataType, ComplexDataValues } from './enums';
+export { DataEntryFactory, ComplexDataEntryFactory } from './factory';
 export {
-  SingleLevelContentType,
-  NestedContentDataType,
-  NestedContentType,
-  DoubleLevelContentType,
-  NonEmptyValidEntryArrayType,
-  ArrayEntryDataType,
-  OptionalEntryDataType,
-  EnumEntryDataType,
   PrecisionRangeType,
   SignificandMaxBits,
   FloatDataEntry,
@@ -20,27 +12,16 @@ export {
   VersionDataEntry,
   BooleanDataEntry,
   DataEntry,
-  DataEntryArray,
-  StateDataType,
-  StateValueType,
-  EnumSemantics,
-  DerivativeStateDataType,
-  VersionContentDefinition,
-  PREFIX_SEPERATOR_DELIMETER,
+  ComplexDataEntry,
+  NestedData,
+  ProtectedAttributeNames,
+  StateDescriptor,
+  StateObject,
+  StateDataObject,
+  StateDataEntry,
+  State,
   PROTECTED_ATTRIBUTE_NAMES
 } from './types';
-export {
-  createParserObject,
-  getStateValue,
-  getBase64String,
-  getDataEntryArray,
-  isDataEntry,
-  isDoubleLevelContentType,
-  isSingleLevelContentType,
-  doubleLevelContentTypeIsEnumEntryDataType,
-  doubleLevelContentTypeIsOptionalEntryDataType,
-  doubleLevelContentTypeIsArrayDefinitionType
-} from './objectmap';
 export {
   parseBase64ToBits,
   getBitsCount,
@@ -50,4 +31,5 @@ export {
   dataBitsStringifier,
   dataEntryCorrecting
 } from './parsers';
+export { createStateDataObject, getInitialStateFromBase64 } from './stateHandling';
 export { interpolateEntryAt, getRelativeValue } from './utils';
