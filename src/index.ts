@@ -35,3 +35,4 @@ export {
 } from './parsers';
 export { createStateDataObject, getInitialStateFromBase64 } from './stateHandling';
 export { interpolateEntryAt, getRelativeValue } from './utils';
+export { getEnumMaxAndMappingFromOptions, getOptionsFromMaxAndMapping } from './factory/utils';
