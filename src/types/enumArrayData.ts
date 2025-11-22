@@ -1,3 +1,5 @@
+import { EnumMappingType } from './enumData';
+
 /**
  * Enum Array object
  *
@@ -16,5 +18,5 @@ export type EnumArrayData = {
   maxCount: number;
   value: number[];
   max: number;
-  mapping: any[];
+  mapping: EnumMappingType;
 };

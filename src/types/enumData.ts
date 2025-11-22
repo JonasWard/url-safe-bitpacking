@@ -1,5 +1,8 @@
 export const EnumMaxBits = 8;
 
+export type EnumMappingType = (string | number | object)[];
+export type EnumOptionsType = string | number | EnumMappingType;
+
 /**
  * Enum object
  *
@@ -11,5 +14,5 @@ export type EnumData = {
   value: number;
   max: number;
   bits: number;
-  mapping: (string | number | object)[];
+  mapping: EnumMappingType;
 };

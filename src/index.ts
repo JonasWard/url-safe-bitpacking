@@ -20,6 +20,8 @@ export {
   StateDataObject,
   StateDataEntry,
   State,
+  EnumOptionsType,
+  EnumMappingType,
   PROTECTED_ATTRIBUTE_NAMES
 } from './types';
 export {

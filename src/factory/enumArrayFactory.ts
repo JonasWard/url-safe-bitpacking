@@ -1,15 +1,15 @@
-import { EnumArrayDataEntry, IntegerMaxBits } from '@/types';
-import { getOptionsFromEnumOptions } from './utils';
+import { EnumArrayDataEntry, EnumOptionsType, IntegerMaxBits } from '@/types';
+import { getEnumMaxAndMappingFromOptions } from './utils';
 
 export const create = (
   value: number[],
-  options: (string | number | object)[] | string | number,
+  options: EnumOptionsType,
   minCount: number = 1,
   maxCount: number = 10,
   name: string = '',
   index: number = -1
 ): EnumArrayDataEntry => {
-  const { max, mapping } = getOptionsFromEnumOptions(options);
+  const { max, mapping } = getEnumMaxAndMappingFromOptions(options);
 
   if (!Number.isInteger(max)) throw new Error(`max must be integers, you have given ${max}`);
   if (!Number.isInteger(minCount) || !Number.isInteger(maxCount))
