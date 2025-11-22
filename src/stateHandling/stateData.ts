@@ -1,7 +1,7 @@
 import { NestedData } from '@/types';
 import { StateDataObject } from '@/types/stateDataEntry';
 
-export const getStateData = (state: NestedData) => {
+export const getStateData = (state: NestedData): StateDataObject => {
   const object: StateDataObject = {};
   state.forEach((item) => {
     switch (item.type) {
