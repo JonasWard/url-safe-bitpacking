@@ -1,17 +1,17 @@
 import { expect, test } from 'bun:test';
 
-import { ComplexDataEntryFactory, DataEntryFactory } from '../factory/factory';
+import { DescriptorFactory } from '../factory/factory';
 import { complexDataStringifier, complexDataEntryBitstringParser } from '../parsers';
 import { ComplexDataEntry, IntDataEntry } from '../types';
 import { updateComplexValue } from '../update';
 
-const intDefinition = DataEntryFactory.createInt(0, 0, 10, 'a number');
+const intDefinition = DescriptorFactory.INT(0, 0, 10, 'a number');
 const getIntValueFromRawValues = (vs: number[], def: IntDataEntry, nested?: boolean) =>
   nested ? vs.map((value) => [{ ...def, value }]) : vs.map((value) => ({ ...def, value }));
 const getComplexDataForValues = <T extends ComplexDataEntry>(c: T, value: T['value'], state: T['state']) =>
   ({ ...c, value, state } as T);
 
-const enumArrayDefinition = DataEntryFactory.createEnumArray(
+const enumArrayDefinition = DescriptorFactory.ENUM_ARRAY(
   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   10,
   1,
@@ -29,7 +29,7 @@ const values: [number, number, number, number, number[], string][] = [
 
 test('array_int', () => {
   values.forEach(([minCount, maxCount, initialState, actualState, value, bitString]) => {
-    const complexData = ComplexDataEntryFactory.createArray([intDefinition], initialState, minCount, maxCount);
+    const complexData = DescriptorFactory.ARRAY([intDefinition], initialState, minCount, maxCount);
     const complexDataWithValues = getComplexDataForValues(
       complexData,
       getIntValueFromRawValues(value, intDefinition, true),
@@ -43,7 +43,7 @@ test('array_int', () => {
 
 test('array_enum_array', () => {
   values.forEach(([minCount, maxCount, initialState, actualState]) => {
-    const complexData = ComplexDataEntryFactory.createArray([enumArrayDefinition], initialState, minCount, maxCount);
+    const complexData = DescriptorFactory.ARRAY([enumArrayDefinition], initialState, minCount, maxCount);
 
     const complexDataWithValues = updateComplexValue(complexData, {
       ...complexData,
@@ -59,8 +59,8 @@ test('array_enum_array', () => {
 
 test('array_in_array', () => {
   values.forEach(([minCount, maxCount, initialState, actualState]) => {
-    const complexData = ComplexDataEntryFactory.createArray([enumArrayDefinition], initialState, minCount, maxCount);
-    const complexDataNested = ComplexDataEntryFactory.createArray([complexData], initialState, minCount, maxCount);
+    const complexData = DescriptorFactory.ARRAY([enumArrayDefinition], initialState, minCount, maxCount);
+    const complexDataNested = DescriptorFactory.ARRAY([complexData], initialState, minCount, maxCount);
     const complexDataWithValues = updateComplexValue(complexDataNested, {
       ...complexDataNested,
       state: actualState
@@ -75,6 +75,6 @@ test('array_in_array', () => {
 
 test('array change_state_value', () => {
   values.forEach(([minCount, maxCount, initialState, actualState]) => {
-    const complexData = ComplexDataEntryFactory.createArray([intDefinition], initialState, minCount, maxCount);
+    const complexData = DescriptorFactory.ARRAY([intDefinition], initialState, minCount, maxCount);
   });
 });
