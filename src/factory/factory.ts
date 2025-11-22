@@ -12,13 +12,13 @@ import { create as createArray } from './arrayFactory';
  * Record containing all the factory methods for the different data entry objects
  */
 export const DescriptorFactory = {
-  FLOAT: createFloat,
-  INT: createInt,
-  ENUM: createEnum,
-  BOOLEAN: createBoolean,
-  VERSION: createVersion,
-  ENUM_ARRAY: createEnumArray,
-  OPTIONAL: createOptional,
-  ENUM_OPTIONS: createEnumOptions,
-  ARRAY: createArray
+  FLOAT: createFloat as typeof createFloat,
+  INT: createInt as typeof createInt,
+  ENUM: createEnum as typeof createEnum,
+  BOOLEAN: createBoolean as typeof createBoolean,
+  VERSION: createVersion as typeof createVersion,
+  ENUM_ARRAY: createEnumArray as typeof createEnumArray,
+  OPTIONAL: createOptional as typeof createOptional,
+  ENUM_OPTIONS: createEnumOptions as typeof createEnumOptions,
+  ARRAY: createArray as typeof createArray
 } as const;
