@@ -30,8 +30,10 @@ export {
   valueBitsParser,
   dataBitsParser,
   dataEntryBitstringParser,
+  dataEntryCorrecting,
   dataBitsStringifier,
-  dataEntryCorrecting
+  complexDataStringifier,
+  complexDataStateStringifier
 } from './parsers';
 export { createStateDataObject, getInitialStateFromBase64 } from './stateHandling';
 export { interpolateEntryAt, getRelativeValue } from './utils';
