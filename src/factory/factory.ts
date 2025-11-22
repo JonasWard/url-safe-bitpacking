@@ -11,28 +11,14 @@ import { create as createArray } from './arrayFactory';
 /**
  * Record containing all the factory methods for the different data entry objects
  */
-export const DataEntryFactory: {
-  createFloat: typeof createFloat;
-  createInt: typeof createInt;
-  createEnum: typeof createEnum;
-  createBoolean: typeof createBoolean;
-  createVersion: typeof createVersion;
-  createEnumArray: typeof createEnumArray;
-} = {
-  createFloat,
-  createInt,
-  createEnum,
-  createBoolean,
-  createVersion,
-  createEnumArray
-};
-
-export const ComplexDataEntryFactory: {
-  createOptional: typeof createOptional;
-  createEnumOptions: typeof createEnumOptions;
-  createArray: typeof createArray;
-} = {
-  createOptional,
-  createEnumOptions,
-  createArray
-};
+export const DescriptorFactory = {
+  FLOAT: createFloat,
+  INT: createInt,
+  ENUM: createEnum,
+  BOOLEAN: createBoolean,
+  VERSION: createVersion,
+  ENUM_ARRAY: createEnumArray,
+  OPTIONAL: createOptional,
+  ENUM_OPTIONS: createEnumOptions,
+  ARRAY: createArray
+} as const;

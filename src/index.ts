@@ -1,5 +1,5 @@
 export { DataType, DataTypeValues, ComplexDataType, ComplexDataValues } from './enums';
-export { DataEntryFactory, ComplexDataEntryFactory } from './factory';
+export { DescriptorFactory } from './factory';
 export {
   PrecisionRangeType,
   SignificandMaxBits,
