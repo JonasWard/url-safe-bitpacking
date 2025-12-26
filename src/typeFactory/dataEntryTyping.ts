@@ -3,26 +3,36 @@
 import { DataType } from '../enums';
 import { DataEntry } from '../types';
 
-export const getDataEntryTypeString = (
-  d: DataEntry,
-  withLibraryInformation: boolean = false,
-  retainValue: boolean = false
-): string => {
-  const sInfo = `value: ${retainValue ? d.value : getDataValueType(d)}, name: "${d.name}", `;
-  const iInfo = withLibraryInformation ? ` ,internalName: ${d.internalName}, index: ${d.index}` : '';
+export const getDataEntryTypeString = (d: DataEntry): string => {
   switch (d.type) {
     case 'BOOLEAN':
-      return `{ ${sInfo}type: "BOOLEAN"${iInfo} }`;
+      return `{ type: "BOOLEAN" }`;
     case 'VERSION':
-      return `{ ${sInfo}type: "VERSION", bits: ${d.bits}${iInfo} }`;
+      return `{ type: "VERSION", bits: ${d.bits} }`;
     case 'ENUM':
-      return `{ ${sInfo}type: "ENUM", max: ${d.max}, bits: ${d.bits}${iInfo} }`;
+      return `{ type: "ENUM", max: ${d.max}, bits: ${d.bits} }`;
     case 'INT':
-      return `{ ${sInfo}type: "INT", min: ${d.min}, max: ${d.max}, bits: ${d.bits}${iInfo} }`;
+      return `{ type: "INT", min: ${d.min}, max: ${d.max}, bits: ${d.bits} }`;
     case 'FLOAT':
-      return `{ ${sInfo}type: "FLOAT", min: ${d.min}, max: ${d.max}, precision: ${d.precision}, significand: ${d.significand}${iInfo} }`;
+      return `{ type: "FLOAT", min: ${d.min}, max: ${d.max}, precision: ${d.precision}, significand: ${d.significand} }`;
     case 'ENUM_ARRAY':
-      return `{ ${sInfo}type: "ENUM_ARRAY", minCount: ${d.minCount}, maxCount: ${d.maxCount}, max: ${d.max}, value: ${d.value}${iInfo} }`;
+      return `{ type: "ENUM_ARRAY", minCount: ${d.minCount}, maxCount: ${d.maxCount}, max: ${d.max}, value: ${d.value} }`;
+    case 'OPTIONAL':
+      return `{ type: "OPTIONAL", descriptor: ${d.descriptor
+        .map((d) => (d ? getDataEntryTypeString(d) : 'null'))
+        .join(', ')}, value: ${d.value ? getDataEntryTypeString(d.value) : 'null'} }`;
+    case 'ENUM_OPTIONS':
+      return `{ type: "ENUM_OPTIONS", descriptor: ${d.descriptor
+        .map((d) => (d ? getDataEntryTypeString(d) : 'null'))
+        .join(', ')}, value: ${d.value ? getDataEntryTypeString(d.value) : 'null'} }`;
+    case 'ARRAY':
+      return `{ type: "ARRAY", descriptor: ${getDataEntryTypeString(d.descriptor)}, value: ${d.value
+        .map((v) => getDataEntryTypeString(v))
+        .join(', ')} }`;
+    case 'OBJECT':
+      return `{ type: "OBJECT", descriptor: ${d.descriptor
+        .map((d) => getDataEntryTypeString(d))
+        .join(', ')}, value: ${d.value.map((v) => getDataEntryTypeString(v)).join(', ')} }`;
   }
 };
 
@@ -32,7 +42,11 @@ const typeNameStringAddition: Record<DataType, string> = {
   ENUM: 'E',
   INT: 'I',
   FLOAT: 'F',
-  ENUM_ARRAY: 'A'
+  ENUM_ARRAY: 'A',
+  OPTIONAL: 'Y', // Optional
+  ENUM_OPTIONS: 'C', // Checks
+  ARRAY: 'L', // List
+  OBJECT: 'O'
 };
 
 const getDataValueType = (d: DataEntry): string =>
@@ -47,5 +61,5 @@ export const getSafeName = (name: string): string => {
   return localName.charAt(0).toUpperCase() + localName.slice(1);
 };
 
-export const getDateEntryTypeNamedString = (d: DataEntry, withLibraryInformation: boolean = false): string =>
-  `export type ${typeNameStringAddition[d.type]}${getSafeName(d.name)} = ${getDataEntryTypeString(d, withLibraryInformation)};`;
+export const getDateEntryTypeNamedString = (d: DataEntry): string =>
+  `export type ${typeNameStringAddition[d.type]}${getSafeName(d.name)} = ${getDataEntryTypeString(d)};`;
