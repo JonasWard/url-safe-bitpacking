@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test';
 
-import { DescriptorFactory } from '../factory/factory';
+import { DataEntryFactory } from '../factory/factory';
 import {
   EnumNode,
   FromState,
@@ -24,9 +24,9 @@ const roundTrip = (node: SpecificTypeNode) => {
 };
 
 test('EnumOptionsDataEntry', () => {
-  const enumA = DescriptorFactory.ENUM(2, 5, 'enum');
-  const enumB = DescriptorFactory.ENUM(4, 25, 'enum');
-  const enumOptions = DescriptorFactory.ENUM_OPTIONS([enumA, enumB, null]);
+  const enumA = DataEntryFactory.ENUM(2, 5, 'enum');
+  const enumB = DataEntryFactory.ENUM(4, 25, 'enum');
+  const enumOptions = DataEntryFactory.ENUM_OPTIONS([enumA, enumB, null]);
   const enumOptionsNode = NodeFactory(enumOptions, null);
   expect(enumOptionsNode.getChildren().length).toEqual(1);
   roundTrip(enumOptionsNode);
@@ -42,14 +42,14 @@ test('EnumOptionsDataEntry', () => {
 });
 
 test('EnumOptionsDataEntry with ObjectDataEntries', () => {
-  const enumA = DescriptorFactory.ENUM(2, 5, 'enumA');
-  const enumB = DescriptorFactory.ENUM(4, 25, 'enumB');
-  const enumC = DescriptorFactory.ENUM(3, 25, 'enumC');
-  const obj0 = DescriptorFactory.OBJECT([enumA, enumB], 'obj');
-  const obj1 = DescriptorFactory.OBJECT([enumA, enumB, enumC], 'obj');
+  const enumA = DataEntryFactory.ENUM(2, 5, 'enumA');
+  const enumB = DataEntryFactory.ENUM(4, 25, 'enumB');
+  const enumC = DataEntryFactory.ENUM(3, 25, 'enumC');
+  const obj0 = DataEntryFactory.OBJECT([enumA, enumB], 'obj');
+  const obj1 = DataEntryFactory.OBJECT([enumA, enumB, enumC], 'obj');
   const obj2 = null;
-  const enum0 = DescriptorFactory.ENUM_OPTIONS([obj0, obj1, obj2]);
-  const enumOptions = DescriptorFactory.ENUM_OPTIONS([obj0, obj1, obj2, enum0]);
+  const enum0 = DataEntryFactory.ENUM_OPTIONS([obj0, obj1, obj2]);
+  const enumOptions = DataEntryFactory.ENUM_OPTIONS([obj0, obj1, obj2, enum0]);
   const enumOptionsNode = NodeFactory(enumOptions, null);
   expect(enumOptionsNode.getChildren().length).toEqual(1);
   roundTrip(enumOptionsNode);
@@ -72,15 +72,15 @@ test('EnumOptionsDataEntry with ObjectDataEntries', () => {
 });
 
 test('more complex state tree', () => {
-  const enumA = DescriptorFactory.ENUM(0, 3, 'enumA');
-  const enumB = DescriptorFactory.ENUM(0, 20, 'enumB');
-  const int = DescriptorFactory.INT(0, 0, 100, 'int');
-  const enumOptions = DescriptorFactory.ENUM_OPTIONS([enumA, enumB]);
-  const array = DescriptorFactory.ARRAY(int, 3, 0, 100, 'array');
-  const optional = DescriptorFactory.OPTIONAL([array, null], false, 'optional');
-  const obj = DescriptorFactory.OBJECT([enumOptions, array, optional, enumOptions], 'obj');
-  const objExample = DescriptorFactory.OBJECT([enumOptions, array, optional, obj], 'this object');
-  const version = DescriptorFactory.VERSION(3, 4, 'versionA');
+  const enumA = DataEntryFactory.ENUM(0, 3, 'enumA');
+  const enumB = DataEntryFactory.ENUM(0, 20, 'enumB');
+  const int = DataEntryFactory.INT(0, 0, 100, 'int');
+  const enumOptions = DataEntryFactory.ENUM_OPTIONS([enumA, enumB]);
+  const array = DataEntryFactory.ARRAY(int, 3, 0, 100, 'array');
+  const optional = DataEntryFactory.OPTIONAL([array, null], false, 'optional');
+  const obj = DataEntryFactory.OBJECT([enumOptions, array, optional, enumOptions], 'obj');
+  const objExample = DataEntryFactory.OBJECT([enumOptions, array, optional, obj], 'this object');
+  const version = DataEntryFactory.VERSION(3, 4, 'versionA');
 
   const stateDescriptor = [version, obj, objExample, array];
   const stateNode = GetStateNodeTree(stateDescriptor as any, 'state data object');
@@ -91,8 +91,8 @@ test('more complex state tree', () => {
 });
 
 test('state node and ArrayDataEntry', () => {
-  const int = DescriptorFactory.INT(0, 0, 100, 'int');
-  const array = DescriptorFactory.ARRAY(int, 3, 1, 101, 'array');
+  const int = DataEntryFactory.INT(0, 0, 100, 'int');
+  const array = DataEntryFactory.ARRAY(int, 3, 1, 101, 'array');
   const arrayNode = NodeFactory(array, null);
   expect(arrayNode.getChildren().length).toEqual(3);
   expect(arrayNode.getChildren().map((n) => (n as IntNode).value)).toMatchObject([0, 0, 0]);
