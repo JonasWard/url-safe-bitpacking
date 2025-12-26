@@ -1,5 +1,24 @@
-export const DataTypeValues = ['VERSION', 'BOOLEAN', 'ENUM', 'INT', 'FLOAT', 'ENUM_ARRAY'] as const;
-export const ComplexDataValues = ['OPTIONAL', 'ENUM_OPTIONS', 'ARRAY'] as const;
+// Files defining the data types
 
-export type DataType = (typeof DataTypeValues)[number];
-export type ComplexDataType = (typeof ComplexDataValues)[number];
+import { DataEntry } from '../types';
+
+export const ConstantBitWidthDataTypes = ['VERSION', 'BOOLEAN', 'ENUM', 'INT', 'FLOAT'] as const;
+export const VariableBitWidthDataTypes = ['ENUM_ARRAY', 'OPTIONAL', 'ENUM_OPTIONS', 'ARRAY', 'OBJECT'] as const;
+
+export const HasMappingDataTypes = ['ENUM', 'ENUM_ARRAY', 'ENUM_OPTIONS'] as const;
+export const HasStateBitsDataTypes = ['ENUM_ARRAY', 'OPTIONAL', 'ENUM_OPTIONS', 'ARRAY'] as const;
+
+export const HasChildDataTypes = ['OPTIONAL', 'ENUM_OPTIONS'] as const; // child can be null
+export const HasChildrenDataTypes = ['ARRAY', 'OBJECT'] as const;
+
+export const HasNestedDataTypes = ['OPTIONAL', 'ENUM_OPTIONS', 'ARRAY', 'OBJECT'] as const;
+
+export const ValueUpdateDataTypes = ['VERSION', 'BOOLEAN', 'ENUM', 'INT', 'FLOAT', 'ENUM_ARRAY'] as const;
+export const StateUpdateDataTypes = ['OPTIONAL', 'ENUM_OPTIONS', 'ARRAY'] as const;
+
+export type ValueUpdateType = (typeof ValueUpdateDataTypes)[number];
+export type StateUpdateType = (typeof StateUpdateDataTypes)[number];
+
+export type DataType = (typeof ConstantBitWidthDataTypes)[number] | (typeof VariableBitWidthDataTypes)[number];
+
+export type SpecifiedDataEntry<T extends DataType> = DataEntry & { type: T };
