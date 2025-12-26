@@ -1,3 +1,4 @@
+import { ConstantBitWidthDataTypes } from '@/enums';
 import { dataEntryCorrecting } from '../parsers/parsers';
 import { DataEntry } from '../types/dataEntry';
 
@@ -7,8 +8,11 @@ import { DataEntry } from '../types/dataEntry';
  * @param t - number between 0 and 1
  * @returns updated data entry
  */
-export const interpolateEntryAt: (dataEntry: DataEntry, t: number) => DataEntry = (
-  dataEntry: DataEntry,
+export const interpolateEntryAt: (
+  dataEntry: DataEntry & { type: (typeof ConstantBitWidthDataTypes)[number] },
+  t: number
+) => DataEntry = (
+  dataEntry: DataEntry & { type: (typeof ConstantBitWidthDataTypes)[number] },
   t: number
 ): DataEntry => {
   const localT = Math.max(Math.min(1, t), 0);
@@ -26,7 +30,5 @@ export const interpolateEntryAt: (dataEntry: DataEntry, t: number) => DataEntry 
     case 'FLOAT':
       const v = dataEntry.min + cosT * (dataEntry.max - dataEntry.min);
       return dataEntryCorrecting({ ...dataEntry, value: Math.min(dataEntry.max, Math.max(v, dataEntry.min)) });
-    case 'ENUM_ARRAY':
-      return { ...dataEntry, value: dataEntry.value.map((v) => Math.floor(localT * (v + 0.999))) };
   }
 };
