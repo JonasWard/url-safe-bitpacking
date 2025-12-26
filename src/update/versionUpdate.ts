@@ -1,10 +1,9 @@
-import { VersionDataEntry } from '../types/dataEntry';
+import { VersionDataEntry } from '../types';
+import { constrainUnsignedInt } from './updateUtils';
 
-export const updateValue = (original: VersionDataEntry, update: VersionDataEntry): VersionDataEntry => {
-  const value = Math.min(original.bits ** 2 - 1, update.value);
+export const constrainValue = <T extends VersionDataEntry>(original: T, update: T['value']): T['value'] =>
+  constrainUnsignedInt(update, original.bits ** 2 - 1);
 
-  return {
-    ...original,
-    value,
-  };
-};
+export const updateValue = <T extends VersionDataEntry>(original: T, update: T['value']): T => (
+  (original.value = constrainValue(original, update)), original
+);

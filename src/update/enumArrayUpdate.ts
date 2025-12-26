@@ -1,8 +1,11 @@
-import { EnumArrayDataEntry } from '@/types';
+import { EnumArrayDataEntry } from '../types';
+import { constrainUnsignedInt } from './updateUtils';
 
-export const updateValue = (original: EnumArrayDataEntry, update: EnumArrayDataEntry): EnumArrayDataEntry => {
-  const count = Math.max(Math.min(update.value.length, original.maxCount), original.minCount);
-  original.value = [...new Array(count)].map((_, i) => Math.min(update.value[i] ?? 0, original.max));
-
-  return original;
+export const constrainValue = <T extends EnumArrayDataEntry>(original: T, update: T['value']): T['value'] => {
+  const count = constrainUnsignedInt(update.length, original.maxCount);
+  return [...new Array(count)].map((_, i) => constrainUnsignedInt(update[i] ?? 0, original.max));
 };
+
+export const updateValue = <T extends EnumArrayDataEntry>(original: T, update: T['value']): T => (
+  (original.value = constrainValue(original, update)), original
+);
