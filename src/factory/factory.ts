@@ -13,7 +13,7 @@ import { DataEntry, ObjectDataEntry, VersionDataEntry } from '../types';
 /**
  * Record containing all the factory methods for the different data entry objects
  */
-export const DescriptorFactory = {
+export const DataEntryFactory = {
   FLOAT: createFloat as typeof createFloat,
   INT: createInt as typeof createInt,
   ENUM: createEnum as typeof createEnum,

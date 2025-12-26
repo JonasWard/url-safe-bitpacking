@@ -14,7 +14,9 @@ export {
   ProtectedAttributeNames,
   EnumOptionsType,
   EnumMappingType,
-  PROTECTED_ATTRIBUTE_NAMES
+  PROTECTED_ATTRIBUTE_NAMES,
+  StateDataObject,
+  StateDataObjectValue
 } from './types';
 export {
   getBitsCount,
@@ -37,7 +39,9 @@ export {
   OptionalNode,
   EnumOptionsNode,
   ObjectNode,
-  StateNode
+  StateNode,
+  getStateData
 } from './stateHandling';
 export { interpolateEntryAt, getRelativeValue } from './utils';
+export { DataEntryFactory } from './factory';
 export { getEnumMaxAndMappingFromOptions, getOptionsFromMaxAndMapping } from './factory/utils';
