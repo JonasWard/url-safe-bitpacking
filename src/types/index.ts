@@ -10,3 +10,4 @@ export * from './booleanData';
 export * from './dataEntry';
 export * from './objectData';
 export * from './updateType';
+export * from './stateData';

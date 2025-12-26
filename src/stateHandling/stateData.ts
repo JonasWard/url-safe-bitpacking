@@ -1,41 +1,42 @@
-import { NestedData } from '@/types';
-import { StateDataObject } from '@/types/stateDataEntry';
+import { DataEntry, StateDataObject, StateDataObjectValue } from '../types';
 
-export const getStateData = (state: NestedData): StateDataObject => {
+const getObjectForDataEntries = (entries: DataEntry[]): StateDataObject => {
   const object: StateDataObject = {};
-  state.forEach((item) => {
-    switch (item.type) {
-      case 'BOOLEAN':
-        object[item.name] = item.value;
-        break;
-      case 'INT':
-        object[item.name] = item.value;
-        break;
-      case 'ENUM':
-        object[item.name] = item.mapping[item.value];
-        break;
-      case 'FLOAT':
-        object[item.name] = item.value;
-        break;
-      case 'VERSION':
-        object[item.name] = item.value;
-        break;
-      case 'ENUM_ARRAY':
-        object[item.name] = item.value.map((v) => item.mapping[v]);
-        break;
-      case 'OPTIONAL':
-        object[item.name] = item.value === null ? null : getStateData(item.value);
-        break;
-      case 'ENUM_OPTIONS':
-        object[item.name] = {
-          ...getStateData(item.value),
-          state: item.state
-        };
-        break;
-      case 'ARRAY':
-        object[item.name] = item.value.map(getStateData);
-        break;
-    }
+  entries.forEach((item) => {
+    object[item.name] = getStateData(item);
   });
   return object;
+};
+
+export const getStateData = (entry: DataEntry): StateDataObjectValue => {
+  switch (entry.type) {
+    case 'BOOLEAN':
+    case 'INT':
+    case 'FLOAT':
+    case 'VERSION':
+      return entry.value;
+    case 'ENUM':
+      return entry.mapping[entry.value];
+    case 'ENUM_ARRAY':
+      return entry.value.map((v) => entry.mapping[v]);
+    case 'OPTIONAL':
+      return entry.value === null ? null : getStateData(entry.value);
+    case 'ENUM_OPTIONS':
+      const state = entry.mapping[entry.state];
+      if (entry.value) {
+        switch (entry.value.type) {
+          case 'OBJECT':
+            return {
+              ...(getStateData(entry.value) as StateDataObject),
+              state
+            };
+          default:
+            return { state, value: getStateData(entry.value) };
+        }
+      } else return { state };
+    case 'OBJECT':
+      return getObjectForDataEntries(entry.value);
+    case 'ARRAY':
+      return entry.value.map((v) => getStateData(v));
+  }
 };
