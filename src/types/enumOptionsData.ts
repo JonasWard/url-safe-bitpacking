@@ -1,9 +1,11 @@
-import { NestedData } from './dataEntry';
+import { DataEntry } from './dataEntry';
+import { EnumMappingType } from './enumData';
 
 export type EnumOptionsData = {
   type: 'ENUM_OPTIONS';
   stateBits: number;
   state: number;
-  descriptor: NestedData[];
-  value: NestedData;
+  descriptor: (DataEntry | null)[];
+  mapping: EnumMappingType;
+  value: DataEntry | null;
 };

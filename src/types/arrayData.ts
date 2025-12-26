@@ -1,4 +1,4 @@
-import { NestedData } from './dataEntry';
+import { DataEntry } from './dataEntry';
 
 export type ArrayData = {
   type: 'ARRAY';
@@ -6,6 +6,6 @@ export type ArrayData = {
   maxCount: number;
   stateBits: number;
   state: number;
-  descriptor: NestedData;
-  value: NestedData[];
+  descriptor: DataEntry;
+  value: DataEntry[];
 };

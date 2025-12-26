@@ -19,4 +19,6 @@ export type EnumArrayData = {
   value: number[];
   max: number;
   mapping: EnumMappingType;
+  stateBits: number;
+  state?: 0; // it is directly derived from the length of the value array
 };

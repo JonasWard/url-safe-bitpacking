@@ -1,8 +1,9 @@
-import { NestedData } from './dataEntry';
+import { DataEntry } from './dataEntry';
 
 export type OptionalData = {
   type: 'OPTIONAL';
   state: boolean;
-  descriptor: [NestedData, null] | [null, NestedData];
-  value: NestedData | null;
+  descriptor: [DataEntry, null] | [null, DataEntry];
+  value: DataEntry | null;
+  stateBits: 1;
 };

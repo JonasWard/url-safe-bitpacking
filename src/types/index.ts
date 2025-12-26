@@ -1,4 +1,3 @@
-export * from './stateDataEntry';
 export * from './enumOptionsData';
 export * from './optionalData';
 export * from './arrayData';
@@ -9,3 +8,5 @@ export * from './intData';
 export * from './versionData';
 export * from './booleanData';
 export * from './dataEntry';
+export * from './objectData';
+export * from './updateType';
