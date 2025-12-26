@@ -1,13 +1,12 @@
 import { expect, test } from 'bun:test';
-
 import {
-  base64url,
   convertArbitraryBaseToArbitraryBase,
+  parseBitsToBase64,
+  base64url,
   convertArbitraryBaseToBitString,
   convertBitStringToArbitraryBase,
-  parseBase64ToBits,
-  parseBitsToBase64
-} from '../parsers/parsers';
+  parseBase64ToBits
+} from '../parsers/parserUtils';
 
 const n0to9 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1];
 const n0to9_binary = [

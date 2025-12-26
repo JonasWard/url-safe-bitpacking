@@ -1,7 +1,7 @@
 import { expect, test } from 'bun:test';
 
 import { DescriptorFactory } from '../factory/factory';
-import { dataBitsParser, dataBitsStringifier } from '../parsers';
+import { dataEntryBitsStringifier, dataEntryBitstringParser } from '../parsers';
 
 export const values: [boolean, string][] = [
   [false, '0'],
@@ -9,10 +9,10 @@ export const values: [boolean, string][] = [
 ];
 
 values.forEach(([v, bitString]) =>
-  test(`boolean ${v}`, () => expect(dataBitsStringifier(DescriptorFactory.BOOLEAN(v))).toBe(bitString))
+  test(`boolean ${v}`, () => expect(dataEntryBitsStringifier(DescriptorFactory.BOOLEAN(v))).toBe(bitString))
 );
 
 values.forEach(([v, bitString]) =>
   test(`parsing '${bitString}' as boolean`, () =>
-    expect(dataBitsParser(bitString, DescriptorFactory.BOOLEAN(v)).value).toBe(v))
+    expect(dataEntryBitstringParser(DescriptorFactory.BOOLEAN(v), bitString)[0].value).toBe(v))
 );

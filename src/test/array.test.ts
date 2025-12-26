@@ -1,15 +1,19 @@
 import { expect, test } from 'bun:test';
 
 import { DescriptorFactory } from '../factory/factory';
-import { complexDataStringifier, complexDataEntryBitstringParser } from '../parsers';
-import { ComplexDataEntry, IntDataEntry } from '../types';
-import { updateComplexValue } from '../update';
+import { dataEntryBitsStringifier, dataEntryBitstringParser } from '../parsers';
+import { DataEntry, IntDataEntry } from '../types';
+import { updateStateEntry } from '../update';
+import { VariableBitWidthDataTypes } from '../enums';
 
 const intDefinition = DescriptorFactory.INT(0, 0, 10, 'a number');
-const getIntValueFromRawValues = (vs: number[], def: IntDataEntry, nested?: boolean) =>
-  nested ? vs.map((value) => [{ ...def, value }]) : vs.map((value) => ({ ...def, value }));
-const getComplexDataForValues = <T extends ComplexDataEntry>(c: T, value: T['value'], state: T['state']) =>
-  ({ ...c, value, state } as T);
+const getIntValueFromRawValues = (vs: number[], def: IntDataEntry): IntDataEntry[] =>
+  vs.map((value) => ({ ...def, value }));
+const getComplexDataForValues = <T extends DataEntry & { type: (typeof VariableBitWidthDataTypes)[number] }>(
+  c: T,
+  value: T['value'],
+  state: T['state']
+) => ({ ...c, value, state } as T);
 
 const enumArrayDefinition = DescriptorFactory.ENUM_ARRAY(
   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -29,52 +33,46 @@ const values: [number, number, number, number, number[], string][] = [
 
 test('array_int', () => {
   values.forEach(([minCount, maxCount, initialState, actualState, value, bitString]) => {
-    const complexData = DescriptorFactory.ARRAY([intDefinition], initialState, minCount, maxCount);
+    const complexData = DescriptorFactory.ARRAY(intDefinition, initialState, minCount, maxCount);
     const complexDataWithValues = getComplexDataForValues(
       complexData,
-      getIntValueFromRawValues(value, intDefinition, true),
+      getIntValueFromRawValues(value, intDefinition),
       actualState
     );
 
-    expect(complexDataStringifier(complexDataWithValues)).toBe(bitString);
-    expect(complexDataEntryBitstringParser(bitString, complexData)[0]).toMatchObject(complexDataWithValues);
+    expect(dataEntryBitsStringifier(complexDataWithValues)).toBe(bitString);
+    expect(dataEntryBitstringParser(complexData, bitString)[0]).toMatchObject(complexDataWithValues);
   });
 });
 
 test('array_enum_array', () => {
   values.forEach(([minCount, maxCount, initialState, actualState]) => {
-    const complexData = DescriptorFactory.ARRAY([enumArrayDefinition], initialState, minCount, maxCount);
+    const complexData = DescriptorFactory.ARRAY(enumArrayDefinition, initialState, minCount, maxCount);
 
-    const complexDataWithValues = updateComplexValue(complexData, {
-      ...complexData,
-      state: actualState
-    });
+    const complexDataWithValues = updateStateEntry(complexData, actualState);
 
-    const bitString = complexDataStringifier(complexDataWithValues);
+    const bitString = dataEntryBitsStringifier(complexDataWithValues);
 
-    expect(complexDataStringifier(complexDataWithValues)).toBe(bitString);
-    expect(complexDataEntryBitstringParser(bitString, complexData)[0]).toMatchObject(complexDataWithValues);
+    expect(dataEntryBitsStringifier(complexDataWithValues)).toBe(bitString);
+    expect(dataEntryBitstringParser(complexData, bitString)[0]).toMatchObject(complexDataWithValues);
   });
 });
 
 test('array_in_array', () => {
   values.forEach(([minCount, maxCount, initialState, actualState]) => {
-    const complexData = DescriptorFactory.ARRAY([enumArrayDefinition], initialState, minCount, maxCount);
-    const complexDataNested = DescriptorFactory.ARRAY([complexData], initialState, minCount, maxCount);
-    const complexDataWithValues = updateComplexValue(complexDataNested, {
-      ...complexDataNested,
-      state: actualState
-    });
+    const complexData = DescriptorFactory.ARRAY(enumArrayDefinition, initialState, minCount, maxCount);
+    const complexDataNested = DescriptorFactory.ARRAY(complexData, initialState, minCount, maxCount);
+    const complexDataWithValues = updateStateEntry(complexDataNested, actualState);
 
-    const bitString = complexDataStringifier(complexDataWithValues);
+    const bitString = dataEntryBitsStringifier(complexDataWithValues);
 
-    expect(complexDataStringifier(complexDataWithValues)).toBe(bitString);
-    expect(complexDataEntryBitstringParser(bitString, complexDataNested)[0]).toMatchObject(complexDataWithValues);
+    expect(dataEntryBitsStringifier(complexDataWithValues)).toBe(bitString);
+    expect(dataEntryBitstringParser(complexDataNested, bitString)[0]).toMatchObject(complexDataWithValues);
   });
 });
 
 test('array change_state_value', () => {
   values.forEach(([minCount, maxCount, initialState, actualState]) => {
-    const complexData = DescriptorFactory.ARRAY([intDefinition], initialState, minCount, maxCount);
+    const complexData = DescriptorFactory.ARRAY(intDefinition, initialState, minCount, maxCount);
   });
 });
