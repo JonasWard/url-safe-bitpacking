@@ -1,5 +1,4 @@
-export { DataType, DataTypeValues, ComplexDataType, ComplexDataValues } from './enums';
-export { DescriptorFactory } from './factory';
+export { DataType, ConstantBitWidthDataTypes, VariableBitWidthDataTypes } from './enums';
 export {
   PrecisionRangeType,
   SignificandMaxBits,
@@ -12,29 +11,33 @@ export {
   VersionDataEntry,
   BooleanDataEntry,
   DataEntry,
-  ComplexDataEntry,
-  NestedData,
   ProtectedAttributeNames,
-  StateDescriptor,
-  StateObject,
-  StateDataObject,
-  StateDataEntry,
-  State,
   EnumOptionsType,
   EnumMappingType,
   PROTECTED_ATTRIBUTE_NAMES
 } from './types';
 export {
-  parseBase64ToBits,
   getBitsCount,
-  valueBitsParser,
-  dataBitsParser,
   dataEntryBitstringParser,
   dataEntryCorrecting,
-  dataBitsStringifier,
-  complexDataStringifier,
-  complexDataStateStringifier
+  dataEntryBitsStringifier,
+  parseBase64ToBits
 } from './parsers';
-export { createStateDataObject, getInitialStateFromBase64 } from './stateHandling';
+export {
+  SpecificTypeNode,
+  NodeFactory,
+  GetStateNodeTree,
+  FromState,
+  ArrayNode,
+  BooleanNode,
+  EnumNode,
+  IntNode,
+  FloatNode,
+  EnumArrayNode,
+  OptionalNode,
+  EnumOptionsNode,
+  ObjectNode,
+  StateNode
+} from './stateHandling';
 export { interpolateEntryAt, getRelativeValue } from './utils';
 export { getEnumMaxAndMappingFromOptions, getOptionsFromMaxAndMapping } from './factory/utils';
