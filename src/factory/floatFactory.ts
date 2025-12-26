@@ -2,6 +2,14 @@ import { FloatDataEntry } from '../types';
 import { PrecisionRangeType, SignificandMaxBits } from '../types/floatData';
 import { getBitsForIntegerNumber } from './helperMethod';
 
+export type FloatFactory = (
+  value: number,
+  min?: number,
+  max?: number,
+  precision?: PrecisionRangeType,
+  name?: string
+) => FloatDataEntry;
+
 /**
  * Method to create a float data entry
  * @param value - `number` default value, should be between `min` and `max`
@@ -9,16 +17,8 @@ import { getBitsForIntegerNumber } from './helperMethod';
  * @param max - `number` (default: 1), should be larger than `min`
  * @param precision - `PrecisionRangeType` (default: 2 -> .01),
  * @param name - `string`
- * @param index - `number`
  */
-export const create = (
-  value: number,
-  min: number = 0,
-  max: number = 1,
-  precision: PrecisionRangeType = 2,
-  name: string = '',
-  index: number = -1
-): FloatDataEntry => {
+export const create: FloatFactory = (value, min = 0, max = 1, precision = 2, name = 'a float') => {
   const precisionMultiplier = 10 ** precision;
 
   const roundedMin = Math.floor(min * precisionMultiplier);
@@ -34,7 +34,6 @@ export const create = (
     max: roundedMax / precisionMultiplier,
     precision,
     significand,
-    name,
-    index
+    name
   };
 };

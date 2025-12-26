@@ -1,8 +1,9 @@
 import { BooleanDataEntry } from '../types';
 
-export const create = (value: boolean, name: string = '', index: number = -1): BooleanDataEntry => ({
+export type BooleanFactory = (value: boolean, name?: string) => BooleanDataEntry;
+
+export const create: BooleanFactory = (value, name = 'a boolean') => ({
   value,
   type: 'BOOLEAN',
-  name,
-  index
+  name
 });

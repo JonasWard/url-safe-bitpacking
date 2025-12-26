@@ -1,11 +1,12 @@
-import { NestedData, OptionalDataEntry } from '@/types';
+import { DataEntry, OptionalDataEntry } from '../types';
 
-export const create = (
-  descriptor: [null, NestedData] | [NestedData, null],
-  defaultState: boolean = false,
-  name: string = '',
-  index: number = -1
-): OptionalDataEntry => {
+export type OptionalFactory = (
+  descriptor: [DataEntry, null] | [null, DataEntry],
+  defaultState?: boolean,
+  name?: string
+) => OptionalDataEntry;
+
+export const create: OptionalFactory = (descriptor, defaultState = false, name = 'an optional') => {
   if (descriptor[0] === null && descriptor[1] === null)
     throw new Error('descriptor must have at least one non-null value');
   if (descriptor[0] !== null && descriptor[1] !== null) throw new Error('descriptor must have only one non-null value');
@@ -16,6 +17,6 @@ export const create = (
     descriptor,
     value: JSON.parse(JSON.stringify(defaultState ? descriptor[1] : descriptor[0])),
     name,
-    index
+    stateBits: 1
   };
 };

@@ -1,28 +1,39 @@
-import { EnumArrayDataEntry, EnumOptionsType, IntegerMaxBits } from '@/types';
+import { EnumArrayDataEntry, EnumOptionsType, IntegerMaxBits } from '../types';
 import { getEnumMaxAndMappingFromOptions } from './utils';
+import { getBitsForIntegerNumber } from './helperMethod';
 
-export const create = (
+const minEnumArrayCount = 0;
+const maxOptionsCount = 1024;
+const maxEnumArrayCount = 1024;
+
+export type EnumArrayFactory = (
   value: number[],
   options: EnumOptionsType,
-  minCount: number = 1,
-  maxCount: number = 10,
-  name: string = '',
-  index: number = -1
-): EnumArrayDataEntry => {
+  minCount?: number,
+  maxCount?: number,
+  name?: string
+) => EnumArrayDataEntry;
+
+export const create: EnumArrayFactory = (
+  value,
+  options,
+  minCount = minEnumArrayCount,
+  maxCount = 10,
+  name = 'enum array'
+) => {
   const { max, mapping } = getEnumMaxAndMappingFromOptions(options);
 
   if (!Number.isInteger(max)) throw new Error(`max must be integers, you have given ${max}`);
   if (!Number.isInteger(minCount) || !Number.isInteger(maxCount))
     throw new Error('minCount and maxCount must be integers');
 
-  if (max < 1) throw new Error('must have at least two options');
-  if (max > 2 ** IntegerMaxBits - 1)
-    throw new Error(`maximum allowed options is 1024, you have given ${max + 1} options`);
+  if (max < 1) throw new Error('must have at least one option');
+  if (max > maxOptionsCount) throw new Error(`maximum allowed options is 1024, you have given ${max + 1} options`);
 
   // are minCount and maxCount in the proper order
   minCount = Math.min(minCount, maxCount);
   maxCount = Math.max(minCount, maxCount);
-  if (minCount < 1) throw new Error('minCount must be at least one');
+  if (minCount < 0) throw new Error("minCount can't be negative");
   if (maxCount - minCount < 0)
     throw new Error(
       `count range length must be positive, given count range length is ${Math.abs(maxCount - minCount)}`
@@ -44,6 +55,8 @@ export const create = (
       `value length must be between minCount and maxCount, ${value.length} is not between ${minCount} and ${maxCount}`
     );
 
+  const stateBits = getBitsForIntegerNumber(maxCount - minCount + 1, IntegerMaxBits);
+
   return {
     type: 'ENUM_ARRAY',
     minCount,
@@ -51,7 +64,7 @@ export const create = (
     value: JSON.parse(JSON.stringify(value)),
     max,
     name,
-    index,
-    mapping
+    mapping,
+    stateBits
   };
 };

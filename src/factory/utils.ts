@@ -1,4 +1,4 @@
-import { EnumMappingType, EnumOptionsType } from '@/types';
+import { EnumMappingType, EnumOptionsType } from '../types';
 
 /**
  * Method to get the max and mapping from the options
