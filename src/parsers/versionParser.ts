@@ -1,5 +1,6 @@
 import { VersionData } from '../types/versionData';
-import { rawValueParser as rawIntParser, rawIntStringifier } from './intParser';
+import { rawValueParser as rawIntParser } from './parserUtils';
+import { rawIntStringifier } from './parserUtils';
 
 export const getBitsCount = (versionData: VersionData): number => versionData.bits;
 

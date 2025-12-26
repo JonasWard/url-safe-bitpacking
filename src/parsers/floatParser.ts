@@ -1,5 +1,6 @@
 import { FloatData, PrecisionRangeType } from '../types/floatData';
-import { rawValueParser as rawIntParser, rawIntStringifier } from './intParser';
+import { rawValueParser as rawIntParser } from './parserUtils';
+import { rawIntStringifier } from './parserUtils';
 
 export const getBitsCount = (floatData: FloatData): number => floatData.significand;
 

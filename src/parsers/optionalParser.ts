@@ -1,24 +1,27 @@
-import { OptionalDataEntry } from '@/types';
-import { nestedDataBitstringParser, nestedDataStringifier } from './parsers';
+import { OptionalDataEntry } from '../types';
+import { dataEntryBitsStringifier, dataEntryBitstringParser, getContentBitsCountForDataEntry } from './parsers';
 
 const getState = (bitString: string): number => Number(bitString.slice(0, 1));
 
-export const rawParser = (bitString: string, optionalData: OptionalDataEntry): [OptionalDataEntry, string] => {
+export const rawParser = (optionalData: OptionalDataEntry, bitString: string): [OptionalDataEntry, string] => {
   const descriptorIndex = getState(bitString);
 
-  bitString = bitString.slice(1);
+  bitString = bitString.slice(optionalData.stateBits);
 
   const [value, remainingBitstring] = optionalData.descriptor[descriptorIndex]
-    ? nestedDataBitstringParser(bitString, optionalData.descriptor[descriptorIndex])
+    ? dataEntryBitstringParser(optionalData.descriptor[descriptorIndex], bitString)
     : [null, bitString];
   const state = Boolean(descriptorIndex);
 
   return [{ ...optionalData, value, state }, remainingBitstring];
 };
 
-export const rawStateStringifier = (optionalData: OptionalDataEntry): string => (optionalData.state ? '1' : '0');
+export const rawStateStringifier = (state: OptionalDataEntry['state']): string => (state ? '1' : '0');
 
 export const rawStringifier = (optionalData: OptionalDataEntry): string =>
   optionalData.value === null
-    ? rawStateStringifier(optionalData)
-    : rawStateStringifier(optionalData) + nestedDataStringifier(optionalData.value);
+    ? rawStateStringifier(optionalData.state)
+    : rawStateStringifier(optionalData.state) + dataEntryBitsStringifier(optionalData.value);
+
+export const getContentBitsCountForValue = (optionalData: OptionalDataEntry['value']): number =>
+  optionalData ? getContentBitsCountForDataEntry(optionalData) : 0;
