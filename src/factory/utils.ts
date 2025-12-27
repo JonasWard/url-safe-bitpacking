@@ -1,4 +1,79 @@
-import { EnumMappingType, EnumOptionsType } from '../types';
+import { DataType } from '@/enums';
+import { EnumMappingType, EnumOptionsType, PrecisionRange, PrecisionRangeType } from '../types';
+
+/**
+ * Method to validate whether the bitscount work for a given state count and bitwidth
+ */
+const validateBitsCount = (stateCount: number, maxBitWidth: number, name: string, type: DataType): number => {
+  const bitCountForStateCount = Math.ceil(Math.log2(stateCount));
+  if (bitCountForStateCount > maxBitWidth)
+    throw new Error(
+      `Cannot store ${stateCount} state in ${maxBitWidth} bits for ${name} ${type} you would need ${bitCountForStateCount} bits`
+    );
+  return bitCountForStateCount;
+};
+
+/**
+ * Method to validate the state of an unsigned int
+ */
+export const validateUnsignedInt = (
+  min: number | undefined,
+  max: number,
+  defaultValue: number,
+  name: string,
+  type: DataType,
+  maxBits: number
+): { min: number; value: number; max: number; bitwidth: number } => {
+  if (min === undefined || min < 0) min = 0;
+  if (!Number.isInteger(min)) min = Math.floor(min); // rounding min to an integer
+  if (!Number.isInteger(max)) max = Math.floor(max); // rounding max to an integer
+  [min, max] = [min, max].sort((a, b) => a - b); // sorting min and max
+  const bitwidth = validateBitsCount(max - min + 1, maxBits, name, type);
+  if (!Number.isInteger(defaultValue)) defaultValue = Math.floor(defaultValue); // rounding defaultValue to an integer
+  return { min, value: Math.max(min, Math.min(defaultValue, max)), max, bitwidth };
+};
+
+/**
+ * Method to validate the state of a signed int
+ */
+export const validateSignedInt = (
+  min: number,
+  max: number,
+  defaultValue: number,
+  name: string,
+  type: DataType,
+  maxBits: number
+): { min: number; value: number; max: number; bitwidth: number } => {
+  if (!Number.isInteger(min)) min = Math.floor(min);
+  if (!Number.isInteger(max)) max = Math.floor(max);
+  if (!Number.isInteger(defaultValue)) defaultValue = Math.floor(defaultValue);
+  [min, max] = [min, max].sort((a, b) => a - b); // sorting min and max
+  const bitwidth = validateBitsCount(max - min + 1, maxBits, name, type);
+  return { min, value: Math.max(min, Math.min(Math.round(defaultValue), max)), max, bitwidth };
+};
+
+/**
+ * Method to validate FLOAT
+ */
+export const validateFloat = (
+  min: number,
+  max: number,
+  defaultValue: number,
+  precision: PrecisionRangeType,
+  name: string,
+  type: DataType,
+  maxBits: number
+): { min: number; value: number; max: number; bitwidth: number } => {
+  if (!PrecisionRange.includes(precision)) throw new Error(`Precision ${precision} is not valid for ${name} ${type}`);
+  const precisionMultiplier = 10 ** precision;
+  min = Math.floor(min * precisionMultiplier);
+  max = Math.floor(max * precisionMultiplier);
+  [min, max] = [min, max].sort((a, b) => a - b); // sorting min and max
+  const bitwidth = validateBitsCount(max - min + 1, maxBits, name, type);
+  [min, max] = [min, max].map((v) => v / precisionMultiplier);
+  const value = Math.max(min, Math.min(Math.round(defaultValue * precisionMultiplier) / precisionMultiplier, max));
+  return { min, value, max, bitwidth };
+};
 
 /**
  * Method to get the max and mapping from the options
