@@ -220,8 +220,10 @@ export class EnumOptionsNode extends ComplexStateNodes<EnumOptionsDataEntry> {
   getStateBits = (): string => enumOptionsStateStringifier(this.state, this.descriptor.stateBits);
   getValueBits = (): string => (this.child ? this.child.bitstring : '');
 
-  private initializedChild = (): SpecificTypeNode | null =>
-    this.descriptor.descriptor[this.state] ? NodeFactory(this.descriptor.descriptor[this.state]!, this) : null;
+  private initializedChild = (): SpecificTypeNode | null => {
+    const validatedEntry = validateDataEntry(this.descriptor.descriptor[this.state], this.descriptor.value);
+    return validatedEntry ? NodeFactory(validatedEntry, this) : null;
+  };
 
   updateState = (newState: EnumOptionsDataEntry['state']): void => {
     const constrainedNewState = constrainStateEnumOptions(this.descriptor.descriptor.length, newState);
