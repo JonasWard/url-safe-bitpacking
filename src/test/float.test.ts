@@ -4,6 +4,27 @@ import { DataEntryFactory } from '../factory/factory';
 import { dataEntryBitsStringifier as dataEntryBitsStringifier, dataEntryBitstringParser } from '../parsers';
 import { PrecisionRangeType } from '../types';
 
+// bitwidth testing
+const minMaxPrecisionBitwidth = [
+  [0, 0, 0, 0],
+  [0, 1, 0, 1],
+  [0, 1, 1, 4],
+  [-1, 1, 1, 5],
+  [0, 1, 2, 7],
+  [-1, 1, 2, 8],
+  [0, 1, 3, 10],
+  [-1, 1, 3, 11],
+  [0, 1, 4, 14],
+  [-1, 1, 4, 15],
+] as const;
+
+minMaxPrecisionBitwidth.forEach(([min, max, precision, bitwidth]) =>
+  test(`float ${min}, min: ${min}, max: ${max}, precision: ${precision}, bits: ${bitwidth}`, () => {
+    const entry = DataEntryFactory.FLOAT(0, min, max, precision);
+    expect(entry.significand).toBe(bitwidth);
+  })
+);
+
 export const values: [number, number, number, PrecisionRangeType, string][] = [
   [1, 0, 1, 0, '1'], // max
   [0, 0, 1, 1, '0000'], // min
@@ -11,8 +32,8 @@ export const values: [number, number, number, PrecisionRangeType, string][] = [
   [0.4, 0, 1, 1, '0100'], // middle
   [0.8, 0, 1, 1, '1000'], // middle
   [1, 0, 1, 1, '1010'], // max
-  [-10, -10, 10, 0, '00000'], // min
-  [0, -10, 10, 1, '01100100'], // middle
+  [-10, -10, 10, 0, '00000'],
+  [0, -10, 10, 1, '01100100'], // min // middle
   [10, -10, 10, 1, '11001000'], // max
   [0, 0, 15, 1, '00000000'], // min
   [3, 0, 15, 1, '00011110'], // min
@@ -28,7 +49,7 @@ export const values: [number, number, number, PrecisionRangeType, string][] = [
 ];
 
 values.forEach(([v, min, max, precision, bitString]) =>
-  test(`float ${v}, min: ${min}, max: ${max}, precision: ${precision}`, () =>
+  test.only(`float ${v}, min: ${min}, max: ${max}, precision: ${precision}`, () =>
     expect(dataEntryBitsStringifier(DataEntryFactory.FLOAT(v, min, max, precision))).toBe(bitString))
 );
 
