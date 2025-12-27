@@ -19,6 +19,7 @@ export {
   OptionalDataEntry,
   EnumOptionsDataEntry,
   ArrayDataEntry,
+  PrecisionRange,
   PrecisionRangeType,
   SignificandMaxBits,
   IntegerMaxBits,
