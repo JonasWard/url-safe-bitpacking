@@ -262,8 +262,9 @@ export class ArrayNode extends ComplexStateNodes<ArrayDataEntry> {
     this.bitstring = this.getBitString();
   }
 
+  // ToDo also handle count of children
   private initializedChildren = (): SpecificTypeNode[] =>
-    this.descriptor.value.map((child) => NodeFactory(child, this));
+    this.descriptor.value.map((entry) => NodeFactory(validateDataEntry(this.descriptor.descriptor, entry)!, this));
 
   getChildren = (): SpecificTypeNode[] => this.children;
 
