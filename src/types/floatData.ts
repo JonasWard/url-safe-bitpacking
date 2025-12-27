@@ -1,4 +1,5 @@
-export type PrecisionRangeType = -3 | -2 | -1 | 0 | 1 | 2 | 3;
+export const PrecisionRange = [-3, -2, -1, 0, 1, 2, 3, 4] as const;
+export type PrecisionRangeType = (typeof PrecisionRange)[number];
 export const SignificandMaxBits = 20; // 1 million
 
 /**
