@@ -29,10 +29,10 @@ From a memory footprint perspective there are two types of attributes in an obje
 | Predefined Bitwidth      | **&check;** | **&check;** | **&check;** | **&check;** | **&check;** | &cross;        | &cross;      | &cross;          | &cross;     | &cross;     |
 | Has State Bit            | &cross;     | &cross;     | &cross;     | &cross;     | &cross;     | **&check;**    | **&check;**  | **&check;**      | **&check;** | &cross;     |
 | Min Bitwidth             | `4`         | `1`         | `1`         | `0`         | `0`         | `1`            | –            | –                | –           | –           |
-| Max Bitwidth             | `10`        | `1`         | `10`        | `21`        | `21`        | `10`           | –            | –                | –           | –           |
+| Max Bitwidth             | `10`        | `1`         | `8`        | `10`        | `21`        | `8`           | –            | –                | –           | –           |
 | Min State Bitwidth       | –           | –           | –           | –           | –           | `0`            | `1`          | `1`              | `0`         | –           |
 | Max State Bitwidth       | –           | –           | –           | –           | –           | `10`           | `1`          | `10`             | `10`        | –           |
-| Max Available States     | `1024`      | `2`         | `1024`      | `2097152`   | `2097152`   | `1024 x 1024`  | `2`          | `1024`           | `1024`      | `0`         |
+| Max Available States     | `1024`      | `2`         | `256`      | `1024`   | `2097152`   | `1024 x 256`  | `2`          | `256`           | `1024`      | -         |
 | Has Mapping              | &cross;     | &cross;     | **&check;** | &cross;     | &cross;     | **&check;**    | &cross;      | **&check;**      | &cross;     | &cross;     |
 | Has Nested Objects       | &cross;     | &cross;     | &cross;     | &cross;     | &cross;     | &cross;        | **&check;**  | **&check;**      | **&check;** | **&check;** |
 | **UPDATING**             | **VERSION** | **BOOLEAN** | **ENUM**    | **INT**     | **FLOAT**   | **ENUM_ARRAY** | **OPTIONAL** | **ENUM_OPTIONS** | **ARRAY**   | **OBJECT**  |
