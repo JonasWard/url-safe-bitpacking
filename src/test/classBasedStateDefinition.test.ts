@@ -12,15 +12,12 @@ import {
 } from '../stateHandling/stateNode';
 
 const roundTrip = (node: SpecificTypeNode) => {
-  const stateDescriptor = [node.toDataEntry() as any] as any;
-  expect(FromState(stateDescriptor, 'state data object', node.getBase64String()).getBase64String()).toEqual(
-    node.getBase64String()
-  );
-  expect(FromState(stateDescriptor, 'state data object', node.getBase64String()).toDataEntry().value[0]).toMatchObject(
-    node.toDataEntry()
-  );
-  console.log(node.toString());
-  console.log(FromState(stateDescriptor, 'state data object', node.getBase64String()).toString());
+  const dEntry = node.toDataEntry();
+  const stateDescriptor = [dEntry] as any;
+  const base64 = node.getBase64String();
+  // console.log(base64, FromState(stateDescriptor, 'state data object', base64).getBase64String());
+  expect(FromState(stateDescriptor, 'state data object', base64).getBase64String()).toEqual(base64);
+  expect(FromState(stateDescriptor, 'state data object', base64).toDataEntry().value[0]).toMatchObject(dEntry);
 };
 
 test('EnumOptionsDataEntry', () => {
@@ -39,6 +36,33 @@ test('EnumOptionsDataEntry', () => {
   enumOptionsNode.updateState(0);
   roundTrip(enumOptionsNode);
   expect((enumOptionsNode.getChildren()[0] as EnumNode).value).toEqual(4);
+});
+
+test('ObjectDataEntries', () => {
+  const enumA = DataEntryFactory.ENUM(2, 5, 'enumA');
+  const enumB = DataEntryFactory.ENUM(4, 25, 'enumB');
+  const enumC = DataEntryFactory.ENUM(3, 25, 'enumC');
+  const obj = DataEntryFactory.OBJECT([enumA, enumB, enumC], 'obj');
+  const enumOptionsNode = NodeFactory(obj, null);
+  roundTrip(enumOptionsNode);
+  (enumOptionsNode.getChildren()[0] as EnumNode).updateValue(3);
+  (enumOptionsNode.getChildren()[1] as EnumNode).updateValue(10);
+  (enumOptionsNode.getChildren()[2] as EnumNode).updateValue(27);
+  roundTrip(enumOptionsNode);
+});
+
+test('ObjectDataEntries', () => {
+  const enumA = DataEntryFactory.ENUM(2, 5, 'enumA');
+  const enumB = DataEntryFactory.ENUM(4, 25, 'enumB');
+  const enumC = DataEntryFactory.ENUM(3, 25, 'enumC');
+  const obj = DataEntryFactory.OBJECT([enumA, enumB, enumC], 'obj');
+  const obj1 = DataEntryFactory.OBJECT([obj], 'obj1');
+  const enumOptionsNode = NodeFactory(obj1, null);
+  roundTrip(enumOptionsNode);
+  ((enumOptionsNode.getChildren()[0] as ObjectNode).getChildren()[0] as EnumNode).updateValue(3);
+  ((enumOptionsNode.getChildren()[0] as ObjectNode).getChildren()[1] as EnumNode).updateValue(10);
+  ((enumOptionsNode.getChildren()[0] as ObjectNode).getChildren()[2] as EnumNode).updateValue(27);
+  roundTrip(enumOptionsNode);
 });
 
 test('EnumOptionsDataEntry with ObjectDataEntries', () => {
@@ -65,7 +89,7 @@ test('EnumOptionsDataEntry with ObjectDataEntries', () => {
   enumOptionsNode.updateState(0);
   roundTrip(enumOptionsNode);
   expect((enumOptionsNode.getChildren()[0] as ObjectNode).getChildren().length).toEqual(2);
-  ((enumOptionsNode.getChildren()[0] as ObjectNode).getChildren()[0] as EnumNode).updateValue(15);
+  ((enumOptionsNode.getChildren()[0] as ObjectNode).getChildren()[0] as EnumNode).updateValue(5);
   roundTrip(enumOptionsNode);
   enumOptionsNode.updateState(1);
   roundTrip(enumOptionsNode);
