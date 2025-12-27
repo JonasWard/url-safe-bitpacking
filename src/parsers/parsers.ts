@@ -1,9 +1,4 @@
-import {
-  ConstantBitWidthDataTypes,
-  HasStateBitsDataTypes,
-  SpecifiedDataEntry,
-  VariableBitWidthDataTypes
-} from '../enums/dataTypes';
+import { ConstantBitWidthDataTypes, HasStateBitsDataTypes, SpecifiedDataEntry } from '../enums/dataTypes';
 import { DataEntry, SimpleDataEntry } from '../types/dataEntry';
 import * as floatParser from './floatParser';
 import * as intParser from './intParser';
