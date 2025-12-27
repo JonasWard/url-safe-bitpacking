@@ -18,7 +18,7 @@ import * as objectParser from './objectParser';
 
 export const getStateBitsCountForDataEntry = (entry: DataEntry): number => {
   if (ConstantBitWidthDataTypes.includes(entry.type as (typeof ConstantBitWidthDataTypes)[number])) return 0;
-  return (entry as DataEntry & { type: (typeof VariableBitWidthDataTypes)[number] }).stateBits;
+  return (entry as DataEntry & { type: (typeof HasStateBitsDataTypes)[number] }).stateBits;
 };
 
 export const getStateBitsForDataEntry = (entry: SpecifiedDataEntry<(typeof HasStateBitsDataTypes)[number]>): string => {

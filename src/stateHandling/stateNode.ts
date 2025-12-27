@@ -323,8 +323,7 @@ export class ObjectNode extends StateNode {
   toDataEntry = (): ObjectDataEntry => ({
     ...this.descriptor,
     name: this.name,
-    value: this.children.map((child) => child.toDataEntry()),
-    stateBits: 0
+    value: this.children.map((child) => child.toDataEntry())
   });
 }
 

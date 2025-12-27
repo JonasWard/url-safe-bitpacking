@@ -4,12 +4,12 @@ import { DataEntryFactory } from '../factory/factory';
 import { dataEntryBitsStringifier, dataEntryBitstringParser } from '../parsers';
 import { DataEntry, IntDataEntry } from '../types';
 import { updateStateEntry } from '../update';
-import { VariableBitWidthDataTypes } from '../enums';
+import { HasStateBitsDataTypes } from '../enums';
 
 const intDefinition = DataEntryFactory.INT(0, 0, 10, 'a number');
 const getIntValueFromRawValues = (vs: number[], def: IntDataEntry): IntDataEntry[] =>
   vs.map((value) => ({ ...def, value }));
-const getComplexDataForValues = <T extends DataEntry & { type: (typeof VariableBitWidthDataTypes)[number] }>(
+const getComplexDataForValues = <T extends DataEntry & { type: (typeof HasStateBitsDataTypes)[number] }>(
   c: T,
   value: T['value'],
   state: T['state']
