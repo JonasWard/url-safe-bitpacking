@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test';
 
-import { DescriptorFactory } from '../factory/factory';
+import { DataEntryFactory } from '../factory/factory';
 import { dataEntryBitsStringifier as dataEntryBitsStringifier, dataEntryBitstringParser } from '../parsers';
 import { PrecisionRangeType } from '../types';
 
@@ -29,10 +29,10 @@ export const values: [number, number, number, PrecisionRangeType, string][] = [
 
 values.forEach(([v, min, max, precision, bitString]) =>
   test(`float ${v}, min: ${min}, max: ${max}, precision: ${precision}`, () =>
-    expect(dataEntryBitsStringifier(DescriptorFactory.FLOAT(v, min, max, precision))).toBe(bitString))
+    expect(dataEntryBitsStringifier(DataEntryFactory.FLOAT(v, min, max, precision))).toBe(bitString))
 );
 
 values.forEach(([v, min, max, precision, bitString]) =>
   test(`parsing '${bitString}' as float`, () =>
-    expect(dataEntryBitstringParser(DescriptorFactory.FLOAT(v, min, max, precision), bitString)[0].value).toBe(v))
+    expect(dataEntryBitstringParser(DataEntryFactory.FLOAT(v, min, max, precision), bitString)[0].value).toBe(v))
 );

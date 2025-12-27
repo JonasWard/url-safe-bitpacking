@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test';
 
-import { DescriptorFactory } from '../factory/factory';
+import { DataEntryFactory } from '../factory/factory';
 import { dataEntryBitsStringifier, dataEntryBitstringParser } from '../parsers';
 
 export const values: [number, number, number, string][] = [
@@ -27,10 +27,10 @@ export const values: [number, number, number, string][] = [
 
 values.forEach(([v, min, max, bitString]) =>
   test(`int ${v}, min: ${min}, max: ${max}`, () =>
-    expect(dataEntryBitsStringifier(DescriptorFactory.INT(v, min, max))).toBe(bitString))
+    expect(dataEntryBitsStringifier(DataEntryFactory.INT(v, min, max))).toBe(bitString))
 );
 
 values.forEach(([v, min, max, bitString]) =>
   test(`parsing '${bitString}' as int`, () =>
-    expect(dataEntryBitstringParser(DescriptorFactory.INT(v, min, max), bitString)[0].value).toBe(v))
+    expect(dataEntryBitstringParser(DataEntryFactory.INT(v, min, max), bitString)[0].value).toBe(v))
 );

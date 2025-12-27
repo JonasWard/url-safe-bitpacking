@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test';
 
-import { DescriptorFactory } from '../factory/factory';
+import { DataEntryFactory } from '../factory/factory';
 import { dataEntryBitsStringifier, dataEntryBitstringParser } from '../parsers';
 import { VersionRangeType } from '../types';
 
@@ -21,10 +21,10 @@ export const values: [number, VersionRangeType, string][] = [
 
 values.forEach(([v, bitWidth, bitString]) =>
   test(`version ${v}, bit-width: ${bitWidth}`, () =>
-    expect(dataEntryBitsStringifier(DescriptorFactory.VERSION(v, bitWidth))).toBe(bitString))
+    expect(dataEntryBitsStringifier(DataEntryFactory.VERSION(v, bitWidth))).toBe(bitString))
 );
 
 values.forEach(([v, bitWidth, bitString]) =>
   test(`parsing '${bitString}' as version`, () =>
-    expect(dataEntryBitstringParser(DescriptorFactory.VERSION(v, bitWidth), bitString)[0].value).toBe(v))
+    expect(dataEntryBitstringParser(DataEntryFactory.VERSION(v, bitWidth), bitString)[0].value).toBe(v))
 );

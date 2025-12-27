@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test';
 
-import { DescriptorFactory } from '../factory/factory';
+import { DataEntryFactory } from '../factory/factory';
 import { dataEntryBitsStringifier, dataEntryBitstringParser } from '../parsers';
 
 /**
@@ -26,12 +26,12 @@ export const values: [number[], number, number, number, string][] = [
 
 values.forEach(([value, max, minCount, maxCount, bitString]) =>
   test(`enum_array ${value}`, () =>
-    expect(dataEntryBitsStringifier(DescriptorFactory.ENUM_ARRAY(value, max, minCount, maxCount))).toBe(bitString))
+    expect(dataEntryBitsStringifier(DataEntryFactory.ENUM_ARRAY(value, max, minCount, maxCount))).toBe(bitString))
 );
 
 values.forEach(([value, max, minCount, maxCount, bitString]) =>
   test(`parsing '${bitString}' as enum_array`, () =>
     expect(
-      dataEntryBitstringParser(DescriptorFactory.ENUM_ARRAY(value, max, minCount, maxCount), bitString)[0].value
+      dataEntryBitstringParser(DataEntryFactory.ENUM_ARRAY(value, max, minCount, maxCount), bitString)[0].value
     ).toMatchObject(value))
 );
