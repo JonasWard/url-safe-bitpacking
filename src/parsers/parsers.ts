@@ -1,4 +1,4 @@
-import { ConstantBitWidthDataTypes, HasStateBitsDataTypes, SpecifiedDataEntry } from '../enums/dataTypes';
+import { ConstantBitWidthDataTypes, HasStateBitsDataTypes } from '../enums/dataTypes';
 import { DataEntry, SimpleDataEntry } from '../types/dataEntry';
 import * as floatParser from './floatParser';
 import * as intParser from './intParser';
@@ -16,7 +16,9 @@ export const getStateBitsCountForDataEntry = (entry: DataEntry): number => {
   return (entry as DataEntry & { type: (typeof HasStateBitsDataTypes)[number] }).stateBits;
 };
 
-export const getStateBitsForDataEntry = (entry: SpecifiedDataEntry<(typeof HasStateBitsDataTypes)[number]>): string => {
+export const getStateBitsForDataEntry = (
+  entry: DataEntry & { type: (typeof HasStateBitsDataTypes)[number] }
+): string => {
   switch (entry.type) {
     case 'ENUM_ARRAY':
       return enumArrayParser.rawStateStringifier(entry.value, entry.minCount, entry.stateBits);

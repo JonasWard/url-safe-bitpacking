@@ -16,9 +16,4 @@ export const HasNestedDataTypes = ['OPTIONAL', 'ENUM_OPTIONS', 'ARRAY', 'OBJECT'
 export const ValueUpdateDataTypes = ['VERSION', 'BOOLEAN', 'ENUM', 'INT', 'FLOAT', 'ENUM_ARRAY'] as const;
 export const StateUpdateDataTypes = ['OPTIONAL', 'ENUM_OPTIONS', 'ARRAY'] as const;
 
-export type ValueUpdateType = (typeof ValueUpdateDataTypes)[number];
-export type StateUpdateType = (typeof StateUpdateDataTypes)[number];
-
 export type DataType = (typeof ConstantBitWidthDataTypes)[number] | (typeof VariableBitWidthDataTypes)[number];
-
-export type SpecifiedDataEntry<T extends DataType> = DataEntry & { type: T };
