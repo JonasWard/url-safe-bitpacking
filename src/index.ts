@@ -1,4 +1,13 @@
-export { DataType, ConstantBitWidthDataTypes, VariableBitWidthDataTypes } from './enums';
+export {
+  DataType,
+  HasMappingDataTypes,
+  HasStateBitsDataTypes,
+  HasChildDataTypes,
+  HasChildrenDataTypes,
+  HasNestedDataTypes,
+  ValueUpdateDataTypes,
+  StateUpdateDataTypes
+} from './enums';
 export {
   VersionDataEntry,
   BooleanDataEntry,
