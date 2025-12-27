@@ -7,7 +7,6 @@ export const create: ObjectFactory = (descriptor, name = 'an object') => {
     type: 'OBJECT',
     descriptor,
     value: descriptor,
-    name,
-    stateBits: 0
+    name
   };
 };
