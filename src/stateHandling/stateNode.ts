@@ -297,7 +297,7 @@ export class ArrayNode extends ComplexStateNodes<ArrayDataEntry> {
 }
 
 export class ObjectNode extends StateNode {
-  private descriptor: ObjectDataEntry;
+  descriptor: ObjectDataEntry;
   private children: SpecificTypeNode[];
 
   constructor(entry: ObjectDataEntry, parent: SpecificTypeNode | null) {
