@@ -91,12 +91,6 @@ const simpleFromValueParser = <T extends SimpleDataEntry>(bitString: string, ent
   }
 };
 
-export const dataEntryBitstringParser = <T extends DataEntry>(entry: T, bitString: string): [T, string] => {
-  const result = _dataEntryBitstringParser(entry, bitString);
-  // console.log(entry.type, entry.name, result[1]);
-  return result;
-};
-
 /**
  * Method that parses a bitstring into a value
  *
@@ -104,7 +98,7 @@ export const dataEntryBitstringParser = <T extends DataEntry>(entry: T, bitStrin
  * @param entry - `DataEntry` that represents the data entry to parse
  * @returns `number` | `boolean` that represents the parsed value
  */
-const _dataEntryBitstringParser = <T extends DataEntry>(entry: T, bitString: string): [T, string] => {
+export const dataEntryBitstringParser = <T extends DataEntry>(entry: T, bitString: string): [T, string] => {
   // console.log(entry.type, entry.name, bitString);
   switch (entry.type) {
     case 'BOOLEAN':
