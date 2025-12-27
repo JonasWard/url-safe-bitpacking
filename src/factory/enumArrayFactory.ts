@@ -1,10 +1,6 @@
-import { EnumArrayDataEntry, EnumOptionsType, IntegerMaxBits } from '../types';
-import { getEnumMaxAndMappingFromOptions } from './utils';
+import { EnumArrayDataEntry, EnumMaxBits, EnumOptionsType, IntegerMaxBits } from '../types';
+import { getEnumMaxAndMappingFromOptions, validateUnsignedInt } from './utils';
 import { getBitsForIntegerNumber } from './helperMethod';
-
-const minEnumArrayCount = 0;
-const maxOptionsCount = 1024;
-const maxEnumArrayCount = 1024;
 
 export type EnumArrayFactory = (
   value: number[],
@@ -14,57 +10,15 @@ export type EnumArrayFactory = (
   name?: string
 ) => EnumArrayDataEntry;
 
-export const create: EnumArrayFactory = (
-  value,
-  options,
-  minCount = minEnumArrayCount,
-  maxCount = 10,
-  name = 'enum array'
-) => {
+export const create: EnumArrayFactory = (value, options, minCount = 0, maxCount = 10, name = 'enum array') => {
   const { max, mapping } = getEnumMaxAndMappingFromOptions(options);
+  const r = validateUnsignedInt(minCount, maxCount, value.length, name, 'ENUM_ARRAY', IntegerMaxBits);
 
-  if (!Number.isInteger(max)) throw new Error(`max must be integers, you have given ${max}`);
-  if (!Number.isInteger(minCount) || !Number.isInteger(maxCount))
-    throw new Error('minCount and maxCount must be integers');
+  // are all the entries less than max
+  value = Array.from(
+    { length: r.value },
+    (_, i) => validateUnsignedInt(0, max, value[i] ?? 0, `${name}[${i}]`, 'ENUM_ARRAY', EnumMaxBits).value
+  );
 
-  if (max < 1) throw new Error('must have at least one option');
-  if (max > maxOptionsCount) throw new Error(`maximum allowed options is 1024, you have given ${max + 1} options`);
-
-  // are minCount and maxCount in the proper order
-  minCount = Math.min(minCount, maxCount);
-  maxCount = Math.max(minCount, maxCount);
-  if (minCount < 0) throw new Error("minCount can't be negative");
-  if (maxCount - minCount < 0)
-    throw new Error(
-      `count range length must be positive, given count range length is ${Math.abs(maxCount - minCount)}`
-    );
-  if (Math.abs(maxCount - minCount) > 2 ** IntegerMaxBits - 1)
-    throw new Error(
-      `count range length must be less than 1024, given count range length is ${Math.abs(maxCount - minCount)}`
-    );
-
-  // are all the entries in value
-  value.forEach((v, i) => {
-    if (!Number.isInteger(v)) throw new Error(`all entries must be integers, index ${i} (${v}) is not`);
-    if (v > max) throw new Error(`all entries must be within the range ${0} - ${max}, index ${i} (${v}) is not`);
-  });
-
-  // are the values provided within the range of max and min count
-  if (value.length < minCount || value.length > maxCount)
-    throw new Error(
-      `value length must be between minCount and maxCount, ${value.length} is not between ${minCount} and ${maxCount}`
-    );
-
-  const stateBits = getBitsForIntegerNumber(maxCount - minCount + 1, IntegerMaxBits);
-
-  return {
-    type: 'ENUM_ARRAY',
-    minCount,
-    maxCount,
-    value: JSON.parse(JSON.stringify(value)),
-    max,
-    name,
-    mapping,
-    stateBits
-  };
+  return { type: 'ENUM_ARRAY', minCount: r.min, maxCount: r.max, value, max, name, mapping, stateBits: r.bitwidth };
 };

@@ -1,6 +1,6 @@
 import { FloatDataEntry } from '../types';
 import { PrecisionRangeType, SignificandMaxBits } from '../types/floatData';
-import { getBitsForIntegerNumber } from './helperMethod';
+import { validateFloat } from './utils';
 
 export type FloatFactory = (
   value: number,
@@ -19,21 +19,6 @@ export type FloatFactory = (
  * @param name - `string`
  */
 export const create: FloatFactory = (value, min = 0, max = 1, precision = 2, name = 'a float') => {
-  const precisionMultiplier = 10 ** precision;
-
-  const roundedMin = Math.floor(min * precisionMultiplier);
-  const roundedMax = Math.ceil(max * precisionMultiplier);
-  const delta = roundedMax - roundedMin;
-
-  const significand = Math.max(1, getBitsForIntegerNumber(delta, SignificandMaxBits));
-
-  return {
-    value,
-    type: 'FLOAT',
-    min: roundedMin / precisionMultiplier,
-    max: roundedMax / precisionMultiplier,
-    precision,
-    significand,
-    name
-  };
+  const r = validateFloat(min, max, value, precision, name, 'FLOAT', SignificandMaxBits);
+  return { value: r.value, type: 'FLOAT', min: r.min, max: r.max, precision, significand: r.bitwidth, name };
 };
