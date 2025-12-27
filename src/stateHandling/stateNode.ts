@@ -12,7 +12,8 @@ import {
   ObjectDataEntry,
   OptionalDataEntry,
   VersionDataEntry,
-  UpdateWithValidationTypes
+  UpdateWithValidationTypes,
+  UpdateWithStateEntries
 } from '../types';
 import { constrainValue, validateDataEntry } from '../update';
 import { constrainState as constrainStateOptional } from '../update/optionalUpdate';
@@ -41,7 +42,10 @@ export class StateNode {
 
   updateUpstream = (): void => {
     const newBitstring = this.getBitString();
-    if (newBitstring !== this.bitstring) (this.bitstring = newBitstring), this.parent && this.parent.updateUpstream();
+    if (newBitstring !== this.bitstring) {
+      this.bitstring = newBitstring;
+      if (this.parent) this.parent.updateUpstream();
+    }
   };
 
   getStateBits = (): string => {
@@ -115,13 +119,13 @@ class SimpleStateNodes<T extends UpdateWithValidationTypes> extends StateNode {
   }
 
   getChildren = (): SpecificTypeNode[] => [];
-
   getDescription = (): string => `${this.name}: ${this.value}`;
 
-  updateValue = (value: T['value']): void => {
-    this.value = constrainValue(this.descriptor, value);
-    this.updateUpstream();
-  };
+  updateValue = (value: T['value']): void => (
+    (this.value = constrainValue(this.descriptor, value)), this.updateUpstream()
+  );
+
+  updateDescriptor = (entry: T): void => ((this.descriptor = entry), this.updateValue(this.value));
 
   toDataEntry = (): T => ({
     ...this.descriptor,
@@ -146,17 +150,23 @@ export class EnumArrayNode extends SimpleStateNodes<EnumArrayDataEntry> {
   getDescription = (): string => `${this.name}: [${this.value.map((v) => this.descriptor.mapping[v]).join(', ')}]`;
 }
 
-export class OptionalNode extends StateNode {
-  private state: OptionalDataEntry['state'];
-  private stateBits: OptionalDataEntry['stateBits'];
-  private descriptor: OptionalDataEntry['descriptor'];
+class ComplexStateNodes<T extends UpdateWithStateEntries> extends StateNode {
+  state: T['state'];
+  descriptor: T;
+
+  constructor(entry: T, parent: SpecificTypeNode | null) {
+    super(entry, parent);
+    this.state = entry.state;
+    this.descriptor = entry;
+  }
+}
+
+export class OptionalNode extends ComplexStateNodes<OptionalDataEntry> {
   private child: SpecificTypeNode | null = null;
 
   constructor(entry: OptionalDataEntry, parent: SpecificTypeNode | null) {
     super(entry, parent);
-    this.state = entry.state;
-    this.stateBits = entry.stateBits;
-    this.descriptor = entry['descriptor'];
+    this.child = this.initializedChild();
     this.bitstring = this.getBitString();
   }
 
@@ -165,52 +175,59 @@ export class OptionalNode extends StateNode {
   getStateBits = (): string => optionalStateStringifier(this.state);
   getValueBits = (): string => (this.child ? this.child.bitstring : '');
 
+  private initializedChild = (): SpecificTypeNode | null =>
+    this.descriptor.descriptor[this.state ? 1 : 0]
+      ? NodeFactory(this.descriptor.descriptor[this.state ? 1 : 0]!, this)
+      : null;
+
   updateState = (newState: OptionalDataEntry['state']): void => {
-    this.state = constrainStateOptional(newState);
-    if (this.state === this.state) return;
-    this.child = this.descriptor[this.state ? 1 : 0] ? NodeFactory(this.descriptor[this.state ? 1 : 0]!, this) : null;
+    const constrainedNewState = constrainStateOptional(newState);
+    if (this.state === constrainedNewState) return;
+    this.state = constrainedNewState;
+    this.child = this.descriptor.descriptor[this.state ? 1 : 0]
+      ? NodeFactory(this.descriptor.descriptor[this.state ? 1 : 0]!, this)
+      : null;
+    this.updateUpstream();
+  };
+
+  updateDescriptor = (entry: OptionalDataEntry): void => {
+    this.descriptor = entry;
+    this.child = this.initializedChild();
     this.updateUpstream();
   };
 
   toDataEntry = (): OptionalDataEntry => ({
-    type: 'OPTIONAL',
+    ...this.descriptor,
     name: this.name,
     state: this.state,
-    stateBits: this.stateBits,
-    descriptor: this.descriptor,
     value: this.child ? this.child.toDataEntry() : null
   });
 
   getDescription = (): string => `${this.name}: ${this.state}`;
 }
 
-export class EnumOptionsNode extends StateNode {
-  private state: EnumOptionsDataEntry['state'];
-  private stateBits: EnumOptionsDataEntry['stateBits'];
-  private descriptor: EnumOptionsDataEntry['descriptor'];
-  private mapping: EnumOptionsDataEntry['mapping'];
+export class EnumOptionsNode extends ComplexStateNodes<EnumOptionsDataEntry> {
   private child: SpecificTypeNode | null = null;
 
   constructor(entry: EnumOptionsDataEntry, parent: SpecificTypeNode | null) {
     super(entry, parent);
-    this.state = entry.state;
-    this.stateBits = entry.stateBits;
-    this.descriptor = entry['descriptor'];
-    this.mapping = entry['mapping'];
-    this.child = entry['value'] ? NodeFactory(entry['value'], this) : null;
+    this.child = this.initializedChild();
     this.bitstring = this.getBitString();
   }
 
   getChildren = (): (SpecificTypeNode | null)[] => [this.child];
 
-  getStateBits = (): string => enumOptionsStateStringifier(this.state, this.stateBits);
+  getStateBits = (): string => enumOptionsStateStringifier(this.state, this.descriptor.stateBits);
   getValueBits = (): string => (this.child ? this.child.bitstring : '');
 
+  private initializedChild = (): SpecificTypeNode | null =>
+    this.descriptor.descriptor[this.state] ? NodeFactory(this.descriptor.descriptor[this.state]!, this) : null;
+
   updateState = (newState: EnumOptionsDataEntry['state']): void => {
-    const constrainedNewState = constrainStateEnumOptions(this.descriptor.length, newState);
+    const constrainedNewState = constrainStateEnumOptions(this.descriptor.descriptor.length, newState);
     if (constrainedNewState === this.state) return;
     const validationResult = validateDataEntry(
-      this.descriptor[constrainedNewState],
+      this.descriptor.descriptor[constrainedNewState],
       this.child ? this.child.toDataEntry() : null
     );
     this.child = validationResult ? NodeFactory(validationResult, this) : null;
@@ -218,76 +235,85 @@ export class EnumOptionsNode extends StateNode {
     this.updateUpstream();
   };
 
+  updateDescriptor = (entry: EnumOptionsDataEntry): void => {
+    this.descriptor = entry;
+    this.child = this.initializedChild();
+    this.updateUpstream();
+  };
+
   toDataEntry = (): EnumOptionsDataEntry => ({
-    type: 'ENUM_OPTIONS',
+    ...this.descriptor,
     name: this.name,
     state: this.state,
-    stateBits: this.stateBits,
-    descriptor: this.descriptor,
-    mapping: this.mapping,
-    value: this.child ? this.child.toDataEntry() : (null as any)
+    value: this.child ? this.child.toDataEntry() : null
   });
 
-  getDescription = () => `${this.name}: ${this.state} of ${this.mapping.length} options`;
+  getDescription = () => `${this.name}: ${this.state} of ${this.descriptor.mapping.length} options`;
 }
 
-export class ArrayNode extends StateNode {
-  private descriptor: ArrayDataEntry['descriptor'];
+export class ArrayNode extends ComplexStateNodes<ArrayDataEntry> {
   private children: SpecificTypeNode[];
-  private minCount: ArrayDataEntry['minCount'];
-  private maxCount: ArrayDataEntry['maxCount'];
-  private stateBits: ArrayDataEntry['stateBits'];
-  private state: ArrayDataEntry['state'];
 
   constructor(entry: ArrayDataEntry, parent: SpecificTypeNode | null) {
     super(entry, parent);
-    this.descriptor = entry['descriptor'];
-    this.children = entry['value'].map((child) => NodeFactory(child, this));
-    this.minCount = entry['minCount'];
-    this.maxCount = entry['maxCount'];
-    this.stateBits = entry['stateBits'];
-    this.state = entry['state'];
+    this.children = this.initializedChildren();
     this.bitstring = this.getBitString();
   }
 
+  private initializedChildren = (): SpecificTypeNode[] =>
+    this.descriptor.value.map((child) => NodeFactory(child, this));
+
   getChildren = (): SpecificTypeNode[] => this.children;
 
-  getStateBits = (): string => arrayStateStringifier(this.state, this.minCount, this.stateBits);
+  getStateBits = (): string => arrayStateStringifier(this.state, this.descriptor.minCount, this.descriptor.stateBits);
   getValueBits = (): string => this.children.map((child) => child.bitstring).join('');
 
+  updateDescriptor = (entry: ArrayDataEntry): void => {
+    this.descriptor = entry;
+    this.children = this.initializedChildren();
+    this.updateUpstream();
+  };
+
   updateState = (newState: ArrayDataEntry['state']): void => {
-    const constrainedNewState = constrainStateArray(newState, this.minCount, this.maxCount);
+    const constrainedNewState = constrainStateArray(newState, this.descriptor.minCount, this.descriptor.maxCount);
     if (constrainedNewState === this.state) return;
     if (constrainedNewState < this.state) this.children = this.children.slice(0, constrainedNewState);
-    else for (let i = this.state; i < constrainedNewState; i++) this.children.push(NodeFactory(this.descriptor, this));
+    else
+      for (let i = this.state; i < constrainedNewState; i++)
+        this.children.push(NodeFactory(this.descriptor.descriptor, this));
     this.state = constrainedNewState;
     this.updateUpstream();
   };
 
   toDataEntry = (): ArrayDataEntry => ({
-    type: 'ARRAY',
+    ...this.descriptor,
     name: this.name,
     value: this.children.map((child) => child.toDataEntry()),
-    minCount: this.minCount,
-    maxCount: this.maxCount,
-    stateBits: this.stateBits,
-    state: this.state,
-    descriptor: this.descriptor
+    state: this.state
   });
 
-  getDescription = (): string => `${this.name}: ${this.state} of (${this.minCount}, ${this.maxCount})`;
+  getDescription = (): string =>
+    `${this.name}: ${this.state} of (${this.descriptor.minCount}, ${this.descriptor.maxCount})`;
 }
 
 export class ObjectNode extends StateNode {
-  private descriptor: ObjectDataEntry['descriptor'];
+  private descriptor: ObjectDataEntry;
   private children: SpecificTypeNode[];
 
   constructor(entry: ObjectDataEntry, parent: SpecificTypeNode | null) {
     super(entry, parent);
-    this.descriptor = entry['descriptor'];
-    this.children = entry['value'].map((child) => NodeFactory(child, this));
+    this.descriptor = entry;
+    this.children = this.initializedChild();
     this.bitstring = this.getBitString();
   }
+
+  private initializedChild = (): SpecificTypeNode[] => this.descriptor.value.map((child) => NodeFactory(child, this));
+
+  updateDescriptor = (entry: ObjectDataEntry): void => {
+    this.descriptor = entry;
+    this.children = this.initializedChild();
+    this.updateUpstream();
+  };
 
   getChildren = (): SpecificTypeNode[] => this.children;
 
@@ -295,10 +321,9 @@ export class ObjectNode extends StateNode {
   getValueBits = (): string => this.children.map((child) => child.bitstring).join('');
 
   toDataEntry = (): ObjectDataEntry => ({
-    type: 'OBJECT',
+    ...this.descriptor,
     name: this.name,
     value: this.children.map((child) => child.toDataEntry()),
-    descriptor: this.descriptor,
     stateBits: 0
   });
 }
