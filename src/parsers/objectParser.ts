@@ -1,4 +1,4 @@
-import { DataEntry, ObjectDataEntry } from '../types';
+import { ObjectDataEntry } from '../types';
 import {
   getContentBitsCountForNestedData,
   nestedDataBitstringParser,
