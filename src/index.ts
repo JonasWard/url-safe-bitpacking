@@ -30,6 +30,7 @@ export {
   NodeFactory,
   GetStateNodeTree,
   FromState,
+  VersionNode,
   ArrayNode,
   BooleanNode,
   EnumNode,
