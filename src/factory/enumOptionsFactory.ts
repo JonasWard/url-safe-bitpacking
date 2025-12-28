@@ -13,7 +13,7 @@ export type EnumOptionsFactory = (
 ) => EnumOptionsDataEntry;
 
 export const create: EnumOptionsFactory = (descriptor, defaultState = 0, name = 'enum options') => {
-  if (descriptor.length < 2) throw new Error('descriptor must have at least two entries');
+  if (descriptor.length < 1) throw new Error('descriptor must have at least one entry');
   if (descriptor.length - 1 < defaultState)
     throw new Error('defaultState must be less than the length of the descriptor');
   if (descriptor.some((v) => v !== null && v.type !== 'OBJECT'))
