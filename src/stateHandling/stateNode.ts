@@ -111,6 +111,8 @@ class SimpleStateNodes<T extends UpdateWithValidationTypes> extends StateNode {
   value: T['value'];
   descriptor: T;
 
+  getBitString = (): string => dataEntryBitsStringifier(this.toDataEntry());
+
   constructor(entry: T, parent: SpecificTypeNode | null) {
     super(entry, parent);
     this.value = entry.value;
