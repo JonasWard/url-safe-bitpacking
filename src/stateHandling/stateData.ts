@@ -8,6 +8,9 @@ const getObjectForDataEntries = (entries: DataEntry[]): StateDataObject => {
   return object;
 };
 
+// special case for enum array and array => all result values are strings of length 1 => return a concatenated string
+const getStringForDataEntries = (values: StateDataObjectValue): string | StateDataObjectValue => Array.isArray(values) && values.every((v) => typeof v === 'string' && v.length === 1) ? values.join('') : values;
+
 export const getStateData = (entry: DataEntry): StateDataObjectValue => {
   switch (entry.type) {
     case 'BOOLEAN':
@@ -18,7 +21,7 @@ export const getStateData = (entry: DataEntry): StateDataObjectValue => {
     case 'ENUM':
       return entry.mapping[entry.value];
     case 'ENUM_ARRAY':
-      return entry.value.map((v) => entry.mapping[v]);
+      return getStringForDataEntries(entry.value.map((v) => entry.mapping[v]));
     case 'OPTIONAL':
       return entry.value === null ? null : getStateData(entry.value);
     case 'ENUM_OPTIONS':
@@ -27,7 +30,7 @@ export const getStateData = (entry: DataEntry): StateDataObjectValue => {
         switch (entry.value.type) {
           case 'OBJECT':
             return {
-              ...(getStateData(entry.value) as StateDataObject),
+              ...getObjectForDataEntries(entry.value.value),
               state
             };
           default:
@@ -37,6 +40,6 @@ export const getStateData = (entry: DataEntry): StateDataObjectValue => {
     case 'OBJECT':
       return getObjectForDataEntries(entry.value);
     case 'ARRAY':
-      return entry.value.map((v) => getStateData(v));
+      return getStringForDataEntries(entry.value.map(getStateData));
   }
 };
