@@ -1,11 +1,11 @@
-import { DataEntry } from './dataEntry';
+import { ObjectDataEntry } from './dataEntry';
 import { EnumMappingType } from './enumData';
 
 export type EnumOptionsData = {
   type: 'ENUM_OPTIONS';
   stateBits: number;
   state: number;
-  descriptor: (DataEntry | null)[];
+  descriptor: (ObjectDataEntry | null)[];
   mapping: EnumMappingType;
-  value: DataEntry | null;
+  value: ObjectDataEntry | null;
 };

@@ -1,4 +1,4 @@
-import { DataEntry, EnumMappingType, EnumOptionsDataEntry, EnumOptionsType } from '../types';
+import { EnumMappingType, EnumOptionsDataEntry, EnumOptionsType, ObjectDataEntry } from '../types';
 import { getBitsForIntegerNumber, getMinimumBitsForInteger } from './helperMethod';
 import { getEnumMaxAndMappingFromOptions } from './utils';
 
@@ -6,7 +6,7 @@ const maxEnumOptions = 64;
 const maxEnumOptionsBits = getMinimumBitsForInteger(maxEnumOptions);
 
 export type EnumOptionsFactory = (
-  descriptor: (DataEntry | null)[],
+  descriptor: (ObjectDataEntry | null)[],
   defaultState?: number,
   name?: string,
   options?: EnumOptionsType

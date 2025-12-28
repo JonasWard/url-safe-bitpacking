@@ -207,7 +207,7 @@ export class OptionalNode extends ComplexStateNodes<OptionalDataEntry> {
 }
 
 export class EnumOptionsNode extends ComplexStateNodes<EnumOptionsDataEntry> {
-  private child: SpecificTypeNode | null = null;
+  private child: ObjectNode | null = null;
 
   constructor(entry: EnumOptionsDataEntry, parent: SpecificTypeNode | null) {
     super(entry, parent);
@@ -220,7 +220,7 @@ export class EnumOptionsNode extends ComplexStateNodes<EnumOptionsDataEntry> {
   getStateBits = (): string => enumOptionsStateStringifier(this.state, this.descriptor.stateBits);
   getValueBits = (): string => (this.child ? this.child.bitstring : '');
 
-  private initializedChild = (): SpecificTypeNode | null => {
+  private initializedChild = (): ObjectNode | null => {
     const validatedEntry = validateDataEntry(this.descriptor.descriptor[this.state], this.descriptor.value);
     return validatedEntry ? NodeFactory(validatedEntry, this) : null;
   };
