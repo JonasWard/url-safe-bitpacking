@@ -1,6 +1,7 @@
 import { expect, test } from 'bun:test';
 import { DataEntryFactory } from '../factory';
-import { EnumOptionsDataEntry } from '../types';
+import { DataEntry, EnumOptionsDataEntry, VersionDataEntry } from '../types';
+import { GetStateNodeTree } from '../stateHandling/stateNode';
 
 test('nested data creation', () => {
   const charsHardCodedNumbers = '0123456789-.e'.split('');
@@ -83,7 +84,9 @@ test('nested data creation', () => {
     DataEntryFactory.VERSION(0, 8),
     DataEntryFactory.ARRAY(inputValueObject, 2, 0, 31, 'inputValues'),
     DataEntryFactory.ARRAY(inputMethodObject, 2, 0, 31, 'methodValues')
-  ] as const;
+  ] as [VersionDataEntry, ...DataEntry[]];
+
+  const node = GetStateNodeTree(ModelStateDescriptor);
 
   expect(true).toBe(true);
 });
