@@ -10,6 +10,7 @@ import {
   ObjectNode,
   SpecificTypeNode
 } from '../stateHandling/stateNode';
+import { getStateData } from '../../dist';
 
 const roundTrip = (node: SpecificTypeNode) => {
   const dEntry = node.toDataEntry();
@@ -100,6 +101,17 @@ test.only('EnumOptionsDataEntry with ObjectDataEntries', () => {
   roundTrip(enumOptionsNode);
   enumOptionsNode.updateState(4);
   roundTrip(enumOptionsNode);
+  expect(getStateData(enumOptionsNode.toDataEntry())).toMatchObject({
+    'these enum options': {
+      state: 2
+    },
+    obj: {
+      enumA: 3,
+      enumB: 4
+    },
+    enumA: 3,
+    state: 4
+  });
 });
 
 test('more complex state tree', () => {
