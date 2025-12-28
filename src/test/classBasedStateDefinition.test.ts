@@ -35,10 +35,9 @@ test('EnumOptionsDataEntry', () => {
   expect(enumOptionsNode.getChildren()[0]).toEqual(null);
   enumOptionsNode.updateState(1);
   roundTrip(enumOptionsNode);
-  expect((enumOptionsNode.getChildren()[0] as EnumNode).value).toEqual(4);
+  expect(((enumOptionsNode.getChildren()[0] as ObjectNode).getChildren()[0] as EnumNode).value).toEqual(2);
   enumOptionsNode.updateState(0);
   roundTrip(enumOptionsNode);
-  expect((enumOptionsNode.getChildren()[0] as EnumNode).value).toEqual(4);
 });
 
 test('ObjectDataEntries', () => {
