@@ -1,4 +1,5 @@
-import { ArrayDataEntry, IntegerMaxBits } from '../types';
+import { ArrayDataEntry, DataEntry, IntegerMaxBits } from '../types';
+import { getCopy } from './copy';
 import { validateUnsignedInt } from './utils';
 
 export type ArrayFactory = (
@@ -13,7 +14,7 @@ export const create: ArrayFactory = (descriptor, defaultState = 0, minCount = 0,
   const r = validateUnsignedInt(minCount, maxCount, defaultState, name, 'ARRAY', IntegerMaxBits);
 
   return {
-    value: [...Array(r.value)].map(() => JSON.parse(JSON.stringify(descriptor))),
+    value: Array.from({ length: r.value }, () => getCopy(descriptor) as DataEntry),
     descriptor,
     type: 'ARRAY',
     minCount: r.min,

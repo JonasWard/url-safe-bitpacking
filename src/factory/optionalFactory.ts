@@ -1,4 +1,5 @@
 import { DataEntry, OptionalDataEntry } from '../types';
+import { getCopy } from './copy';
 
 export type OptionalFactory = (
   descriptor: [DataEntry, null] | [null, DataEntry],
@@ -15,7 +16,7 @@ export const create: OptionalFactory = (descriptor, defaultState = false, name =
     type: 'OPTIONAL',
     state: defaultState,
     descriptor,
-    value: JSON.parse(JSON.stringify(defaultState ? descriptor[1] : descriptor[0])),
+    value: getCopy(defaultState ? descriptor[1] : descriptor[0]),
     name,
     stateBits: 1
   };
