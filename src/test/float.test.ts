@@ -49,7 +49,7 @@ export const values: [number, number, number, PrecisionRangeType, string][] = [
 ];
 
 values.forEach(([v, min, max, precision, bitString]) =>
-  test.only(`float ${v}, min: ${min}, max: ${max}, precision: ${precision}`, () =>
+  test(`float ${v}, min: ${min}, max: ${max}, precision: ${precision}`, () =>
     expect(dataEntryBitsStringifier(DataEntryFactory.FLOAT(v, min, max, precision))).toBe(bitString))
 );
 
