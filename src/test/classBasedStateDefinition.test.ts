@@ -68,7 +68,7 @@ test('ObjectDataEntries', () => {
   roundTrip(enumOptionsNode);
 });
 
-test.only('EnumOptionsDataEntry with ObjectDataEntries', () => {
+test('EnumOptionsDataEntry with ObjectDataEntries', () => {
   const enumA = DataEntryFactory.ENUM(2, 5, 'enumA');
   const enumB = DataEntryFactory.ENUM(4, 25, 'enumB');
   const enumC = DataEntryFactory.ENUM(3, 25, 'enumC');
@@ -77,7 +77,7 @@ test.only('EnumOptionsDataEntry with ObjectDataEntries', () => {
   const obj2 = null;
   const enum0 = DataEntryFactory.OBJECT(
     [DataEntryFactory.ENUM_OPTIONS([obj0, obj1, obj2], 2, 'these enum options'), obj0, enumA],
-    'obj'
+    'enum0'
   );
   const enumOptions = DataEntryFactory.ENUM_OPTIONS([obj0, obj1, obj2, obj0, enum0]);
   const enumOptionsNode = NodeFactory(enumOptions, null);
@@ -110,7 +110,7 @@ test.only('EnumOptionsDataEntry with ObjectDataEntries', () => {
       enumB: 4
     },
     enumA: 3,
-    state: 4
+    state: 'enum0'
   });
 });
 
@@ -130,9 +130,6 @@ test('more complex state tree', () => {
 
   const stateDescriptor = [version, obj, objExample, array];
   const stateNode = GetStateNodeTree(stateDescriptor as any, 'state data object');
-  console.log(stateNode.toString());
-  console.log(stateNode.getBase64String());
-  console.log(FromState(stateDescriptor as any, 'state data object', stateNode.getBase64String()).toString());
   roundTrip(stateNode);
 });
 
