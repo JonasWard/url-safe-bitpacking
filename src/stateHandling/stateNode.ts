@@ -279,6 +279,18 @@ export class ArrayNode extends ComplexStateNodes<ArrayDataEntry> {
     this.updateUpstream();
   };
 
+  canRemoveChild = (index: number): boolean =>
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index >= this.children.length ||
+    this.children.length - this.descriptor.minCount > 0;
+
+  removeChild = (index: number): void => {
+    if (this.canRemoveChild(index)) return;
+    this.children = this.children.slice(0, index).concat(this.children.slice(index + 1));
+    this.updateUpstream();
+  };
+
   updateState = (newState: ArrayDataEntry['state']): void => {
     const constrainedNewState = constrainStateArray(newState, this.descriptor.minCount, this.descriptor.maxCount);
     if (constrainedNewState === this.state) return;
