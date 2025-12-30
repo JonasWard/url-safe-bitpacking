@@ -164,4 +164,7 @@ test('state node and ArrayDataEntry', () => {
   roundTrip(arrayNode);
   (arrayNode.getChildren()[7] as IntNode).updateValue(99);
   roundTrip(arrayNode);
+  expect(arrayNode.canRemoveChild(0)).toBe(true);
+  arrayNode.removeChild(0);
+  expect(arrayNode.getChildren().length).toEqual(9);
 });
