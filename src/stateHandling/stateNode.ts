@@ -286,7 +286,8 @@ export class ArrayNode extends ComplexStateNodes<ArrayDataEntry> {
     this.children.length - this.descriptor.minCount > 0;
 
   removeChild = (index: number): void => {
-    if (this.canRemoveChild(index)) return;
+    if (!this.canRemoveChild(index)) return;
+    this.state--;
     this.children = this.children.slice(0, index).concat(this.children.slice(index + 1));
     this.updateUpstream();
   };
