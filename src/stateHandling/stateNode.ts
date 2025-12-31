@@ -219,6 +219,12 @@ export class EnumOptionsNode extends ComplexStateNodes<EnumOptionsDataEntry> {
 
   getChildren = (): (SpecificTypeNode | null)[] => [this.child];
 
+  /**
+   * Helper method only available to EnumOptionsNode that allows to straight access the children of the child of an enum
+   * @returns `null` | `(SpecificTypeNode)[]`
+   */
+  getChildData = (): null | (SpecificTypeNode | null)[] => (this.child ? this.child.getChildren() : null);
+
   getStateBits = (): string => enumOptionsStateStringifier(this.state, this.descriptor.stateBits);
   getValueBits = (): string => (this.child ? this.child.bitstring : '');
 
