@@ -78,7 +78,7 @@ test('EnumOptionsDataEntry with ObjectDataEntries', () => {
     [DataEntryFactory.ENUM_OPTIONS([obj0, obj1, obj2], 2, 'these enum options'), obj0, enumA],
     'enum0'
   );
-  const enumOptions = DataEntryFactory.ENUM_OPTIONS([obj0, obj1, obj2, obj0, enum0]);
+  const enumOptions = DataEntryFactory.ENUM_OPTIONS([obj0, obj1, obj2, obj0, enum0], 0, 'the enum options object');
   const enumOptionsNode = NodeFactory(enumOptions, null);
   expect(enumOptionsNode.getChildren().length).toEqual(1);
   roundTrip(enumOptionsNode);
@@ -105,7 +105,7 @@ test('EnumOptionsDataEntry with ObjectDataEntries', () => {
       state: 2
     },
     obj: {
-      enumA: 3,
+      enumA: 2,
       enumB: 4
     },
     enumA: 3,
