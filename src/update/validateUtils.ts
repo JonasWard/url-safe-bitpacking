@@ -17,7 +17,7 @@ export const validateDataEntry = <T extends DataEntry>(
       ) as T;
     else
       return updateValueEntry(
-        descriptorValue as UpdateWithValuesEntries,
+        { ...(descriptorValue as UpdateWithValuesEntries) },
         (differentValue as UpdateWithValuesEntries).value
       ) as T;
 
