@@ -11,4 +11,4 @@ export type UpdateWithValuesEntries = DataEntry & { type: (typeof SimpleDataType
 export type UpdateWithStateEntries = DataEntry & { type: (typeof ComplexDataTypes)[number] };
 
 export type UpdateValue<T extends UpdateWithValuesEntries> = (entry: T, value: T['value']) => T;
-export type UpdateState<T extends UpdateWithStateEntries> = (entry: T, state: T['state']) => T;
+export type UpdateState<T extends UpdateWithStateEntries> = (entry: T, state: T['state'], current?: T['value']) => T;
