@@ -73,13 +73,29 @@ export const constrainValue = <T extends UpdateWithValidationTypes>(original: T,
  * @param original - the original data entry
  * @param update - the update data entry
  */
-export const updateStateEntry = <T extends UpdateWithStateEntries>(original: T, update: T['state']): T => {
+export const updateStateEntry = <T extends UpdateWithStateEntries>(
+  original: T,
+  update: T['state'],
+  current?: T['value']
+): T => {
   switch (original.type) {
     case 'OPTIONAL':
-      return optionalUpdate.updateState(original, update as OptionalDataEntry['state']) as T;
+      return optionalUpdate.updateState(
+        original,
+        update as OptionalDataEntry['state'],
+        current as OptionalDataEntry['value']
+      ) as T;
     case 'ENUM_OPTIONS':
-      return enumOptionsUpdate.updateState(original, update as EnumOptionsDataEntry['state']) as T;
+      return enumOptionsUpdate.updateState(
+        original,
+        update as EnumOptionsDataEntry['state'],
+        current as EnumOptionsDataEntry['value']
+      ) as T;
     case 'ARRAY':
-      return arrayUpdate.updateState(original, update as ArrayDataEntry['state']) as T;
+      return arrayUpdate.updateState(
+        original,
+        update as ArrayDataEntry['state'],
+        current as ArrayDataEntry['value']
+      ) as T;
   }
 };
