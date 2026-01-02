@@ -1,7 +1,12 @@
 import { DataEntry, ComplexDataTypes, UpdateWithStateEntries, UpdateWithValuesEntries } from '../types';
 import { updateStateEntry, updateValueEntry } from './updateValues';
 
-// for now simple validation of values
+/**
+ * Method used as an interchange for validating data entries
+ * @param descriptorValue - `DataEntry` - used as a mask for the state
+ * @param differentValue - `DataEntry` - the one with the updated value and or state
+ * @returns 
+ */
 export const validateDataEntry = <T extends DataEntry>(
   descriptorValue: T | null,
   differentValue: T | null
