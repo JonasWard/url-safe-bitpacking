@@ -4,9 +4,9 @@ import { validateDataEntry } from './validateUtils';
 export const constrainState = (state: OptionalDataEntry['state']): OptionalDataEntry['state'] =>
   state === true ? true : false;
 
-export const updateState: UpdateState<OptionalDataEntry> = (original, state): OptionalDataEntry => {
-  original.state = constrainState(state);
-  original.value = validateDataEntry(original.descriptor[Number(state)], original.value);
+export const updateState: UpdateState<OptionalDataEntry> = (original, state, current): OptionalDataEntry => {
+  const updatedState = constrainState(state);
+  const value = validateDataEntry(original.descriptor[Number(state)], current ?? original.value);
 
-  return original;
+  return { ...original, state: updatedState, value };
 };

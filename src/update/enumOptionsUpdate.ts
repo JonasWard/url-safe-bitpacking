@@ -5,12 +5,12 @@ import { validateDataEntry } from './validateUtils';
 export const constrainState = (descriptorLength: EnumOptionsDataEntry['descriptor']['length'], state: number): number =>
   constrainUnsignedInt(state, descriptorLength - 1);
 
-export const updateState: UpdateState<EnumOptionsDataEntry> = (original, state): EnumOptionsDataEntry => {
-  original.state = constrainState(original.descriptor.length, state);
-  original.value = validateDataEntry(
-    original.descriptor[original.state],
-    original.value
+export const updateState: UpdateState<EnumOptionsDataEntry> = (original, state, current): EnumOptionsDataEntry => {
+  const updatedState = constrainState(original.descriptor.length, state);
+  const value = validateDataEntry(
+    original.descriptor[updatedState],
+    current ?? original.value
   ) as EnumOptionsDataEntry['value'];
 
-  return original;
+  return { ...original, state: updatedState, value };
 };

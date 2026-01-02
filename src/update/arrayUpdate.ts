@@ -9,14 +9,19 @@ export const constrainState = (
   maxCount: ArrayDataEntry['maxCount']
 ): ArrayDataEntry['state'] => constrainSignedInt(state, minCount, maxCount);
 
-export const updateState: UpdateState<ArrayDataEntry> = (original, state): ArrayDataEntry => {
+export const updateState: UpdateState<ArrayDataEntry> = (original, state, current): ArrayDataEntry => {
   // if state of the update is not within the acceptable range in the original, just return the original
-  original.state = constrainState(state, original.minCount, original.maxCount);
-  original.value = [...new Array(original.state)].map((_, i) =>
-    original.value[i]
-      ? (validateDataEntry(original.descriptor, original.value[i] ?? null) as DataEntry)
+  const updatedState = constrainState(state, original.minCount, original.maxCount);
+  const currentValue = current ?? original.value;
+  const value = [...new Array(updatedState)].map((_, i) =>
+    currentValue[i]
+      ? (validateDataEntry(original.descriptor, currentValue[i] ?? null) as DataEntry)
       : original.descriptor
   );
 
-  return original;
+  return {
+    ...original,
+    state: updatedState,
+    value
+  };
 };
