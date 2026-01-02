@@ -12,7 +12,8 @@ export const validateDataEntry = <T extends DataEntry>(
     if (ComplexDataTypes.includes(descriptorValue.type as (typeof ComplexDataTypes)[number]))
       return updateStateEntry(
         descriptorValue as UpdateWithStateEntries,
-        (differentValue as UpdateWithStateEntries).state
+        (differentValue as UpdateWithStateEntries).state,
+        (differentValue as UpdateWithStateEntries).value
       ) as T;
     else
       return updateValueEntry(
