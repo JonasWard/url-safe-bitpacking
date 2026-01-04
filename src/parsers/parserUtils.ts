@@ -16,6 +16,7 @@ export const getBitsForEnumArrayCountOfBase = (count: number, base: number): num
  * @returns 0 | 1 bit string
  */
 export const convertArbitraryBaseToBitString = (input: number[], fromBase: number): string => {
+  if (input.length === 0) return '';
   const expectedOutputLength = getBitsForEnumArrayCountOfBase(input.length, fromBase);
   const fromBaseBigInt = BigInt(fromBase);
 
@@ -37,7 +38,7 @@ export const convertBitStringToArbitraryBase = (
   toBase: number,
   expectedOutputLength: number
 ): number[] => {
-  let decimalValue = BigInt(`0b${input}`);
+  let decimalValue = BigInt(`0b${input === '' ? '0' : input}`);
   const toBaseBigInt = BigInt(toBase);
 
   // Step 2: Convert to the target base

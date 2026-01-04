@@ -21,7 +21,9 @@ export const values: [number[], number, number, number, string][] = [
     1,
     32,
     '111111111111110111011110011011110101100111000101111011010101101001001110010100011000001111011100110101100010110101001001010000011100110001010010000011000100000100000'
-  ]
+  ],
+  [[], 16, 0, 3, '00'],
+  [[], 16, 0, 4, '000']
 ];
 
 values.forEach(([value, max, minCount, maxCount, bitString]) =>
@@ -31,6 +33,23 @@ values.forEach(([value, max, minCount, maxCount, bitString]) =>
 
 values.forEach(([value, max, minCount, maxCount, bitString]) =>
   test(`parsing '${bitString}' as enum_array`, () =>
+    expect(
+      dataEntryBitstringParser(DataEntryFactory.ENUM_ARRAY(value, max, minCount, maxCount), bitString)[0].value
+    ).toMatchObject(value))
+);
+
+export const withZeroLenghtValues: [number[], number, number, number, string][] = [
+  [[], 16, 0, 3, '00'],
+  [[], 16, 0, 4, '000']
+];
+
+withZeroLenghtValues.forEach(([value, max, minCount, maxCount, bitString]) =>
+  test(`enum_array_with_zero ${value}`, () =>
+    expect(dataEntryBitsStringifier(DataEntryFactory.ENUM_ARRAY(value, max, minCount, maxCount))).toBe(bitString))
+);
+
+withZeroLenghtValues.forEach(([value, max, minCount, maxCount, bitString]) =>
+  test(`parsing '${bitString}' as enum_array_with_zero`, () =>
     expect(
       dataEntryBitstringParser(DataEntryFactory.ENUM_ARRAY(value, max, minCount, maxCount), bitString)[0].value
     ).toMatchObject(value))
