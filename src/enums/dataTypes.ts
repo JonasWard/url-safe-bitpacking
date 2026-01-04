@@ -1,7 +1,4 @@
-// Files defining the data types
-
-import { DataEntry } from '../types';
-
+// File defining the data types and all the union types
 export const ConstantBitWidthDataTypes = ['VERSION', 'BOOLEAN', 'ENUM', 'INT', 'FLOAT'] as const;
 export const VariableBitWidthDataTypes = ['ENUM_ARRAY', 'OPTIONAL', 'ENUM_OPTIONS', 'ARRAY', 'OBJECT'] as const;
 
